@@ -7,16 +7,18 @@ import java.io.InputStreamReader;
 
 import javax.net.ssl.SSLSocket;
 
-import essentials.Log;
+import essentials.SimpleLog;
 
 public class ClientThread extends Thread {
 
-	Log log;
+	SimpleLog log;
 
 	SSLSocket socket;
 	BufferedReader reader;
 	DataOutputStream writer;
 
+	int id;
+	
 	public void run() {
 
 		// Configure log
@@ -29,17 +31,18 @@ public class ClientThread extends Thread {
 			log.logStackTrace(e);
 		}
 		
-		
+		//TODO Implement authentication + log message
 	}
 
 	void initializeSession() throws IOException {
 
-		//Initialize reader and writer
+		// Initialize reader and writer
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		writer = new DataOutputStream(socket.getOutputStream());
 	}
 
-	public ClientThread(SSLSocket s) {
+	public ClientThread(SSLSocket s, int i) {
 		socket = s;
+		id = i;
 	}
 }
