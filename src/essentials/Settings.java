@@ -1,6 +1,3 @@
-/**
- * 
- */
 package essentials;
 
 import java.io.File;
@@ -12,14 +9,31 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 /**
+ * 
+ * A simple class for loading and saving settings to XML files
+ * 
  * @author Maximilian von Gaisberg
  *
  */
 public class Settings {
-
+	File file;
 	Properties settings = new Properties();
+	SimpleLog log;
+
+	/**
+	 * Use this to read in the settings file
+	 * 
+	 * 
+	 * @param file
+	 *            The file to be read
+	 * @param defaultValues
+	 *            The values that should be used if the file is broken
+	 * @param log
+	 *            The log that should be logged to
+	 */
 
 	public Settings(File file, Properties defaultValues, SimpleLog log) {
+		this.file = file;
 		String filename = file.getName();
 		log.debug("Reading " + filename);
 		try {
@@ -50,12 +64,14 @@ public class Settings {
 
 		} catch (FileNotFoundException e) {
 
-			log.error("FileNotFoundException while reading " + filename
+			log.fatal("FileNotFoundException while reading " + filename
 					+ e.getMessage());
+			log.logStackTrace(e);
 			System.exit(1);
 
 		} catch (IOException e) {
-			log.error("IOException while reading" + filename + e.getMessage());
+			log.fatal("IOException while reading" + filename + e.getMessage());
+			log.logStackTrace(e);
 			System.exit(1);
 		}
 	}
@@ -66,5 +82,12 @@ public class Settings {
 
 	public void setSetting(String key, String value) {
 		settings.setProperty(key, value);
+		try {
+			settings.storeToXML(new FileOutputStream(this.file), null);
+		} catch (IOException e) {
+			log.fatal("IOException while saving settings" + e.getMessage());
+			log.logStackTrace(e);
+			System.exit(1);
+		}
 	}
 }
