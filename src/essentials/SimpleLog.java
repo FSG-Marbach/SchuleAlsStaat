@@ -11,11 +11,12 @@ import java.text.SimpleDateFormat;
 /**
  * A simple class for a simple log
  * 
+ * @version 1.0
  * @author Maximilian von Gaisberg
  * @author Felix Beutter
+ *
  */
-
-public class Log {
+public class SimpleLog {
 
 	static File file;
 	static boolean timestamp;
@@ -32,17 +33,17 @@ public class Log {
 	 *            If true, there will be a timestamp in front of every entry
 	 * @throws IOException
 	 */
-	public Log(File file, boolean useSameFile, boolean useTimestamp) {
+	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp) {
 
 		dateFormat = new SimpleDateFormat("dd.MM.yyyy_hh:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
-		Log.timestamp = useTimestamp;
+		SimpleLog.timestamp = useTimestamp;
 
 		if (!useSameFile)
-			Log.file = new File(file.getPath() + "_"
+			SimpleLog.file = new File(file.getPath() + "_"
 					+ dateFormat.format(time) + ".txt");
 		else
-			Log.file = file;
+			SimpleLog.file = file;
 
 		if (!file.exists())
 			try {
