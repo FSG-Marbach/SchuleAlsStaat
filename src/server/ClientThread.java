@@ -30,6 +30,16 @@ public class ClientThread extends Thread {
 			log.error("Error occurred while initializing session!");
 			log.logStackTrace(e);
 		}
+	
+		try {
+			String string = null;
+			while((string = reader.readLine()) != null) {
+				System.out.println("Client " + id + " sent: " + string);
+				System.out.flush();
+			}	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		//TODO Implement authentication + log message
 	}

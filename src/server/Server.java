@@ -2,15 +2,10 @@ package server;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Properties;
 
 import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
-
-import org.apache.commons.ssl.KeyMaterial;
-import org.apache.commons.ssl.SSLServer;
-import org.apache.commons.ssl.TrustMaterial;
 
 import essentials.Settings;
 import essentials.SimpleLog;
@@ -23,57 +18,56 @@ public class Server {
 
 	static SimpleLog log;
 	Settings settings;
-	SSLServer server;
 	SSLServerSocket serverSocket;
-	
-	int PORT = 443;
-	final String logFilePath = "C://CDMS//log.txt";
 
-	int id = 0;
+	final String logFilePath = "C:\\CDMS\\log.txt";
+	final String home = "C:\\CDMS";
+	final String keystore = "server.keystore";
+	final String password = "123456";
 	
+	int port = 5678;
+	int id = 0;
+
 	public Server() {
 
 		// Create log file
 		log = new SimpleLog(new File(logFilePath), true, true);
 
-		// Initialize settings
-		Properties defaultValues = new Properties();
-		defaultValues.setProperty("port", String.valueOf(PORT));
-		defaultValues.setProperty("certificate", "C://CDMS//server.crt");
-		defaultValues.setProperty("privateKey", "C://CDMS//server.key");
-		defaultValues.setProperty("password", "1234");
-		settings = new Settings(new File("C://CDMS//settings.xml"), defaultValues, log);
+		//TODO Initialize settings
+		
+//		Properties defaultValues = new Properties();
+//		defaultValues.setProperty("port", String.valueOf(port));
+//		defaultValues.setProperty("home", "C:\\CDMS");
+//		defaultValues.setProperty("keystore", "server.keystore");
+//		defaultValues.setProperty("password", "123456");
+//		settings = new Settings(new File("C:\\CDMS\\settings.xml"), defaultValues, log);
 
-		// Setting variables
-		try {
-			PORT = Integer.parseInt(settings.getSetting("PORT"));
-		} catch (NumberFormatException e) {
-			settings.setSetting("port", String.valueOf(PORT));
-			log.error("NumberFormatException while setting port! Default port (" + PORT + ") will be used...");
-		}
+		//TODO Setting variables (port)
 		
+//		try {
+//			port = Integer.parseInt(settings.getSetting("port"));
+//		} catch (NumberFormatException e) {
+//			settings.setSetting("port", String.valueOf(port));
+//			log.error("NumberFormatException while setting port! Default port (" + port + ") will be used...");
+//		}
+
 		// Configuring SSLServer
-		try {
-			configureSSLServer();
-		} catch (GeneralSecurityException | IOException e) {
-			log.fatal("Fatal error occurred while configuring server! Shuting down...");
-			log.logStackTrace(e);
-			System.exit(1);
-		}
-		
+		configureSSLServer();
+
 		// Creating SSLServer
 		try {
-			serverSocket = (SSLServerSocket) server.createServerSocket(PORT);
+			SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+			serverSocket = (SSLServerSocket) factory.createServerSocket(port);
 		} catch (IOException e) {
 			log.fatal("Fatal error occurred while creating server! Shuting down...");
 			log.logStackTrace(e);
 			System.exit(1);
 		}
 
-		log.info("Successfully created server on port " + PORT);
+		log.info("Successfully created server on port " + port);
 		log.info("Waiting for clients...");
 
-		//Accepting clients
+		// Accepting clients
 		while (true) {
 
 			SSLSocket client = null;
@@ -83,23 +77,18 @@ public class Server {
 				log.error("Error occurred while accepting a client (id: " + id + ")! Closing socket...");
 				log.logStackTrace(e);
 			}
-			if(client != null) new ClientThread(client, id).start();
+			if (client != null)
+				new ClientThread(client, id).start();
 			id++;
 		}
 	}
-	
-	void configureSSLServer() throws GeneralSecurityException, IOException {
+
+	void configureSSLServer() {
+
+		String keystorePath = home + "\\" + keystore;
 		
-		server = new SSLServer();
-		
-		String certificate = settings.getSetting("certificate");
-		String privateKey = settings.getSetting("privateKey");
-		char[] password = settings.getSetting("password").toCharArray();
-		
-		KeyMaterial keyMaterial = new KeyMaterial(certificate, privateKey, password);
-		
-		server.setKeyMaterial(keyMaterial);
-		server.addTrustMaterial(TrustMaterial.TRUST_ALL);
+		System.setProperty("javax.net.ssl.keyStore", keystorePath);
+		System.setProperty("javax.net.ssl.keyStorePassword", password);
 	}
 
 	static SimpleLog getLog() {
