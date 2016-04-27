@@ -32,26 +32,37 @@ public class Server {
 		// Create log file
 		log = new SimpleLog(new File("log.txt"), true, true);
 
+		String message = "Started 'Country Data Management System' server | Version: " + version;
+
+		String s = "";
+		for (int i = 0; i < message.length(); i++)
+			s = s + "=";
+
+		log.info(s);
+		log.info(message);
+		log.info(s);
+
 		// Initializing settings
 		Properties defaultValues = new Properties();
 		defaultValues.setProperty("port", String.valueOf(port));
 		defaultValues.setProperty("keystore", "server.keystore");
 		defaultValues.setProperty("password", "123456");
-		defaultValues.setProperty("permissionsPath", "permissions.xml");
-		defaultValues.setProperty("passwordsPath", "passwords.xml");
-		settings = new Settings(new File("settings.xml"), defaultValues, false, log);
+		defaultValues.setProperty("permissionsPath", "permissions.properties");
+		defaultValues.setProperty("passwordsPath", "passwords.properties");
+		settings = new Settings(new File("settings.properties"), defaultValues, false, log);
 
 		// Setting variables (port)
 		try {
 			port = Integer.parseInt(settings.getSetting("port"));
 		} catch (NumberFormatException e) {
 			settings.setSetting("port", String.valueOf(port));
-			log.error(
-					"Error occurred while reading port from settings.xml! Default port (" + port + ") will be used...");
+			log.error("Error occurred while reading port from settings.properties! Default port (" + port
+					+ ") will be used...");
 		}
 
 		keystore = settings.getSetting("keystore");
 		password = settings.getSetting("password");
+		passwordsPath = settings.getSetting("passwordsPath");
 		permissionsPath = settings.getSetting("permissionsPath");
 
 		// Creating/checking local files
@@ -90,15 +101,7 @@ public class Server {
 			System.exit(1);
 		}
 
-		String message = "Successfully created CDMS server on port " + port + " (version: " + version + ")";
-
-		String s = "";
-		for (int i = 0; i < message.length(); i++)
-			s = s + "=";
-
-		log.info(s);
-		log.info(message);
-		log.info(s);
+		log.info("Successfully created CDMS server on port " + port);
 		log.info("Waiting for clients...");
 
 		// Accepting clients

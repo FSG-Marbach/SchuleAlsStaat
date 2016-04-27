@@ -71,6 +71,7 @@ public class ClientThread extends Thread {
 				if (goOn) {
 
 					log.info("Successfull authentication and initialization of client " + id);
+
 					// TODO
 				}
 			}
@@ -106,10 +107,10 @@ public class ClientThread extends Thread {
 		password = reader.readLine();
 
 		// Checking password
-		if (passwords.getSetting("clientName") == null)
+		if (passwords.getSetting(clientName) == null)
 			throw new AuthenticationException(
 					"No entry of '" + clientName + "' in '" + settings.getSetting("passwordsPath") + "'!");
-		if (!passwords.getSetting("clientName").equals(password))
+		if (!passwords.getSetting(clientName).equals(password))
 			throw new AuthenticationException("Wrong password!");
 	}
 

@@ -12,7 +12,7 @@ public class TestClient {
 	final static String passwd = "123456";
 
 	final static String theServerName = "localhost";
-	final static int theServerPort = 5678;
+	final static int theServerPort = 3746;
 
 	void doClientSide() throws Exception {
 
@@ -20,8 +20,17 @@ public class TestClient {
 		SSLSocket sslSocket = (SSLSocket) sslsf.createSocket(theServerName, theServerPort);
 
 		OutputStream sslOS = sslSocket.getOutputStream();
-		sslOS.write("Hello SSL Server\n".getBytes());
+		sslOS.write("TestClient\n".getBytes());
 		sslOS.flush();
+		sslOS.write("123456\n".getBytes());
+		sslOS.flush();
+
+		for (int i = 0; i < 10; i++) {
+			sslOS.write("Blub\n".getBytes());
+			sslOS.flush();
+			Thread.sleep(1000);
+		}
+
 		sslSocket.close();
 	}
 
