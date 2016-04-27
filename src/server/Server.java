@@ -32,7 +32,7 @@ public class Server {
 		// Create log file
 		log = new SimpleLog(new File("log.txt"), true, true);
 
-		String message = "Started 'Country Data Management System' server | Version: " + version;
+		String message = "Started 'Citizen Data Management System' server | Version: " + version;
 
 		String s = "";
 		for (int i = 0; i < message.length(); i++)
@@ -72,7 +72,7 @@ public class Server {
 		}
 
 		if (passwordsPath == null || !new File(passwordsPath).exists()) {
-			log.fatal("Missing passwords file! Shuting downn...");
+			log.fatal("Missing passwords file! Shuting down...");
 			System.exit(1);
 		}
 
