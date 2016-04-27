@@ -2,6 +2,9 @@ package server;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -65,7 +68,46 @@ public class ClientThread extends Thread {
 
 					log.info("Successful authentication and initialization of client " + id);
 
-					// TODO
+					String[] allowedCommands = new String[0];
+
+					// TODO Reading permissions from file
+
+					// Receiving and managing commands
+					while (goOn) {
+
+						// Receiving command
+						String command = null;
+						try {
+							command = reader.readLine();
+							log.info("Client " + id + " sent command '" + command + "'");
+						} catch (IOException e) {
+							log.error("Error occurred while receiving data from client " + id);
+							goOn = false;
+						}
+
+						// Checking for permission
+						boolean included = false;
+						for (String s : allowedCommands)
+							if (s.equals(command)) {
+								included = true;
+								break;
+							}
+
+						if (included) {
+
+							// Executing command
+							switch (command) {
+							case "":
+								break;
+							default:
+								log.warning("Client " + id + " sent unimplemented command (' + " + command
+										+ "') with permission!");
+								break;
+							}
+						} else {
+							log.warning("Client " + id + " tried to execute '" + command + "'(without permission)!");
+						}
+					}
 				}
 			}
 		}

@@ -51,7 +51,7 @@ public class Server {
 		defaultValues.setProperty("passwordsPath", "passwords.properties");
 		settings = new Settings(new File("settings.properties"), defaultValues, false, log);
 
-		// Setting variables (port)
+		// Setting variables
 		try {
 			port = Integer.parseInt(settings.getSetting("port"));
 		} catch (NumberFormatException e) {
@@ -67,17 +67,17 @@ public class Server {
 
 		// Creating/checking local files
 		if (keystore == null || !new File(keystore).exists()) {
-			log.fatal("Missing keystore file! Couldn't create server. Shuting down...");
+			log.fatal("Missing keystore file! Couldn't create server. Shutting down...");
 			System.exit(1);
 		}
 
 		if (passwordsPath == null || !new File(passwordsPath).exists()) {
-			log.fatal("Missing passwords file! Shuting down...");
+			log.fatal("Missing passwords file! Shutting down...");
 			System.exit(1);
 		}
 
 		if (permissionsPath == null || !new File(permissionsPath).exists()) {
-			log.fatal("Missing permissions file! Shuting down...");
+			log.fatal("Missing permissions file! Shutting down...");
 			System.exit(1);
 		}
 
@@ -96,7 +96,7 @@ public class Server {
 			SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 			serverSocket = (SSLServerSocket) factory.createServerSocket(port);
 		} catch (IOException e) {
-			log.fatal("Fatal error occurred while creating server! Shuting down...");
+			log.fatal("Fatal error occurred while creating server! Shutting down...");
 			log.logStackTrace(e);
 			System.exit(1);
 		}
