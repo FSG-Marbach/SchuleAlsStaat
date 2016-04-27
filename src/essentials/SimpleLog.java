@@ -35,7 +35,7 @@ public class SimpleLog {
 	 */
 	public SimpleLog(File file, boolean useSameFile, boolean useTimestamp) {
 
-		dateFormat = new SimpleDateFormat("dd.MM.yyyy_hh:mm:ss");
+		dateFormat = new SimpleDateFormat("dd.MM.yyyy_HH:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		SimpleLog.timestamp = useTimestamp;
 
