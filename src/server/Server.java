@@ -2,6 +2,7 @@ package server;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -20,39 +21,45 @@ public class Server {
 	Settings settings;
 	SSLServerSocket serverSocket;
 
-	final String logFilePath = "C:\\CDMS\\log.txt";
-	final String home = "C:\\CDMS";
-	final String keystore = "server.keystore";
-	final String password = "123456";
-	
-	int port = 5678;
+	final String version = "0.1.1";
+	String keystore, password;
+
+	int port = 3746;
 	int id = 0;
 
 	public Server() {
 
 		// Create log file
-		log = new SimpleLog(new File(logFilePath), true, true);
+		log = new SimpleLog(new File("log.txt"), true, true);
 
-		//TODO Initialize settings
-		
-//		Properties defaultValues = new Properties();
-//		defaultValues.setProperty("port", String.valueOf(port));
-//		defaultValues.setProperty("home", "C:\\CDMS");
-//		defaultValues.setProperty("keystore", "server.keystore");
-//		defaultValues.setProperty("password", "123456");
-//		settings = new Settings(new File("C:\\CDMS\\settings.xml"), defaultValues, log);
+		// Initialize settings
+		Properties defaultValues = new Properties();
+		defaultValues.setProperty("port", String.valueOf(port));
+		defaultValues.setProperty("keystore", "server.keystore");
+		defaultValues.setProperty("password", "123456");
+		settings = new Settings(new File("settings.xml"), defaultValues, log);
 
-		//TODO Setting variables (port)
-		
-//		try {
-//			port = Integer.parseInt(settings.getSetting("port"));
-//		} catch (NumberFormatException e) {
-//			settings.setSetting("port", String.valueOf(port));
-//			log.error("NumberFormatException while setting port! Default port (" + port + ") will be used...");
-//		}
+		// Create/check local files
+		if (!new File(settings.getSetting("keystore")).exists()) {
+			log.fatal("Missing keystore file! Couldn't create server. Shuting down...");
+			System.exit(1);
+		}
+
+		// Setting variables (port)
+		try {
+			port = Integer.parseInt(settings.getSetting("port"));
+		} catch (NumberFormatException e) {
+			settings.setSetting("port", String.valueOf(port));
+			log.error(
+					"Error occurred while reading port from settings.xml! Default port (" + port + ") will be used...");
+		}
+
+		keystore = settings.getSetting("keystore");
+		password = settings.getSetting("password");
 
 		// Configuring SSLServer
-		configureSSLServer();
+		System.setProperty("javax.net.ssl.keyStore", keystore);
+		System.setProperty("javax.net.ssl.keyStorePassword", password);
 
 		// Creating SSLServer
 		try {
@@ -64,7 +71,15 @@ public class Server {
 			System.exit(1);
 		}
 
-		log.info("Successfully created server on port " + port);
+		String message = "Successfully created CDMS server on port " + port + " (version: " + version + ")";
+		
+		String s = "";
+		for (int i = 0; i < message.length(); i++)
+			s = s + "=";
+
+		log.info(s);
+		log.info(message);
+		log.info(s);
 		log.info("Waiting for clients...");
 
 		// Accepting clients
@@ -81,14 +96,6 @@ public class Server {
 				new ClientThread(client, id).start();
 			id++;
 		}
-	}
-
-	void configureSSLServer() {
-
-		String keystorePath = home + "\\" + keystore;
-		
-		System.setProperty("javax.net.ssl.keyStore", keystorePath);
-		System.setProperty("javax.net.ssl.keyStorePassword", password);
 	}
 
 	static SimpleLog getLog() {
