@@ -58,6 +58,7 @@ public class ClientThread extends Thread {
 
 					try {
 						permissionsGroup = Integer.parseInt(group);
+						log.info("Registered client " + id + " to permissions group " + permissionsGroup);
 					} catch (NumberFormatException e) {
 						log.error(
 								"NumberFormatException occurred while reading permissions group of client " + id + "!");
@@ -70,7 +71,7 @@ public class ClientThread extends Thread {
 
 				if (goOn) {
 
-					log.info("Successfull authentication and initialization of client " + id);
+					log.info("Successful authentication and initialization of client " + id);
 
 					// TODO
 				}
