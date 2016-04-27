@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import essentials.Essentials;
-import essentials.SimpleLog;
 
 /**
  * @author Maximilian
@@ -32,28 +31,9 @@ public class ConnectionDialog extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtCertPath;
 	private JTextField textField_1;
-	private SimpleLog log;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ConnectionDialog frame = new ConnectionDialog();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public ConnectionDialog() {
+
 		setTitle("Verbindung");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,6 +44,11 @@ public class ConnectionDialog extends JFrame {
 		contentPane.setLayout(null);
 
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		btnCancel.setBounds(242, 71, 89, 23);
 		contentPane.add(btnCancel);
 
