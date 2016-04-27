@@ -18,11 +18,11 @@ import essentials.SimpleLog;
 public class Server {
 
 	static SimpleLog log;
-	Settings settings;
+	static Settings settings, passwords, permissions;
 	SSLServerSocket serverSocket;
 
-	final String version = "0.1.1";
-	String keystore, password;
+	final String version = "0.1.2";
+	String keystore, password, permissionsPath, passwordsPath;
 
 	int port = 3746;
 	int id = 0;
@@ -32,18 +32,14 @@ public class Server {
 		// Create log file
 		log = new SimpleLog(new File("log.txt"), true, true);
 
-		// Initialize settings
+		// Initializing settings
 		Properties defaultValues = new Properties();
 		defaultValues.setProperty("port", String.valueOf(port));
 		defaultValues.setProperty("keystore", "server.keystore");
 		defaultValues.setProperty("password", "123456");
-		settings = new Settings(new File("settings.xml"), defaultValues, log);
-
-		// Create/check local files
-		if (!new File(settings.getSetting("keystore")).exists()) {
-			log.fatal("Missing keystore file! Couldn't create server. Shuting down...");
-			System.exit(1);
-		}
+		defaultValues.setProperty("permissionsPath", "permissions.xml");
+		defaultValues.setProperty("passwordsPath", "passwords.xml");
+		settings = new Settings(new File("settings.xml"), defaultValues, false, log);
 
 		// Setting variables (port)
 		try {
@@ -56,6 +52,29 @@ public class Server {
 
 		keystore = settings.getSetting("keystore");
 		password = settings.getSetting("password");
+		permissionsPath = settings.getSetting("permissionsPath");
+
+		// Creating/checking local files
+		if (keystore == null || !new File(keystore).exists()) {
+			log.fatal("Missing keystore file! Couldn't create server. Shuting down...");
+			System.exit(1);
+		}
+
+		if (passwordsPath == null || !new File(passwordsPath).exists()) {
+			log.fatal("Missing passwords file! Shuting downn...");
+			System.exit(1);
+		}
+
+		if (permissionsPath == null || !new File(permissionsPath).exists()) {
+			log.fatal("Missing permissions file! Shuting down...");
+			System.exit(1);
+		}
+
+		// Initializing client passwords
+		passwords = new Settings(new File(passwordsPath), new Properties(), false, log);
+
+		// Initializing client permissions
+		permissions = new Settings(new File(permissionsPath), new Properties(), false, log);
 
 		// Configuring SSLServer
 		System.setProperty("javax.net.ssl.keyStore", keystore);
@@ -72,7 +91,7 @@ public class Server {
 		}
 
 		String message = "Successfully created CDMS server on port " + port + " (version: " + version + ")";
-		
+
 		String s = "";
 		for (int i = 0; i < message.length(); i++)
 			s = s + "=";
@@ -100,6 +119,18 @@ public class Server {
 
 	static SimpleLog getLog() {
 		return log;
+	}
+
+	static Settings getSettings() {
+		return settings;
+	}
+
+	static Settings getPasswords() {
+		return passwords;
+	}
+
+	static Settings getPermissions() {
+		return permissions;
 	}
 
 	public static void main(String[] args) throws IOException {
