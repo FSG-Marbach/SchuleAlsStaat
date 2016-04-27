@@ -1,0 +1,23 @@
+Create Certificates for 'Citizen Data Management System' like this:
+
+Make sure that Java is installed and added to your PATH-Variable
+
+Command: keytool -genkey -keystore server.keystore -keyalg RSA -keysize 2048 -validity [days]
+
+You will now be asked to enter a couple of informations. Use these:
+
+Password: [Password]
+CN: [Your name]
+OU: FSG Marbach
+O: Schule als Staat 
+L: Marbach
+S: Baden-Wuerttemberg
+C=DE
+
+To create the truststore file for the client(s), you will need to extract the public key certificate first like this:
+
+Command: keytool -export -keystore server.keystore -file certificate.crt
+
+After that you can create the truststore file like this:
+
+Command: keytool -import -file certificate.crt -keystore client.truststore
