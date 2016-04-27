@@ -1,13 +1,13 @@
 /**
  * 
  */
-package ClientLibrary;
+package clientLibrary;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -15,9 +15,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import essentials.Essentials;
+import essentials.SimpleLog;
 
 /**
  * @author Maximilian
@@ -28,6 +32,7 @@ public class ConnectionDialog extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtCertPath;
 	private JTextField textField_1;
+	private SimpleLog log;
 
 	/**
 	 * Launch the application.
@@ -75,7 +80,7 @@ public class ConnectionDialog extends JFrame {
 		contentPane.add(lblZertifikatpfad);
 
 		txtCertPath = new JTextField();
-		txtCertPath.setText("C:/CDMS");
+		txtCertPath.setText("C:\\CDMS");
 		txtCertPath.setBounds(89, 40, 209, 20);
 		contentPane.add(txtCertPath);
 		txtCertPath.setColumns(10);
@@ -84,7 +89,12 @@ public class ConnectionDialog extends JFrame {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				FileChooser fc = new FileChooser();
+				JFileChooser fc = new JFileChooser();
+				fc.setDialogTitle("Installationsverzeichnis...");
+				fc.setCurrentDirectory(new File("C:\\"));
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fc.showOpenDialog(null);
+				txtCertPath.setText(fc.getSelectedFile().getPath());
 
 			}
 		});
@@ -104,9 +114,19 @@ public class ConnectionDialog extends JFrame {
 		textField_1.setBounds(246, 9, 52, 20);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
+		String[] ips = { "127.0.0.1" };
+		try {
+			ips = Essentials.searchIPs();
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(this,
+					"IOException while retrieving IPs. Enter IP manually",
+					"Error", JOptionPane.ERROR_MESSAGE);
+			// log.logStackTrace(e1);
+		}
 
 		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "127.0.0.1" }));
+		comboBox.setEditable(true);
+		comboBox.setModel(new DefaultComboBoxModel(ips));
 		comboBox.setBounds(89, 9, 118, 20);
 		contentPane.add(comboBox);
 	}
