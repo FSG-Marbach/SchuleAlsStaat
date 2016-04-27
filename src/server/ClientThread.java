@@ -33,6 +33,8 @@ public class ClientThread extends Thread {
 		// Configure log
 		log = Server.getLog();
 
+		log.info("Client " + id + " connected");
+
 		// Initialize session
 		try {
 			initializeSession();
@@ -85,27 +87,31 @@ public class ClientThread extends Thread {
 							goOn = false;
 						}
 
-						// Checking for permission
-						boolean included = false;
-						for (String s : allowedCommands)
-							if (s.equals(command)) {
-								included = true;
-								break;
-							}
+						if (goOn) {
 
-						if (included) {
+							// Checking for permission
+							boolean included = false;
+							for (String s : allowedCommands)
+								if (s.equals(command)) {
+									included = true;
+									break;
+								}
 
-							// Executing command
-							switch (command) {
-							case "":
-								break;
-							default:
-								log.warning("Client " + id + " sent unimplemented command (' + " + command
-										+ "') with permission!");
-								break;
+							if (included) {
+
+								// Executing command
+								switch (command) {
+								case "":
+									break;
+								default:
+									log.warning("Client " + id + " sent unimplemented command (' + " + command
+											+ "') with permission!");
+									break;
+								}
+							} else {
+								log.warning(
+										"Client " + id + " tried to execute '" + command + "'(without permission)!");
 							}
-						} else {
-							log.warning("Client " + id + " tried to execute '" + command + "'(without permission)!");
 						}
 					}
 				}
