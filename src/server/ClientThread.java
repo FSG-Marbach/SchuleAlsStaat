@@ -19,9 +19,9 @@ public class ClientThread extends Thread {
 	DataOutputStream writer;
 	Settings settings, passwords, permissions;
 
-	String clientName, password;
+	String clientName, password, permissionsGroup;
 
-	int id, permissionsGroup;
+	int id;
 
 	public void run() {
 
@@ -55,17 +55,9 @@ public class ClientThread extends Thread {
 				// Reading permissions group
 				String group = permissions.getSetting(clientName);
 				if (group != null) {
-
-					try {
-						permissionsGroup = Integer.parseInt(group);
-						log.info("Registered client " + id + " to permissions group " + permissionsGroup);
-					} catch (NumberFormatException e) {
-						log.error(
-								"NumberFormatException occurred while reading permissions group of client " + id + "!");
-						goOn = false;
-					}
+					permissionsGroup = group;
 				} else {
-					log.error("NullPointerException occurred while reading permissions group of client " + id + "!");
+					log.error("Error occurred while reading permissions group of client " + id + "!");
 					goOn = false;
 				}
 
