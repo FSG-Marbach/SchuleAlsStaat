@@ -11,7 +11,7 @@ public class TestClient {
 
 	public TestClient() throws Exception {
 
-		System.setProperty("javax.net.ssl.trustStore", "client.truststore");
+		System.setProperty("javax.net.ssl.trustStore", "res/client/client.truststore");
 		System.setProperty("javax.net.ssl.trustStorePassword", "123456");
 
 		SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -22,6 +22,7 @@ public class TestClient {
 
 		writer.writeBytes("root\n");
 		writer.writeBytes("123456\n");
+		writer.writeBytes("reload all\n");
 		writer.writeBytes("disconnect\n");
 
 		socket.close();

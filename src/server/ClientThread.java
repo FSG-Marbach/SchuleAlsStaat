@@ -101,6 +101,7 @@ public class ClientThread extends Thread {
 									break;
 								case "reload":
 									Commands.reload(id, command);
+									break;
 								default:
 									log.warning("Client " + id + " sent unimplemented command (' + " + command
 											+ "') with permission!");

@@ -12,14 +12,14 @@ public abstract class Commands {
 		if (command[1] != null) {
 			switch (command[1]) {
 			case "all":
-				reloadPasswords();
-				reloadPermissions();
+				Server.getPasswords().reload();
+				Server.getPermissions().reload();
 				break;
 			case "passwords":
-				reloadPasswords();
+				Server.getPasswords().reload();
 				break;
 			case "permissions":
-				reloadPermissions();
+				Server.getPermissions().reload();
 				break;
 			default:
 				Server.getLog().warning("Client " + id + " sent invalid command: '" + command[1] + "'!");
@@ -27,21 +27,5 @@ public abstract class Commands {
 		} else {
 			Server.getLog().warning("Client " + id + " sent invalid command: '" + command[1] + "'!");
 		}
-	}
-
-	static void reloadPasswords() {
-		Settings passwords = new Settings(new File(Server.getSettings().getSetting("passwordsPath")), new Properties(),
-				false, Server.getLog());
-		Server.setPasswords(passwords);
-
-		Server.getLog().info("Reloaded passwords");
-	}
-
-	static void reloadPermissions() {
-		Settings permissions = new Settings(new File(Server.getSettings().getSetting("permissionsPath")),
-				new Properties(), false, Server.getLog());
-		Server.setPasswords(permissions);
-
-		Server.getLog().info("Reloaded permissions");
 	}
 }

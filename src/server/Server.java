@@ -21,6 +21,7 @@ public class Server {
 	static Settings settings, passwords, permissions;
 	SSLServerSocket serverSocket;
 
+	final static String path = "res\\server\\";
 	final String version = "0.1.2";
 	String keystore, password, permissionsPath, passwordsPath;
 
@@ -30,7 +31,7 @@ public class Server {
 	public Server() {
 
 		// Create log file
-		log = new SimpleLog(new File("log.txt"), true, true);
+		log = new SimpleLog(new File(path + "log.txt"), true, true);
 
 		String message = "Started 'Citizen Data Management System' server | Version: " + version;
 
@@ -49,7 +50,7 @@ public class Server {
 		defaultValues.setProperty("password", "123456");
 		defaultValues.setProperty("permissionsPath", "permissions.properties");
 		defaultValues.setProperty("passwordsPath", "passwords.properties");
-		settings = new Settings(new File("settings.properties"), defaultValues, false, log);
+		settings = new Settings(new File(path + "settings.properties"), defaultValues, false, log);
 		settings.setComment("Syntax: [Key]=[Value]", true);
 
 		// Setting variables
@@ -67,22 +68,22 @@ public class Server {
 		permissionsPath = settings.getSetting("permissionsPath");
 
 		// Creating/checking local files
-		if (keystore == null || !new File(keystore).exists()) {
+		if (keystore == null || !new File(path + keystore).exists()) {
 			log.fatal("Missing keystore file! Couldn't create server. Shutting down...");
 			System.exit(1);
 		}
 
 		// Initializing client passwords
-		passwords = new Settings(new File(passwordsPath), new Properties(), false, log);
+		passwords = new Settings(new File(path + passwordsPath), new Properties(), false, log);
 		passwords.setComment("Syntax: [Client name]=[Password]", true);
 
 		// Initializing client permissions
-		permissions = new Settings(new File(permissionsPath), new Properties(), false, log);
+		permissions = new Settings(new File(path + permissionsPath), new Properties(), false, log);
 		permissions.setComment(
 				"Syntax: [Client name]=[Permissions group] or [Permissions group]=[Array of permissions]", true);
 
 		// Configuring SSLServer
-		System.setProperty("javax.net.ssl.keyStore", keystore);
+		System.setProperty("javax.net.ssl.keyStore", path + keystore);
 		System.setProperty("javax.net.ssl.keyStorePassword", password);
 
 		// Creating SSLServer
@@ -113,6 +114,10 @@ public class Server {
 			id++;
 		}
 	}
+	
+	static String getPath() {
+		return path;
+	}
 
 	static SimpleLog getLog() {
 		return log;
@@ -126,18 +131,9 @@ public class Server {
 		return passwords;
 	}
 
-	static void setPasswords(Settings s) {
-		passwords = s;
-	}
-
 	static Settings getPermissions() {
 		return permissions;
 	}
-
-	static void setPermissions(Settings s) {
-		permissions = s;
-	}
-
 	public static void main(String[] args) throws IOException {
 		new Server();
 	}
