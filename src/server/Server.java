@@ -114,7 +114,7 @@ public class Server {
 			id++;
 		}
 	}
-	
+
 	static String getPath() {
 		return path;
 	}
@@ -134,6 +134,7 @@ public class Server {
 	static Settings getPermissions() {
 		return permissions;
 	}
+
 	public static void main(String[] args) throws IOException {
 		new Server();
 	}

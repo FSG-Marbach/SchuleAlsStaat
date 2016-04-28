@@ -1,8 +1,8 @@
 package test;
 
-import java.io.BufferedReader;
+//import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.InputStreamReader;
+//import java.io.InputStreamReader;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -17,13 +17,14 @@ public class TestClient {
 		SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 		SSLSocket socket = (SSLSocket) factory.createSocket("localhost", 3746);
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		// BufferedReader reader = new BufferedReader(new
+		// InputStreamReader(socket.getInputStream()));
 		DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
 
 		writer.writeBytes("root\n");
 		writer.writeBytes("123456\n");
-		writer.writeBytes("reload all\n");
-		writer.writeBytes("disconnect\n");
+		writer.writeBytes("reload passwords blub permissions bla\n");
+		writer.writeBytes("disconnect\n"); 
 
 		socket.close();
 	}

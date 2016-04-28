@@ -103,13 +103,13 @@ public class ClientThread extends Thread {
 									Commands.reload(id, command);
 									break;
 								default:
-									log.warning("Client " + id + " sent unimplemented command (' + " + command
+									log.warning("Client " + id + " sent unimplemented command ('" + request
 											+ "') with permission!");
 									break;
 								}
 							} else {
 								log.warning(
-										"Client " + id + " tried to execute '" + command + "' (without permission)!");
+										"Client " + id + " tried to execute '" + request + "' (without permission)!");
 							}
 						}
 					}
@@ -119,7 +119,7 @@ public class ClientThread extends Thread {
 
 		// Closing socket
 		try {
-			log.info("Closing socket of client " + id);
+			log.debug("Closing socket of client " + id);
 			socket.close();
 			log.info("Closed socket of client " + id);
 		} catch (IOException e) {
