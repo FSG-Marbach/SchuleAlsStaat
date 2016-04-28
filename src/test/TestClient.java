@@ -1,6 +1,8 @@
 package test;
 
-import java.io.OutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -15,20 +17,14 @@ public class TestClient {
 		SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 		SSLSocket socket = (SSLSocket) factory.createSocket("localhost", 3746);
 
-//		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//		DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
-//		
-//		writer.writeBytes("TestClient\n");
-//		writer.flush();
-//		writer.writeBytes("123456\n");
-//		writer.flush();
-//		writer.writeBytes("TestCommand\n");
-//		writer.flush();
-		
-		OutputStream sslOS = socket.getOutputStream();
-		sslOS.write("TestClient\n".getBytes());
-		sslOS.write("123456\n".getBytes());
-		sslOS.write("TestCommand\n".getBytes());
+		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
+
+		writer.writeBytes("root\n");
+		writer.writeBytes("123456\n");
+		writer.writeBytes("disconnect\n");
+
+		socket.close();
 	}
 
 	public static void main(String[] args) throws Exception {

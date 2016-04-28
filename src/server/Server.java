@@ -50,6 +50,7 @@ public class Server {
 		defaultValues.setProperty("permissionsPath", "permissions.properties");
 		defaultValues.setProperty("passwordsPath", "passwords.properties");
 		settings = new Settings(new File("settings.properties"), defaultValues, false, log);
+		settings.setComment("Syntax: [Key]=[Value]", true);
 
 		// Setting variables
 		try {
@@ -71,21 +72,14 @@ public class Server {
 			System.exit(1);
 		}
 
-		if (passwordsPath == null || !new File(passwordsPath).exists()) {
-			log.fatal("Missing passwords file! Shutting down...");
-			System.exit(1);
-		}
-
-		if (permissionsPath == null || !new File(permissionsPath).exists()) {
-			log.fatal("Missing permissions file! Shutting down...");
-			System.exit(1);
-		}
-
 		// Initializing client passwords
 		passwords = new Settings(new File(passwordsPath), new Properties(), false, log);
+		passwords.setComment("Syntax: [Client name]=[Password]", true);
 
 		// Initializing client permissions
 		permissions = new Settings(new File(permissionsPath), new Properties(), false, log);
+		permissions.setComment(
+				"Syntax: [Client name]=[Permissions group] or [Permissions group]=[Array of permissions]", true);
 
 		// Configuring SSLServer
 		System.setProperty("javax.net.ssl.keyStore", keystore);
@@ -132,8 +126,16 @@ public class Server {
 		return passwords;
 	}
 
+	static void setPasswords(Settings s) {
+		passwords = s;
+	}
+
 	static Settings getPermissions() {
 		return permissions;
+	}
+
+	static void setPermissions(Settings s) {
+		permissions = s;
 	}
 
 	public static void main(String[] args) throws IOException {
