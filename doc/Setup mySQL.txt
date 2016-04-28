@@ -17,15 +17,15 @@ Windows:
 	On the next screen, choose a secure root password
 	and create a few account (you can add/remove accounts later)
 	
-	On the next screen, make sure mySQL will run as a Windows Service
-	on System Startup
+	On the next screen, make sure mySQL will run as a Windows service
+	on system startup
 	
 	Skip all following steps
 	
 Ubuntu:
 	sudo apt-get install mysql-server
-	Find out by yourself, how to configure it
-	Now, install the mySQL Connector/J manually
+	Find out by yourself, how to configure it.
+	Now, install the mySQL Connector/J manually.
 	
 Create database and start using it:
 	create database db_name;
@@ -55,5 +55,5 @@ Create table:
 Insert entries:
 	INSERT INTO table_name values (default, 'test', 'test', 'test);
 	
-Modifie entries:
+Modify entries:
 	UPDATE table_name SET colum_name = value WHERE colum_name = value;

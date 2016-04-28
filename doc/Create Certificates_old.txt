@@ -6,7 +6,7 @@ Create Certificates like this:
 	or download installer from https://slproweb.com/products/Win32OpenSSL.html
 
 
-	Create RSA private key with RSA (2048 bit key length), SHA256 and Triple DES encryption:
+	Create RSA private key with 2048 bit key length, SHA256 and Triple DES encryption:
 
 	Command: openssl genrsa -des3 -out Client001.key 2048 -rsa256
 
@@ -28,7 +28,7 @@ Create Certificates like this:
 	O=FSG Marbach
 	OU=Schule als Staat
 	CN=CDMS_Client001
-	E=<Mail>
+	E=software@unitedstatesofschiller.de
 
 	
 View details of the files:
