@@ -1,0 +1,59 @@
+Setup mySQL like this:
+
+Windows:
+	Download the Community-Version Installer from: http://dev.mysql.com/downloads/mysql/
+	(not the web-community installer)
+	You can download the 32-bit Installer, it will automatically install the 64-bit binaries
+	
+	During the installation, select "Custom" and install
+		-mySQL Server
+		-Connector/J
+	
+	On the next screen, apply the following configurations:
+		Config Type: Server Machine
+		TCP/IP, port 3306
+		Open Firewall port for network access
+	
+	On the next screen, choose a secure root password
+	and create a few account (you can add/remove accounts later)
+	
+	On the next screen, make sure mySQL will run as a Windows Service
+	on System Startup
+	
+	Skip all following steps
+	
+Ubuntu:
+	sudo apt-get install mysql-server
+	Find out by yourself, how to configure it
+	Now, install the mySQL Connector/J manually
+	
+Create database and start using it:
+	create database db_name;
+	use db_name;
+	
+Create user and grant access to all commands:
+	CREATE USER user_name IDENTIFIED BY 'user_pass'; 
+	grant usage on *.* to user_name@localhost identified by 'sqluserpw'; 
+	grant all privileges on db_name.* to user_name@localhost; 
+	
+Create table:
+	create table table_name (colum1_name data_type [constraints], colum2_name data_type [constraints]);
+	
+	The data_type can be:
+		char(size)			String of fixed size
+		varchar(maxsize)	String of variable size
+		number(size,d)		Number with maximum number of digits on the left and right side of the comma
+		date				Date.
+		int					Integer.
+	
+	The constraints can be:
+		unique: 		There can't be two entries with the same value
+		not null: 		The entry can't be empty
+		primary key:	Defines a unique identifier of each record
+		auto_increment:	When setting the value to "default" it will take the next higher value
+
+Insert entries:
+	INSERT INTO table_name values (default, 'test', 'test', 'test);
+	
+Modifie entries:
+	UPDATE table_name SET colum_name = value WHERE colum_name = value;
