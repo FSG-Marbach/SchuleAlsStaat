@@ -3,7 +3,6 @@
  */
 package clientLibrary;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -26,21 +25,23 @@ import essentials.Essentials;
  * @author Maximilian
  *
  */
-public class ConnectionDialog extends JFrame {
+public class ConnectionDialog {
 
-	private JPanel contentPane;
-	private JTextField txtCertPath;
-	private JTextField textField_1;
+	private static JPanel contentPane;
+	private static JTextField txtCertPath;
+	private static JTextField textField_1;
+	static JFrame frame;
 
-	public ConnectionDialog() {
-
-		setTitle("Verbindung");
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 344, 133);
+	public static void showConnectionDialog() {
+		frame = new JFrame();
+		frame.setVisible(true);
+		frame.setTitle("Verbindung");
+		frame.setResizable(false);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(100, 100, 344, 133);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		frame.setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JButton btnCancel = new JButton("Cancel");
@@ -103,16 +104,20 @@ public class ConnectionDialog extends JFrame {
 		try {
 			ips = Essentials.searchIPs();
 		} catch (IOException e1) {
-			JOptionPane.showMessageDialog(this,
+			JOptionPane.showMessageDialog(frame,
 					"IOException while retrieving IPs. Enter IP manually",
 					"Error", JOptionPane.ERROR_MESSAGE);
 			// log.logStackTrace(e1);
 		}
 
-		JComboBox comboBox = new JComboBox();
+		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setEditable(true);
-		comboBox.setModel(new DefaultComboBoxModel(ips));
+		comboBox.setModel(new DefaultComboBoxModel<String>(ips));
 		comboBox.setBounds(89, 9, 118, 20);
 		contentPane.add(comboBox);
+		frame.repaint();
+		comboBox.repaint();
+		comboBox.setVisible(true);
+		comboBox.setSelectedIndex(0);
 	}
 }
