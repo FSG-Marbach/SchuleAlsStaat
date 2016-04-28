@@ -1,0 +1,57 @@
+Create Certificates like this:
+
+
+	Make sure OpenSSL is installed and added to your PATH-Variable.
+	If not, download it from https://www.openssl.org/ and compile it 
+	or download installer from https://slproweb.com/products/Win32OpenSSL.html
+
+
+	Create RSA private key with RSA (2048 bit key length), SHA256 and Triple DES encryption:
+
+	Command: openssl genrsa -des3 -out Client001.key 2048 -rsa256
+
+	Don't use "Client001.key" but the actual ID of the client or server.
+	You will now have to enter a pass-phrase. Use "1234" for testing purposes.
+
+	Backup the server.key and the pass-phrase in a secure location!
+
+
+	Create a signed Certificate (X509) that is valid for 25 years and store it under the same name
+
+	Command: openssl req -new -x509 -nodes -sha256 -days 9125 -key Client001.key -out Client001.crt
+
+	You will now be asked to enter a couple of informations. Use these:
+
+	C=DE
+	S=Baden-Wuerttemberg
+	L=Marbach
+	O=FSG Marbach
+	OU=Schule als Staat
+	CN=CDMS_Client001
+	E=<Mail>
+
+	
+View details of the files:
+
+	You can view the details of the RSA private key with:
+	openssl rsa -noout -text -in Client001.key
+
+	And the details of the signed certificate:
+	openssl x509 -noout -text -in Client001.crt
+
+
+Change pass-phrase:
+
+	openssl rsa -des3 -in Client001.key -out Client001.key.new
+
+
+Check if certificate matches private key
+	
+	Get the md5 hash of the modulus and compare them manually
+	
+	openssl x509 -noout -modulus -in server.crt | openssl md5
+	openssl rsa -noout -modulus -in server.key | openssl md5
+
+
+See also:
+	http://httpd.apache.org/docs/2.2/ssl/ssl_faq.html
