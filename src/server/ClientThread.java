@@ -2,16 +2,12 @@ package server;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.net.ssl.SSLSocket;
 import javax.security.sasl.AuthenticationException;
 
-import essentials.Settings;
 import essentials.SimpleLog;
 
 public class ClientThread extends Thread {
@@ -20,7 +16,6 @@ public class ClientThread extends Thread {
 	SSLSocket socket;
 	BufferedReader reader;
 	DataOutputStream writer;
-	Settings settings, passwords, permissions;
 
 	String clientName, password, permissionsGroup;
 
@@ -58,9 +53,8 @@ public class ClientThread extends Thread {
 			if (goOn) {
 
 				// Reading permissions group
-				String group = permissions.getSetting(clientName);
-				if (group != null) {
-					permissionsGroup = group;
+				if (Server.getPermissions().getSetting(clientName) != null) {
+					permissionsGroup = Server.getPermissions().getSetting(clientName);
 				} else {
 					log.error("Error occurred while reading permissions group of client " + id + "!");
 					goOn = false;
@@ -68,31 +62,32 @@ public class ClientThread extends Thread {
 
 				if (goOn) {
 
-					log.info("Successful authentication and initialization of client " + id);
+					log.info("Successful authentication of client " + id);
 
-					String[] allowedCommands = new String[0];
-
-					// TODO Reading permissions from file
+					String[] allowedCommands = Server.getPermissions().getArray(permissionsGroup);
 
 					// Receiving and managing commands
 					while (goOn) {
 
 						// Receiving command
-						String command = null;
+						String request = null;
 						try {
-							command = reader.readLine();
-							log.info("Client " + id + " sent command '" + command + "'");
+							request = reader.readLine();
+							log.info("Client " + id + " sent command '" + request + "'");
 						} catch (IOException e) {
 							log.error("Error occurred while receiving data from client " + id);
+							log.logStackTrace(e);
 							goOn = false;
 						}
 
 						if (goOn) {
 
+							String[] command = request.split(" ");
+
 							// Checking for permission
 							boolean included = false;
 							for (String s : allowedCommands)
-								if (s.equals(command)) {
+								if (s.equals(command[0])) {
 									included = true;
 									break;
 								}
@@ -100,9 +95,12 @@ public class ClientThread extends Thread {
 							if (included) {
 
 								// Executing command
-								switch (command) {
-								case "":
+								switch (command[0]) {
+								case "disconnect":
+									goOn = false;
 									break;
+								case "reload":
+									Commands.reload(id, command);
 								default:
 									log.warning("Client " + id + " sent unimplemented command (' + " + command
 											+ "') with permission!");
@@ -110,7 +108,7 @@ public class ClientThread extends Thread {
 								}
 							} else {
 								log.warning(
-										"Client " + id + " tried to execute '" + command + "'(without permission)!");
+										"Client " + id + " tried to execute '" + command + "' (without permission)!");
 							}
 						}
 					}
@@ -134,11 +132,6 @@ public class ClientThread extends Thread {
 		// Initialize reader and writer
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		writer = new DataOutputStream(socket.getOutputStream());
-
-		// Getting settings objects
-		settings = Server.getSettings();
-		passwords = Server.getPasswords();
-		permissions = Server.getPermissions();
 	}
 
 	void authenticateSession() throws IOException {
@@ -148,10 +141,10 @@ public class ClientThread extends Thread {
 		password = reader.readLine();
 
 		// Checking password
-		if (passwords.getSetting(clientName) == null)
-			throw new AuthenticationException(
-					"No entry of '" + clientName + "' in '" + settings.getSetting("passwordsPath") + "'!");
-		if (!passwords.getSetting(clientName).equals(password))
+		if (Server.getPasswords().getSetting(clientName) == null)
+			throw new AuthenticationException("No entry of '" + clientName + "' in '"
+					+ Server.getSettings().getSetting("Server.getPasswords()Path") + "'!");
+		if (!Server.getPasswords().getSetting(clientName).equals(password))
 			throw new AuthenticationException("Wrong password!");
 	}
 
