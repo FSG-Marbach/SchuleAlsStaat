@@ -7,6 +7,10 @@ import java.io.DataOutputStream;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+/**
+ * @author Felix Beutter
+ */
+
 public class TestClient {
 
 	public TestClient() throws Exception {
@@ -23,8 +27,8 @@ public class TestClient {
 
 		writer.writeBytes("root\n");
 		writer.writeBytes("123456\n");
-		writer.writeBytes("reload passwords blub permissions bla\n");
-		writer.writeBytes("disconnect\n"); 
+		writer.writeBytes("reload all bla\n");
+		writer.writeBytes("disconnect\n");
 
 		socket.close();
 	}

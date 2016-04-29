@@ -10,6 +10,10 @@ import javax.security.sasl.AuthenticationException;
 
 import essentials.SimpleLog;
 
+/**
+ * @author Felix Beutter
+ */
+
 public class ClientThread extends Thread {
 
 	SimpleLog log;
@@ -108,8 +112,7 @@ public class ClientThread extends Thread {
 									break;
 								}
 							} else {
-								log.warning(
-										"Client " + id + " tried to execute '" + request + "' (without permission)!");
+								log.warning("Client " + id + " tried to execute '" + request + "' without permission!");
 							}
 						}
 					}
