@@ -27,12 +27,18 @@ public class ConnectionDialog {
 	private JTextField textField_1;
 	private JComboBox<String> comboBox;
 	JFrame frame;
+	boolean keepAlive;
+	int buttonState;
+	public final static int BUTTON_CANCEL = 1;
+	public final static int BUTTON_CONNECT = 0;
 
 	public ConnectionDialog() {
 
 	}
 
-	public void showConnectionDialog(int port, String[] ips) {
+	public int showConnectionDialog(int port, String[] ips) {
+		keepAlive = true;
+
 		frame = new JFrame();
 		frame.setVisible(true);
 		frame.setTitle("Verbindung");
@@ -47,7 +53,9 @@ public class ConnectionDialog {
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				buttonState = BUTTON_CANCEL;
+				keepAlive = false;
+
 			}
 		});
 		btnCancel.setBounds(207, 71, 89, 23);
@@ -56,6 +64,9 @@ public class ConnectionDialog {
 		JButton btnConnect = new JButton("Connect");
 		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				buttonState = BUTTON_CONNECT;
+				keepAlive = false;
+
 			}
 		});
 		btnConnect.setBounds(108, 71, 89, 23);
@@ -94,6 +105,15 @@ public class ConnectionDialog {
 		comboBox.repaint();
 		comboBox.setVisible(true);
 		comboBox.setSelectedIndex(0);
+		while (keepAlive)
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+
+		frame.dispose();
+		return buttonState;
 	}
 
 	public String getPassword() {

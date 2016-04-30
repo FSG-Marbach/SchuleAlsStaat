@@ -14,8 +14,9 @@ import essentials.SimpleLog;
 
 public class Connection {
 
-	final int PORT = 443;
-	final String path = "res\\client";
+	int port = 443;
+	String ip = "127.0.0.1";
+	final String path = "res\\client\\";
 
 	public void connect() throws IOException {
 
@@ -24,6 +25,8 @@ public class Connection {
 		Properties props = new Properties();
 		props.setProperty("port", "3746");
 		props.setProperty("ip", "127.0.0.1");
+		props.setProperty("truststore", "res/client/client.truststore");
+		props.setProperty("truststorePassword", "123456");
 
 		Settings settings = new Settings(
 				new File(path + "settings.properties"), props, false, log);
@@ -38,11 +41,18 @@ public class Connection {
 					"Error", JOptionPane.ERROR_MESSAGE);
 			// log.logStackTrace(e1);
 		}
-		dialog.showConnectionDialog(
-				Integer.parseInt(settings.getSetting("port")), ips);
+		if (dialog.showConnectionDialog(
+				Integer.parseInt(settings.getSetting("port")), ips) == ConnectionDialog.BUTTON_CONNECT) {
 
-		SSLSocket socket = (SSLSocket) SSLSocketFactory.getDefault()
-				.createSocket("localhost", PORT);
+			ip = dialog.getIP();
+			port = Integer.parseInt(dialog.getPort());
+
+			System.setProperty("javax.net.ssl.trustStore",settings.getSetting("truststore"));
+			System.setProperty("javax.net.ssl.trustStorePassword",settings.getSetting("truststorePassword")));
+
+			SSLSocket socket = (SSLSocket) SSLSocketFactory.getDefault()
+					.createSocket(ip, port);
+		}
 
 	}
 
