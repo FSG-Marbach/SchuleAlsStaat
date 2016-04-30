@@ -5,21 +5,16 @@ package clientLibrary;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-import essentials.Essentials;
 
 /**
  * @author Maximilian
@@ -27,18 +22,23 @@ import essentials.Essentials;
  */
 public class ConnectionDialog {
 
-	private static JPanel contentPane;
-	private static JTextField txtCertPath;
-	private static JTextField textField_1;
-	static JFrame frame;
+	private JPanel contentPane;
+	private JPasswordField passwordField;
+	private JTextField textField_1;
+	private JComboBox<String> comboBox;
+	JFrame frame;
 
-	public static void showConnectionDialog() {
+	public ConnectionDialog() {
+
+	}
+
+	public void showConnectionDialog(int port, String[] ips) {
 		frame = new JFrame();
 		frame.setVisible(true);
 		frame.setTitle("Verbindung");
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 344, 133);
+		frame.setBounds(100, 100, 314, 133);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		frame.setContentPane(contentPane);
@@ -50,7 +50,7 @@ public class ConnectionDialog {
 				System.exit(0);
 			}
 		});
-		btnCancel.setBounds(242, 71, 89, 23);
+		btnCancel.setBounds(207, 71, 89, 23);
 		contentPane.add(btnCancel);
 
 		JButton btnConnect = new JButton("Connect");
@@ -58,34 +58,18 @@ public class ConnectionDialog {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnConnect.setBounds(143, 71, 89, 23);
+		btnConnect.setBounds(108, 71, 89, 23);
 		contentPane.add(btnConnect);
 
-		JLabel lblZertifikatpfad = new JLabel("Zertifikatpfad:");
-		lblZertifikatpfad.setBounds(10, 43, 69, 14);
-		contentPane.add(lblZertifikatpfad);
+		JLabel lblPassword = new JLabel("Passwort:");
+		lblPassword.setBounds(10, 43, 69, 14);
+		contentPane.add(lblPassword);
 
-		txtCertPath = new JTextField();
-		txtCertPath.setText("C:\\CDMS");
-		txtCertPath.setBounds(89, 40, 209, 20);
-		contentPane.add(txtCertPath);
-		txtCertPath.setColumns(10);
-
-		JButton button = new JButton("...");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				JFileChooser fc = new JFileChooser();
-				fc.setDialogTitle("Installationsverzeichnis...");
-				fc.setCurrentDirectory(new File("C:\\"));
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				fc.showOpenDialog(null);
-				txtCertPath.setText(fc.getSelectedFile().getPath());
-
-			}
-		});
-		button.setBounds(308, 39, 23, 23);
-		contentPane.add(button);
+		passwordField = new JPasswordField();
+		passwordField.setText("1234");
+		passwordField.setBounds(89, 40, 209, 20);
+		contentPane.add(passwordField);
+		passwordField.setColumns(10);
 
 		JLabel lblIpadresse = new JLabel("IP-Adresse:");
 		lblIpadresse.setBounds(10, 12, 69, 14);
@@ -96,21 +80,12 @@ public class ConnectionDialog {
 		contentPane.add(lblPort);
 
 		textField_1 = new JTextField();
-		textField_1.setText("15678");
+		textField_1.setText(String.valueOf(port));
 		textField_1.setBounds(246, 9, 52, 20);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
-		String[] ips = { "127.0.0.1" };
-		try {
-			ips = Essentials.searchIPs();
-		} catch (IOException e1) {
-			JOptionPane.showMessageDialog(frame,
-					"IOException while retrieving IPs. Enter IP manually",
-					"Error", JOptionPane.ERROR_MESSAGE);
-			// log.logStackTrace(e1);
-		}
 
-		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox = new JComboBox<String>();
 		comboBox.setEditable(true);
 		comboBox.setModel(new DefaultComboBoxModel<String>(ips));
 		comboBox.setBounds(89, 9, 118, 20);
@@ -119,5 +94,30 @@ public class ConnectionDialog {
 		comboBox.repaint();
 		comboBox.setVisible(true);
 		comboBox.setSelectedIndex(0);
+	}
+
+	public String getPassword() {
+		return new String(passwordField.getPassword());
+	}
+
+	public void setPassword(String certPath) {
+		passwordField.setText(certPath);
+		;
+	}
+
+	public String getIP() {
+		return (String) comboBox.getSelectedItem();
+	}
+
+	public void setIP(String ip) {
+		comboBox.setSelectedItem(ip);
+	}
+
+	public String getPort() {
+		return (String) textField_1.getText();
+	}
+
+	public void setPort(String ip) {
+		textField_1.setText(ip);
 	}
 }

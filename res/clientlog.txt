@@ -1,0 +1,16 @@
+28.04.2016_21:51:30 DEBUG: Reading clientsettings.properties
+28.04.2016_21:51:30 WARNING: 'clientsettings.properties' doesn't exist! Using default values
+28.04.2016_21:53:09 DEBUG: Reading clientsettings.properties
+28.04.2016_21:53:09 INFO: Loaded clientsettings.properties
+28.04.2016_21:53:55 DEBUG: Reading clientsettings.properties
+28.04.2016_21:53:55 INFO: Loaded clientsettings.properties
+28.04.2016_21:54:10 DEBUG: Reading clientsettings.properties
+28.04.2016_21:54:10 INFO: Loaded clientsettings.properties
+28.04.2016_21:54:30 DEBUG: Reading clientsettings.properties
+28.04.2016_21:54:30 INFO: Loaded clientsettings.properties
+28.04.2016_21:55:07 DEBUG: Reading clientsettings.properties
+28.04.2016_21:55:07 INFO: Loaded clientsettings.properties
+28.04.2016_21:55:19 DEBUG: Reading clientsettings.properties
+28.04.2016_21:55:19 INFO: Loaded clientsettings.properties
+28.04.2016_21:57:07 DEBUG: Reading clientsettings.properties
+28.04.2016_21:57:07 INFO: Loaded clientsettings.properties
