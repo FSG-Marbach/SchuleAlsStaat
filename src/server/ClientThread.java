@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 import javax.net.ssl.SSLSocket;
 
@@ -60,7 +61,7 @@ public class ClientThread extends Thread {
 									String[] command = request.split(" ");
 
 									// Checking for permission
-									if (Essentials.included(allowedCommands, command[0])) {
+									if (Arrays.asList(allowedCommands).contains(command[0])) {
 
 										// Executing command
 										switch (command[0]) {
