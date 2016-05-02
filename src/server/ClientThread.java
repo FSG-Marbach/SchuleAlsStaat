@@ -132,11 +132,13 @@ public class ClientThread extends Thread {
 		try {
 			log.debug("Closing socket of client " + id);
 			socket.close();
-			log.info("Closed socket of client " + id);
+			log.debug("Closed socket of client " + id);
 		} catch (IOException e) {
 			log.warning("Error occurred while closing socket of client  " + id);
 			log.logStackTrace(e);
 		}
+
+		log.info("Client " + id + " disconnected");
 	}
 
 	public ClientThread(SSLSocket socket, int id, SimpleLog log, Settings settings, Settings passwords,

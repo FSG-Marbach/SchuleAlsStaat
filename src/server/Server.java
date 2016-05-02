@@ -22,7 +22,7 @@ public class Server {
 	SSLServerSocket serverSocket;
 
 	final static String path = "res\\server\\";
-	final String version = "0.1.2";
+	final String version = "0.1.3";
 	String keystore, password, permissionsPath, passwordsPath;
 
 	int port = 3746;

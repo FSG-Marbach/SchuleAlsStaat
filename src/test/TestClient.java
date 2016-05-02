@@ -27,7 +27,7 @@ public class TestClient {
 
 		writer.writeBytes("root\n");
 		writer.writeBytes("123456\n");
-		writer.writeBytes("reload all bla\n");
+		writer.writeBytes("reload all\n");
 		writer.writeBytes("disconnect\n");
 
 		socket.close();
