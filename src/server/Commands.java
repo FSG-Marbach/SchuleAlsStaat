@@ -1,6 +1,7 @@
 package server;
 
 import essentials.Essentials;
+import essentials.Settings;
 import essentials.SimpleLog;
 
 /**
@@ -10,9 +11,7 @@ import essentials.SimpleLog;
 public abstract class Commands {
 
 	// Reloading server properties
-	static void reload(int id, String[] command) {
-
-		SimpleLog log = Server.getLog();
+	static void reload(int id, String[] command, SimpleLog log, Settings passwords, Settings permissions) {
 
 		if (!(command.length < 2)) {
 
@@ -22,13 +21,13 @@ public abstract class Commands {
 				if (command[i + 1] != null) {
 					switch (command[i + 1]) {
 					case "all":
-						Server.getPasswords().reload();
-						Server.getPermissions().reload();
+						passwords.reload();
+						permissions.reload();
 					case "passwords":
-						Server.getPasswords().reload();
+						passwords.reload();
 						break;
 					case "permissions":
-						Server.getPermissions().reload();
+						permissions.reload();
 						break;
 					default:
 						b = true;

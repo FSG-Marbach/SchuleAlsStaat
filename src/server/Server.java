@@ -110,29 +110,9 @@ public class Server {
 				log.logStackTrace(e);
 			}
 			if (client != null)
-				new ClientThread(client, id).start();
+				new ClientThread(client, id, log, settings, passwords, permissions).start();
 			id++;
 		}
-	}
-
-	static String getPath() {
-		return path;
-	}
-
-	static SimpleLog getLog() {
-		return log;
-	}
-
-	static Settings getSettings() {
-		return settings;
-	}
-
-	static Settings getPasswords() {
-		return passwords;
-	}
-
-	static Settings getPermissions() {
-		return permissions;
 	}
 
 	public static void main(String[] args) throws IOException {
