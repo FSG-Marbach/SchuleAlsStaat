@@ -23,6 +23,7 @@ public abstract class Commands {
 					case "all":
 						passwords.reload();
 						permissions.reload();
+						break;
 					case "passwords":
 						passwords.reload();
 						break;

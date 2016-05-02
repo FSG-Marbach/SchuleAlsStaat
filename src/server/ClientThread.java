@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 import javax.net.ssl.SSLSocket;
 
+import essentials.Essentials;
 import essentials.Settings;
 import essentials.SimpleLog;
 
@@ -27,7 +28,6 @@ public class ClientThread extends Thread {
 
 		// Initialize session
 		try {
-
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new DataOutputStream(socket.getOutputStream());
 
@@ -60,14 +60,7 @@ public class ClientThread extends Thread {
 									String[] command = request.split(" ");
 
 									// Checking for permission
-									boolean included = false;
-									for (String s : allowedCommands)
-										if (s.equals(command[0])) {
-											included = true;
-											break;
-										}
-
-									if (included) {
+									if (Essentials.included(allowedCommands, command[0])) {
 
 										// Executing command
 										switch (command[0]) {
@@ -148,6 +141,7 @@ public class ClientThread extends Thread {
 
 	public ClientThread(SSLSocket socket, int id, SimpleLog log, Settings settings, Settings passwords,
 			Settings permissions) {
+
 		this.socket = socket;
 		this.id = id;
 		this.log = log;
