@@ -1,5 +1,6 @@
 package server;
 
+import essentials.Essentials;
 import essentials.SimpleLog;
 
 /**
@@ -38,31 +39,16 @@ public abstract class Commands {
 
 				if (b)
 					log.warning("Client " + id + " sent invalid argument: '" + command[i + 1] + "' in command: '"
-							+ getAssembledStringArray(command) + "'!");
+							+ Essentials.getAssembledStringArray(command) + "'!");
 			}
 		} else {
-			log.warning("Client " + id + " sent invalid command: '" + getAssembledStringArray(command) + "'!");
+			log.warning(
+					"Client " + id + " sent invalid command: '" + Essentials.getAssembledStringArray(command) + "'!");
 		}
 	}
 
-	/**
-	 * Assembles a String Array into one String, where the parts are separated
-	 * by space
-	 * 
-	 * @param array
-	 *            The String Array, which will be assembled
-	 * @return The assembled String
-	 */
-	static String getAssembledStringArray(String[] array) {
+	static void shutdown(int id, String[] command) {
 
-		String string = "";
-		for (int i = 0; i < array.length; i++) {
-
-			if (!(i == array.length - 1))
-				string = string + array[i] + " ";
-			else
-				string = string + array[i];
-		}
-		return string;
+		// TODO
 	}
 }
