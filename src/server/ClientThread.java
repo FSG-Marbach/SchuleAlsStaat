@@ -42,57 +42,67 @@ public class ClientThread extends Thread {
 					// Syndicate password
 					if (passwords.getSetting(clientName).equals(password)) {
 
-						// Reading permissions group
-						if (permissions.getSetting(clientName) != null) {
+						log.info("Successful authentication of client " + id + " (Name: " + clientName + ")");
 
-							permissionsGroup = permissions.getSetting(clientName);
-							String[] allowedCommands = permissions.getArray(permissionsGroup);
+						try {
+							writer.writeBytes("Successful authentication");
 
-							// Receiving and managing commands
-							boolean b = true;
-							while (b) {
+							// Reading permissions group
+							if (permissions.getSetting(clientName) != null) {
 
-								// Receiving command
-								String request = null;
-								try {
-									request = reader.readLine();
-									log.info("Client " + id + " sent command '" + request + "'");
+								permissionsGroup = permissions.getSetting(clientName);
+								String[] allowedCommands = permissions.getArray(permissionsGroup);
 
-									String[] command = request.split(" ");
+								// Receiving and managing commands
+								boolean b = true;
+								while (b) {
 
-									// Checking for permission
-									if (Arrays.asList(allowedCommands).contains(command[0])) {
+									// Receiving command
+									String request = null;
+									try {
+										request = reader.readLine();
+										log.info("Client " + id + " sent command '" + request + "'");
 
-										// Executing command
-										switch (command[0]) {
-										case "disconnect":
-											b = false;
-											break;
-										case "reload":
-											Commands.reload(id, command, log, passwords, permissions);
-											break;
-										case "shutdown":
-											Commands.shutdown(id, command);
-											break;
-										default:
-											log.warning("Client " + id + " sent unimplemented command ('" + request
-													+ "') with permission!");
-											break;
+										String[] command = request.split(" ");
+
+										// Checking for permission
+										if (Arrays.asList(allowedCommands).contains(command[0])) {
+
+											// Executing command
+											switch (command[0]) {
+											case "disconnect":
+												b = false;
+												break;
+											case "reload":
+												Commands.reload(id, command, log, passwords, permissions);
+												break;
+											case "shutdown":
+												Commands.shutdown(id, command);
+												break;
+											default:
+												log.warning("Client " + id + " sent unimplemented command ('" + request
+														+ "') with permission!");
+												break;
+											}
+										} else {
+											log.warning("Client " + id + " tried to execute '" + request
+													+ "' without permission!");
 										}
-									} else {
-										log.warning("Client " + id + " tried to execute '" + request
-												+ "' without permission!");
+
+									} catch (IOException e) {
+										log.error("Error occurred while receiving data from client " + id);
+										log.logStackTrace(e);
+										b = false;
 									}
-
-								} catch (IOException e) {
-									log.error("Error occurred while receiving data from client " + id);
-									log.logStackTrace(e);
-									b = false;
 								}
-							}
 
-						} else {
-							log.error("Error occurred while reading permissions group of client " + id + "!");
+							} else {
+								log.error("Error occurred while reading permissions group of client " + id + "!");
+							}
+						} catch (IOException e) {
+							log.warning("Couldn't sent authentication message ('Successful authentication') to client "
+									+ id + "!");
+							log.logStackTrace(e);
 						}
 					} else {
 
