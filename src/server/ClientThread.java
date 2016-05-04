@@ -99,7 +99,7 @@ public class ClientThread extends Thread {
 						log.warning("Authentication of client " + id + " failed! (Wrong password)");
 
 						try {
-							writer.writeBytes("Wrong password");
+							writer.writeBytes("Wrong password\n");
 						} catch (IOException e) {
 							log.warning(
 									"Couldn't sent authentication message ('Wrong password') to client " + id + "!");
@@ -112,7 +112,7 @@ public class ClientThread extends Thread {
 							+ settings.getSetting("passwordsPath") + ")");
 
 					try {
-						writer.writeBytes("Invalid name");
+						writer.writeBytes("Invalid name\n");
 					} catch (IOException e) {
 						log.warning("Couldn't sent authentication message ('Invalid name') to client " + id + "!");
 						log.logStackTrace(e);
