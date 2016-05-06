@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.util.Properties;
 
 import javax.net.ssl.SSLSocket;
@@ -18,7 +19,7 @@ import essentials.SimpleLog;
 public class Connection {
 
 	int port = 443;
-	String ip = "127.0.0.1";
+	String ip;
 	final String path = "res\\client\\";
 	SSLSocket socket;
 	DataOutputStream writer;
@@ -36,35 +37,83 @@ public class Connection {
 			JOptionPane.showMessageDialog(null,
 					"IOException while retrieving IPs. Enter IP manually",
 					"Error", JOptionPane.ERROR_MESSAGE);
-			// log.logStackTrace(e1);
 		}
-		if (dialog.showConnectionDialog(
-				Integer.parseInt(settings.getSetting("port")), ips) == ConnectionDialog.BUTTON_CONNECT) {
+		boolean success = false;
+		while (!success) {
 
-			ip = dialog.getIP();
-			port = Integer.parseInt(dialog.getPort());
+			if (dialog.showConnectionDialog(
+					Integer.parseInt(settings.getSetting("port")), ips) == ConnectionDialog.BUTTON_CONNECT) {
 
-			System.setProperty("javax.net.ssl.trustStore",
-					settings.getSetting("truststore"));
-			System.setProperty("javax.net.ssl.trustStorePassword",
-					settings.getSetting("truststorePassword"));
+				ip = dialog.getIP();
+				port = Integer.parseInt(dialog.getPort());
+				System.setProperty("javax.net.ssl.trustStore",
+						settings.getSetting("truststore"));
+				System.setProperty("javax.net.ssl.trustStorePassword",
+						settings.getSetting("truststorePassword"));
+				try {
+					socket = (SSLSocket) SSLSocketFactory.getDefault()
+							.createSocket(ip, port);
 
-			socket = (SSLSocket) SSLSocketFactory.getDefault().createSocket(ip,
-					port);
+					writer = new DataOutputStream(socket.getOutputStream());
+					reader = new BufferedReader(new InputStreamReader(
+							socket.getInputStream()));
+					if (!authenticate()) {
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"Connection not possible\nIncorrect username and password",
+										"Error", JOptionPane.OK_OPTION);
+						log.warning("Connection not possible, wrpng username or password");
+					} else
+						success = true;
+				} catch (ConnectException e) {
+					JOptionPane.showMessageDialog(null,
+							"Connection not possible\nWrong IP or port",
+							"Error", JOptionPane.OK_OPTION);
+					log.warning("Connection not possible, wrong ip or port");
+				}
 
-			writer = new DataOutputStream(socket.getOutputStream());
-			reader = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-
+			} else {
+				log.info("Program terminated by user");
+				System.exit(0);
+			}
 		}
 
 	}
 
 	public boolean authenticate() {
 
-		writer.writeBytes(settings.getSetting("user"));
-		writer.writeBytes(settings.getSetting("password"));
+		try {
+			writer.writeBytes(settings.getSetting("user"));
 
+			writer.writeBytes(settings.getSetting("password"));
+
+			String result = reader.readLine();
+			if (result.startsWith("Successful authentication")) {
+				log.info("Authentication successful");
+				return true;
+			}
+
+			else {
+				log.error("Authentication failed. Return code was: " + result);
+				return false;
+			}
+
+		} catch (IOException e) {
+			log.logStackTrace(e);
+			return false;
+		}
+
+	}
+
+	public String readLine() {
+		try {
+			return reader.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public Connection() {
