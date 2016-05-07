@@ -26,6 +26,7 @@ public class Connection {
 	BufferedReader reader;
 	SimpleLog log;
 	Settings settings;
+	boolean connected = false;
 
 	public void connect() throws IOException {
 
@@ -39,20 +40,27 @@ public class Connection {
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 		boolean success = false;
+		dialog.showConnectionDialog(
+				Integer.parseInt(settings.getSetting("port")), ips);
+		dialog.setIP(settings.getSetting("ip"));
+		dialog.setPassword(settings.getSetting("password"));
 		while (!success) {
 
-			if (dialog.showConnectionDialog(
-					Integer.parseInt(settings.getSetting("port")), ips) == ConnectionDialog.BUTTON_CONNECT) {
+			if (dialog.getButtonState() == ConnectionDialog.BUTTON_CONNECT) {
 
-				ip = dialog.getIP();
-				port = Integer.parseInt(dialog.getPort());
+				settings.setSetting("ip", dialog.getIP());
+				settings.setSetting("port", dialog.getPort());
+				settings.setSetting("password", dialog.getPassword());
 				System.setProperty("javax.net.ssl.trustStore",
 						settings.getSetting("truststore"));
 				System.setProperty("javax.net.ssl.trustStorePassword",
 						settings.getSetting("truststorePassword"));
 				try {
 					socket = (SSLSocket) SSLSocketFactory.getDefault()
-							.createSocket(ip, port);
+							.createSocket(
+									settings.getSetting("ip"),
+									Integer.parseInt(settings
+											.getSetting("port")));
 
 					writer = new DataOutputStream(socket.getOutputStream());
 					reader = new BufferedReader(new InputStreamReader(
@@ -64,8 +72,11 @@ public class Connection {
 										"Connection not possible\nIncorrect username and password",
 										"Error", JOptionPane.OK_OPTION);
 						log.warning("Connection not possible, wrpng username or password");
-					} else
+					} else {
 						success = true;
+						dialog.dispose();
+					}
+
 				} catch (ConnectException e) {
 					JOptionPane.showMessageDialog(null,
 							"Connection not possible\nWrong IP or port",
@@ -75,9 +86,11 @@ public class Connection {
 
 			} else {
 				log.info("Program terminated by user");
+				dialog.dispose();
 				System.exit(0);
 			}
 		}
+		connected = true;
 
 	}
 
@@ -127,6 +140,17 @@ public class Connection {
 
 		settings = new Settings(new File(path + "settings.properties"), props,
 				false, log);
+		String[] neccessaryKeys = { "truststore", "truststorePassword", "user" };
+		if (!settings.containsKeys(neccessaryKeys)) {
+			log.fatal("Neccessary keys are missing in settings file. Terminating");
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"Neccessary keys are missing in the settings file. Program is being terminated. Please contact system administrator",
+							"Settings file corrupted", JOptionPane.OK_OPTION);
+			System.exit(1);
+
+		}
 
 	}
 

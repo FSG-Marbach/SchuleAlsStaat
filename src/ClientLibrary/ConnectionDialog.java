@@ -36,7 +36,8 @@ public class ConnectionDialog {
 
 	public ConnectionDialog() {
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager
+					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,7 +53,7 @@ public class ConnectionDialog {
 		}
 	}
 
-	public int showConnectionDialog(int port, String[] ips) {
+	public void showConnectionDialog(int port, String[] ips) {
 		keepAlive = true;
 
 		frame = new JFrame();
@@ -121,15 +122,21 @@ public class ConnectionDialog {
 		comboBox.repaint();
 		comboBox.setVisible(true);
 		comboBox.setSelectedIndex(0);
+
+	}
+
+	public int getButtonState() {
 		while (keepAlive)
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e1) {
-				e1.printStackTrace();
 			}
-
-		frame.dispose();
+		keepAlive = true;
 		return buttonState;
+	}
+
+	public void dispose() {
+		frame.dispose();
 	}
 
 	public String getPassword() {
