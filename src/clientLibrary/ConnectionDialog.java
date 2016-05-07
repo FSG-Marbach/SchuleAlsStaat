@@ -1,7 +1,7 @@
 /**
  * 
  */
-package clientLibrary2;
+package clientLibrary;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

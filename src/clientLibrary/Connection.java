@@ -1,4 +1,4 @@
-package clientLibrary2;
+package clientLibrary;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
