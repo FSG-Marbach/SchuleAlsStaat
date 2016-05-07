@@ -97,10 +97,8 @@ public class Connection {
 	public boolean authenticate() {
 
 		try {
-			writer.writeBytes(settings.getSetting("user"));
-
-			writer.writeBytes(settings.getSetting("password"));
-
+			writer.writeBytes(settings.getSetting("user") + "\n");
+			writer.writeBytes(settings.getSetting("password") + "\n");
 			String result = reader.readLine();
 			if (result.startsWith("Successful authentication")) {
 				log.info("Authentication successful");
@@ -123,10 +121,21 @@ public class Connection {
 		try {
 			return reader.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Reading failed");
+			log.logStackTrace(e);
 		}
 		return null;
+	}
+
+	public boolean writeLine(String text) {
+		try {
+			writer.writeBytes(text + "\n");
+		} catch (IOException e) {
+			log.error("Writing failed");
+			log.logStackTrace(e);
+			return false;
+		}
+		return true;
 	}
 
 	public Connection() {
@@ -146,7 +155,7 @@ public class Connection {
 			JOptionPane
 					.showMessageDialog(
 							null,
-							"Neccessary keys are missing in the settings file. Program is being terminated. Please contact system administrator",
+							"Neccessary keys are missing in the settings file. Program is being terminated.\nPlease contact system administrator",
 							"Settings file corrupted", JOptionPane.OK_OPTION);
 			System.exit(1);
 
@@ -157,6 +166,8 @@ public class Connection {
 	public static void main(String[] args) throws IOException {
 		Connection f = new Connection();
 		f.connect();
+		f.writeLine("reload all");
+		System.out.println(f.readLine());
 	}
 
 }
