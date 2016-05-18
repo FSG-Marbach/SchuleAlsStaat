@@ -22,7 +22,7 @@ public class Connection {
 
 	int port = 443;
 	String ip;
-	final String path = "res\\client\\";
+	final static String path = "res\\client\\";
 	SSLSocket socket;
 	DataOutputStream writer;
 	BufferedReader reader;
@@ -234,17 +234,29 @@ public class Connection {
 		return true;
 	}
 
-	public Connection() {
-		log = new SimpleLog(new File(path + "log.txt"), true, true);
+	/**
+	 * The unsafe option to use the Connection. The is no settings file and you
+	 * can't use the GUI. You have to specify all parameters by yourself.
+	 * 
+	 * @param log
+	 *            The log to log to
+	 */
+	public Connection(SimpleLog log) {
+		this.log = log;
+	}
 
-		Properties props = new Properties();
-		props.setProperty("port", "3746");
-		props.setProperty("ip", "127.0.0.1");
-		props.setProperty("truststore", "res/client/client.truststore");
-		props.setProperty("truststorePassword", "123456");
-
-		settings = new Settings(new File(path + "settings.properties"), props,
-				false, log);
+	/**
+	 * The safe method to use the Connection. you can use the GUI and dont't
+	 * have to worry about anything
+	 * 
+	 * @param log
+	 *            The Log to log to
+	 * @param settings
+	 *            The Settings to set the settings to
+	 */
+	public Connection(SimpleLog log, Settings settings) {
+		this.log = log;
+		this.settings = settings;
 		String[] neccessaryKeys = { "truststore", "truststorePassword", "user" };
 		if (!settings.containsKeys(neccessaryKeys)) {
 			log.fatal("Neccessary keys are missing in settings file. Terminating");
@@ -259,12 +271,26 @@ public class Connection {
 
 	}
 
-	public String getSetting(String key) {
-		return settings.getSetting(key);
+	/**
+	 * 
+	 * @return The Settings object
+	 */
+	public Settings getSettings() {
+		return settings;
 	}
 
 	public static void main(String[] args) throws IOException {
-		Connection f = new Connection();
+
+		SimpleLog log = new SimpleLog(new File(path + "log.txt"), true, true);
+		Properties props = new Properties();
+		props.setProperty("port", "3746");
+		props.setProperty("ip", "127.0.0.1");
+		props.setProperty("truststore", "res/client/client.truststore");
+		props.setProperty("truststorePassword", "123456");
+
+		Settings settings = new Settings(
+				new File(path + "settings.properties"), props, false, log);
+		Connection f = new Connection(log, settings);
 		f.connect();
 		f.writeLine("reload all");
 		System.out.println(f.readLine());
