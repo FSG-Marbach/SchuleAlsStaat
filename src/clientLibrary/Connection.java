@@ -257,7 +257,7 @@ public class Connection {
 	public Connection(SimpleLog log, Settings settings) {
 		this.log = log;
 		this.settings = settings;
-		String[] neccessaryKeys = { "truststore", "truststorePassword", "user" };
+		String[] neccessaryKeys = { "truststore", "truststorePassword", "user", "port" };
 		if (!settings.containsKeys(neccessaryKeys)) {
 			log.fatal("Neccessary keys are missing in settings file. Terminating");
 			JOptionPane

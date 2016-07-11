@@ -27,6 +27,7 @@ public class ConnectionDialog {
 	private JPanel contentPane;
 	private JPasswordField passwordField;
 	private JTextField textField_1;
+	private JTextField txtUsername;
 	private JComboBox<String> comboBox;
 	JFrame frame;
 	boolean keepAlive;
@@ -91,6 +92,16 @@ public class ConnectionDialog {
 
 		JLabel lblPassword = new JLabel("Passwort:");
 		lblPassword.setBounds(10, 43, 69, 14);
+		contentPane.add(lblPassword);
+
+		passwordField = new JPasswordField();
+		passwordField.setText("1234");
+		passwordField.setBounds(89, 40, 209, 20);
+		contentPane.add(passwordField);
+		passwordField.setColumns(10);
+		
+		JLabel lblUsername = new JLabel("Username:");
+		lblUsername.setBounds(10, 43, 69, 14);
 		contentPane.add(lblPassword);
 
 		passwordField = new JPasswordField();
