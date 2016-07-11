@@ -23,6 +23,7 @@ public class Connection {
 	int port = 443;
 	String ip;
 	final static String path = "res\\client\\";
+
 	SSLSocket socket;
 	DataOutputStream writer;
 	BufferedReader reader;
@@ -236,39 +237,21 @@ public class Connection {
 
 	/**
 	 * The unsafe option to use the Connection. The is no settings file and you
-	 * can't use the GUI. You have to specify all parameters by yourself.
+	 * can't use the GUI. You have to specify all parameters by yourself or use
+	 * the hardcoded values.
+	 * 
+	 * You might wonder why this is called the "unsafe method" even though there
+	 * is no other "safe" way of connecting. Well, there was a safe way, but it
+	 * has been removed, because a fellow developer of mine was simply to stupid
+	 * to use it. One of the main reasons he never manages to use my code
+	 * correctly is, that he never reads my Javadoc-comments. He will certainly
+	 * never read this xD
 	 * 
 	 * @param log
 	 *            The log to log to
 	 */
 	public Connection(SimpleLog log) {
 		this.log = log;
-	}
-
-	/**
-	 * The safe method to use the Connection. you can use the GUI and dont't
-	 * have to worry about anything
-	 * 
-	 * @param log
-	 *            The Log to log to
-	 * @param settings
-	 *            The Settings to set the settings to
-	 */
-	public Connection(SimpleLog log, Settings settings) {
-		this.log = log;
-		this.settings = settings;
-		String[] neccessaryKeys = { "truststore", "truststorePassword", "user", "port" };
-		if (!settings.containsKeys(neccessaryKeys)) {
-			log.fatal("Neccessary keys are missing in settings file. Terminating");
-			JOptionPane
-					.showMessageDialog(
-							null,
-							"Neccessary keys are missing in the settings file. Program is being terminated.\nPlease contact system administrator",
-							"Settings file corrupted", JOptionPane.OK_OPTION);
-			System.exit(1);
-
-		}
-
 	}
 
 	/**
@@ -287,10 +270,9 @@ public class Connection {
 		props.setProperty("ip", "127.0.0.1");
 		props.setProperty("truststore", "res/client/client.truststore");
 		props.setProperty("truststorePassword", "123456");
+		props.setProperty("timeout", "1000");
 
-		Settings settings = new Settings(
-				new File(path + "settings.properties"), props, false, log);
-		Connection f = new Connection(log, settings);
+		Connection f = new Connection(log);
 		f.connect();
 		f.writeLine("reload all");
 		System.out.println(f.readLine());
