@@ -132,11 +132,11 @@ public class Connection {
 	 * @param user
 	 *            The user used to log in to
 	 * @param passwd
-	 *            The password fro the user
+	 *            The password for the user
 	 * @param trustStore
 	 *            The Path of the trustStore
 	 * @param trustStorePasswd
-	 *            The password of the truststore
+	 *            The password of the trustStore
 	 * @return
 	 * @throws IOException
 	 */
