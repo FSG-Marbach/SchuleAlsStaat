@@ -36,7 +36,7 @@ public class Connection {
 	final int WRONG_IP_PORT = 3;
 
 	/**
-	 * Shows a GUI to input neccessary information to connect to a server and
+	 * Shows a GUI to input necessary information to connect to a server and
 	 * authenticate. Then it will connect and authenticate
 	 * 
 	 * @throws IOException
