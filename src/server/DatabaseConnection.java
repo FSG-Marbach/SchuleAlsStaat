@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * @author Maximilian
+ * @author Maximilian A pretty useless class. It only exists, because Felix
+ *         thinks, writing one line of code is faster than writing an other line
+ *         of code
  *
  */
 public class DatabaseConnection {
