@@ -9,10 +9,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -26,38 +26,50 @@ import essentials.SimpleLog;
 
 public class Console {
 
-	Connection connection;
-	JFrame frame;
-	GridBagLayout layout = new GridBagLayout();
-	JPanel panel, buttonBackground;
-	JTextArea textArea;
-	JTextField textField;
-	Settings settings;
+	final String PATH = "res\\console\\";
+	final int PORT = 3746;
 
-	public Console() {
+	String username = "", ip = "";
+	int port = 0;
 
-		settings = new Settings(new File("res\\client\\settings.properties"), null, false, new SimpleLog());
-		connection = new Connection(new SimpleLog(), settings);
-		try {
-			connection.connect();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Couldn't connect to server", "Error occurred",
-					JOptionPane.ERROR_MESSAGE);
-		}
+	public Console() throws IOException {
 
-		frame = new JFrame("Citizen Data Management System Console");
+		Properties defaultValues = new Properties();
+		defaultValues.setProperty("ip", "127.0.0.1");
+		defaultValues.setProperty("port", String.valueOf(PORT));
+		defaultValues.setProperty("truststore", "client.truststore");
+		defaultValues.setProperty("truststorePassword", "123456");
+		Settings settings = new Settings(new File(PATH + "settings.properties"), defaultValues, false, new SimpleLog());
+
+		Connection connection = new Connection(new SimpleLog(), settings);
+		connection.connect();
+
+		username = connection.getUsername();
+		ip = connection.getIp();
+		port = connection.getPort();
+
+		GridBagLayout layout = new GridBagLayout();
+
+		JFrame frame = new JFrame("Citizen Data Management System Console");
 		frame.setLayout(layout);
 
-		panel = new JPanel();
+		JPanel panel = new JPanel();
 		panel.setBackground(Color.black);
 		panel.setLayout(layout);
 		Essentials.addComponent(frame, layout, panel, 0, 0, 1, 1, 1, 1, new Insets(0, 0, 0, 0));
 
-		textArea = new JTextArea(30, 120);
+		String loginMessage = "Successful authentication of user '" + username + "' on CDMS server running on '" + ip
+				+ "/" + port;
+		String s = "";
+		for (int i = 0; i <= loginMessage.length(); i++)
+			s = s + "=";
+		loginMessage = s + "\n" + loginMessage + "'\n" + s + "\n" + username + "> ";
+
+		JTextArea textArea = new JTextArea(loginMessage, 30, 120);
 		textArea.setBackground(Color.black);
 		textArea.setForeground(Color.white);
 		textArea.setCaretColor(Color.WHITE);
-		textArea.setFont(new Font("Monospaced", 0, 12));
+		textArea.setFont(new Font("Consolas", 0, 14));
 		textArea.setBorder(BorderFactory.createLineBorder(Color.black, 10));
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
@@ -68,22 +80,21 @@ public class Console {
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		Essentials.addComponent(panel, layout, scrollPane, 0, 0, 1, 1, 1, 1, new Insets(0, 0, 0, 0));
 
-		textField = new JTextField();
-		textField.setBackground(Color.black);
-		textField.setForeground(Color.white);
-		textField.setCaretColor(Color.WHITE);
-		textField.setFont(new Font("Monospaced", 0, 12));
-		textField.setBorder(BorderFactory.createMatteBorder(0, 5, 0, 5, Color.black));
+		JTextField textField = new JTextField();
+		textField.setBackground(Color.white);
+		textField.setForeground(Color.black);
+		textField.setCaretColor(Color.black);
+		textField.setFont(new Font("Consolas", 0, 14));
+		textField.setBorder(BorderFactory.createMatteBorder(5, 10, 5, 10, Color.white));
 		textField.setPreferredSize(new Dimension(0, 30));
 		textField.addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-
 					String input = textField.getText();
 					textField.setText("");
-					textArea.append(input);
+					textArea.append(input + "\n" + username + "> ");
 					connection.writeLine(input);
 				}
 			}
@@ -103,13 +114,12 @@ public class Console {
 		frame.setVisible(true);
 
 		while (true) {
-
 			String output = connection.readLine();
-			textArea.append("\n" + output);
+			textArea.append(output + "\n");
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

@@ -1,177 +1,177 @@
-/**
- * 
- */
 package clientLibrary;
 
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.text.NumberFormat;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.EmptyBorder;
+import javax.swing.text.NumberFormatter;
 
-/**
- * @author Maximilian
- *
- */
+import essentials.Essentials;
+import essentials.Settings;
+import essentials.SimpleLog;
+
 public class ConnectionDialog {
 
-	private JPanel contentPane;
-	private JPasswordField passwordField;
-	private JTextField textField_1;
-	private JTextField txtUsername;
-	private JComboBox<String> comboBox;
-	JFrame frame;
-	boolean keepAlive;
-	int buttonState;
-	public final static int BUTTON_CANCEL = 1;
-	public final static int BUTTON_CONNECT = 0;
+	SimpleLog log;
+	Settings settings;
 
-	public ConnectionDialog() {
+	static JComboBox<String> cbxIp;
+	static JFormattedTextField txfPort;
+	static JTextField txfUsername;
+	static JPasswordField txfPassword;
+	static JButton btnAbort, btnConnect;
+
+	static String ip, username, password;
+	static int port;
+
+	boolean connect = false;
+
+	public ConnectionDialog(SimpleLog log, Settings settings) {
+
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			System.out.println(
+					"Error while setting LookAndFeel in ConnectionDialog gui! Default Java LookAndFeel will be used...");
 		}
+
+		this.log = log;
+		this.settings = settings;
 	}
 
-	public void showConnectionDialog(int port, String[] ips) {
-		keepAlive = true;
+	public void showConnectionDialog() {
 
-		frame = new JFrame();
-		frame.setVisible(true);
-		frame.setTitle("Verbindung");
-		frame.setResizable(false);
+		GridBagLayout layout = new GridBagLayout();
+
+		JFrame frame = new JFrame("Verbindung");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(100, 100, 314, 133);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		frame.setContentPane(contentPane);
-		contentPane.setLayout(null);
+		frame.setResizable(false);
+		frame.setLayout(layout);
 
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonState = BUTTON_CANCEL;
-				keepAlive = false;
+		JLabel lblIp = new JLabel("IP-Adresse:");
+		Essentials.addComponent(frame, layout, lblIp, 0, 0, 1, 1, 0, 0, new Insets(5, 5, 5, 5));
 
-			}
-		});
-		btnCancel.setBounds(207, 71, 89, 23);
-		contentPane.add(btnCancel);
+		// JTextField txfIp = new JTextField(settings.getSetting("ip"));
+		// Essentials.addComponent(frame, layout, txfIp, 1, 0, 1, 1, 1, 0, new
+		// Insets(5, 0, 5, 5));
 
-		JButton btnConnect = new JButton("Connect");
-		btnConnect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonState = BUTTON_CONNECT;
-				keepAlive = false;
+		String[] ips = new String[0];
+		try {
+			ips = Essentials.searchIPs();
+			String local = String.valueOf(InetAddress.getLocalHost().getHostAddress());
+			String[] ips2 = new String[ips.length + 1];
+			System.arraycopy(ips, 0, ips2, 0, ips.length);
+			ips2[ips.length] = local;
+			ips = ips2;
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(null, "IOException while retrieving IPs. Enter IP manually", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			ips = new String[0];
+		}
 
-			}
-		});
-		btnConnect.setBounds(108, 71, 89, 23);
-		contentPane.add(btnConnect);
-
-		JLabel lblPassword = new JLabel("Passwort:");
-		lblPassword.setBounds(10, 43, 69, 14);
-		contentPane.add(lblPassword);
-
-		passwordField = new JPasswordField();
-		passwordField.setText("1234");
-		passwordField.setBounds(89, 40, 209, 20);
-		contentPane.add(passwordField);
-		passwordField.setColumns(10);
-		
-		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(10, 43, 69, 14);
-		contentPane.add(lblPassword);
-
-		passwordField = new JPasswordField();
-		passwordField.setText("1234");
-		passwordField.setBounds(89, 40, 209, 20);
-		contentPane.add(passwordField);
-		passwordField.setColumns(10);
-
-		JLabel lblIpadresse = new JLabel("IP-Adresse:");
-		lblIpadresse.setBounds(10, 12, 69, 14);
-		contentPane.add(lblIpadresse);
+		cbxIp = new JComboBox<String>(ips);
+		Essentials.addComponent(frame, layout, cbxIp, 1, 0, 1, 1, 1, 0, new Insets(5, 0, 5, 5));
 
 		JLabel lblPort = new JLabel("Port:");
-		lblPort.setBounds(217, 12, 32, 14);
-		contentPane.add(lblPort);
+		Essentials.addComponent(frame, layout, lblPort, 2, 0, 1, 1, 0, 0, new Insets(5, 0, 5, 5));
 
-		textField_1 = new JTextField();
-		textField_1.setText(String.valueOf(port));
-		textField_1.setBounds(246, 9, 52, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		NumberFormat format = NumberFormat.getInstance();
+		format.setGroupingUsed(false);
+		NumberFormatter formatter = new NumberFormatter(format);
+		formatter.setAllowsInvalid(false);
+		txfPort = new JFormattedTextField(formatter);
+		txfPort.setText(settings.getSetting("port"));
+		txfPort.setPreferredSize(new Dimension(50, 20));
+		Essentials.addComponent(frame, layout, txfPort, 3, 0, 1, 1, 0, 0, new Insets(5, 0, 5, 5));
 
-		comboBox = new JComboBox<String>();
-		comboBox.setEditable(true);
-		comboBox.setModel(new DefaultComboBoxModel<String>(ips));
-		comboBox.setBounds(89, 9, 118, 20);
-		contentPane.add(comboBox);
-		frame.repaint();
-		comboBox.repaint();
-		comboBox.setVisible(true);
-		comboBox.setSelectedIndex(0);
+		JLabel lblUser = new JLabel("Benutzer:");
+		Essentials.addComponent(frame, layout, lblUser, 0, 1, 1, 1, 0, 0, new Insets(0, 5, 5, 5));
 
-	}
+		JTextField txfUsername = new JTextField();
+		txfUsername.setPreferredSize(new Dimension(260, 20));
+		Essentials.addComponent(frame, layout, txfUsername, 1, 1, 3, 1, 1, 0, new Insets(0, 0, 5, 5));
 
-	public int getButtonState() {
-		while (keepAlive)
+		JLabel lblPassword = new JLabel("Passwort:");
+		Essentials.addComponent(frame, layout, lblPassword, 0, 2, 1, 1, 0, 0, new Insets(0, 5, 10, 5));
+
+		txfPassword = new JPasswordField();
+		txfUsername.setPreferredSize(new Dimension(260, 20));
+		Essentials.addComponent(frame, layout, txfPassword, 1, 2, 3, 1, 1, 0, new Insets(0, 0, 10, 5));
+
+		JPanel pnlButton = new JPanel();
+		pnlButton.setLayout(layout);
+		Essentials.addComponent(frame, layout, pnlButton, 0, 3, 4, 1, 1, 0, new Insets(0, 0, 0, 0));
+
+		JPanel emptyPanel = new JPanel();
+		Essentials.addComponent(pnlButton, layout, emptyPanel, 0, 0, 1, 1, 1, 0, new Insets(0, 0, 0, 0));
+
+		btnAbort = new JButton("abbrechen");
+		btnAbort.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		Essentials.addComponent(pnlButton, layout, btnAbort, 1, 0, 1, 1, 0, 0, new Insets(0, 5, 5, 5));
+
+		btnConnect = new JButton("verbinden");
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				ip = String.valueOf(cbxIp.getSelectedItem());
+				port = Integer.valueOf(txfPort.getText());
+				username = txfUsername.getText();
+				password = new String(txfPassword.getPassword());
+
+				connect = true;
+			}
+		});
+		Essentials.addComponent(pnlButton, layout, btnConnect, 2, 0, 1, 1, 0, 0, new Insets(0, 0, 5, 5));
+
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+
+		while (!connect) {
 			try {
 				Thread.sleep(1);
-			} catch (InterruptedException e1) {
+			} catch (InterruptedException e) {
+				log.error("InterruptedException occurred!");
 			}
-		keepAlive = true;
-		return buttonState;
-	}
-
-	public void dispose() {
+		}
+		
 		frame.dispose();
 	}
 
-	public String getPassword() {
-		return new String(passwordField.getPassword());
+	static String getIp() {
+		return ip;
 	}
 
-	public void setPassword(String certPath) {
-		passwordField.setText(certPath);
-
+	static int getPort() {
+		return port;
 	}
 
-	public String getIP() {
-		return (String) comboBox.getSelectedItem();
+	static String getUsername() {
+		return username;
 	}
 
-	public void setIP(String ip) {
-		comboBox.setSelectedItem(ip);
-	}
-
-	public String getPort() {
-		return (String) textField_1.getText();
-	}
-
-	public void setPort(String ip) {
-		textField_1.setText(ip);
+	static String getPassword() {
+		return password;
 	}
 }

@@ -14,7 +14,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.swing.JOptionPane;
 
-import essentials.Essentials;
 import essentials.Settings;
 import essentials.SimpleLog;
 
@@ -23,7 +22,6 @@ public class Connection {
 	int port = 443;
 	String ip;
 	final static String path = "res\\client\\";
-
 	SSLSocket socket;
 	DataOutputStream writer;
 	BufferedReader reader;
@@ -42,85 +40,111 @@ public class Connection {
 	 * 
 	 * @throws IOException
 	 */
-	public void connect() throws IOException {
+	// public void connect() throws IOException {
+	//
+	// ConnectionDialogOld dialog = new ConnectionDialogOld();
+	// String[] ips = new String[0];
+	// try {
+	// ips = Essentials.searchIPs();
+	// } catch (IOException e1) {
+	// JOptionPane.showMessageDialog(null, "IOException while retrieving IPs.
+	// Enter IP manually", "Error",
+	// JOptionPane.ERROR_MESSAGE);
+	// }
+	// boolean success = false;
+	// dialog.showConnectionDialog(Integer.parseInt(settings.getSetting("port")),
+	// ips);
+	// while (!success) {
+	//
+	// if (dialog.getButtonState() == ConnectionDialogOld.BUTTON_CONNECT) {
+	//
+	// settings.setSetting("ip", dialog.getIP());
+	// settings.setSetting("port", dialog.getPort());
+	// settings.setSetting("password", dialog.getPassword());
+	// System.setProperty("javax.net.ssl.trustStore",
+	// settings.getSetting("truststore"));
+	// System.setProperty("javax.net.ssl.trustStorePassword",
+	// settings.getSetting("truststorePassword"));
+	// try {
+	// socket = (SSLSocket) SSLSocketFactory.getDefault().createSocket();
+	// socket.connect(
+	// new InetSocketAddress(settings.getSetting("ip"),
+	// Integer.parseInt(settings.getSetting("port"))),
+	// Integer.parseInt(settings.getSetting("timeout")));
+	//
+	// writer = new DataOutputStream(socket.getOutputStream());
+	// reader = new BufferedReader(new
+	// InputStreamReader(socket.getInputStream()));
+	// if (!authenticate()) {
+	// JOptionPane.showMessageDialog(null, "Connection not possible\nIncorrect
+	// username and password",
+	// "Error", JOptionPane.OK_OPTION);
+	// log.warning("Connection not possible, wrpng username or password");
+	// } else {
+	// success = true;
+	// dialog.dispose();
+	// }
+	// } catch (SocketTimeoutException e) {
+	// String[] buttons = { "Retry", "Close" };
+	// int response = JOptionPane.showOptionDialog(null,
+	// "Connection to server timed out\nRetry or ask developer for help",
+	// "SocketTimeoutException",
+	// JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, buttons,
+	// buttons[0]);
+	// if (response == 1) {
+	// log.info("Connection timed out: Program terminated by user");
+	// System.exit(0);
+	// }
+	// } catch (ConnectException e) {
+	// JOptionPane.showMessageDialog(null, "Connection not possible\nWrong IP or
+	// port", "Error",
+	// JOptionPane.OK_OPTION);
+	// log.warning("Connection not possible, wrong ip or port");
+	// }
+	//
+	// } else {
+	// log.info("Program terminated by user");
+	// dialog.dispose();
+	// System.exit(0);
+	// }
+	// }
+	// connected = true;
+	//
+	// }
 
-		ConnectionDialog dialog = new ConnectionDialog();
-		String[] ips = new String[0];
-		try {
-			ips = Essentials.searchIPs();
-		} catch (IOException e1) {
-			JOptionPane.showMessageDialog(null,
-					"IOException while retrieving IPs. Enter IP manually",
-					"Error", JOptionPane.ERROR_MESSAGE);
-		}
+	public void connect() {
+
+		System.setProperty("javax.net.ssl.trustStore", path + settings.getSetting("truststore"));
+		System.setProperty("javax.net.ssl.trustStorePassword", settings.getSetting("truststorePassword"));
+
 		boolean success = false;
-		dialog.showConnectionDialog(
-				Integer.parseInt(settings.getSetting("port")), ips);
-		dialog.setIP(settings.getSetting("ip"));
-		dialog.setPassword(settings.getSetting("password"));
 		while (!success) {
 
-			if (dialog.getButtonState() == ConnectionDialog.BUTTON_CONNECT) {
+			ConnectionDialog dialog = new ConnectionDialog(log, settings);
+			dialog.showConnectionDialog();
 
-				settings.setSetting("ip", dialog.getIP());
-				settings.setSetting("port", dialog.getPort());
-				settings.setSetting("password", dialog.getPassword());
-				System.setProperty("javax.net.ssl.trustStore",
-						settings.getSetting("truststore"));
-				System.setProperty("javax.net.ssl.trustStorePassword",
-						settings.getSetting("truststorePassword"));
-				try {
-					socket = (SSLSocket) SSLSocketFactory.getDefault()
-							.createSocket();
-					socket.connect(
-							new InetSocketAddress(settings.getSetting("ip"),
-									Integer.parseInt(settings
-											.getSetting("port"))), Integer
-									.parseInt(settings.getSetting("timeout")));
+			try {
+				SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+				SSLSocket socket = (SSLSocket) factory.createSocket(ConnectionDialog.getIp(),
+						ConnectionDialog.getPort());
 
-					writer = new DataOutputStream(socket.getOutputStream());
-					reader = new BufferedReader(new InputStreamReader(
-							socket.getInputStream()));
-					if (!authenticate()) {
-						JOptionPane
-								.showMessageDialog(
-										null,
-										"Connection not possible\nIncorrect username and password",
-										"Error", JOptionPane.OK_OPTION);
-						log.warning("Connection not possible, wrpng username or password");
-					} else {
-						success = true;
-						dialog.dispose();
-					}
-				} catch (SocketTimeoutException e) {
-					String[] buttons = { "Retry", "Close" };
-					int response = JOptionPane
-							.showOptionDialog(
-									null,
-									"Connection to server timed out\nRetry or ask developer for help",
-									"SocketTimeoutException",
-									JOptionPane.YES_NO_OPTION,
-									JOptionPane.WARNING_MESSAGE, null, buttons,
-									buttons[0]);
-					if (response == 1) {
-						log.info("Connection timed out: Program terminated by user");
-						System.exit(0);
-					}
-				} catch (ConnectException e) {
+				reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				writer = new DataOutputStream(socket.getOutputStream());
+
+				if (!authenticate()) {
 					JOptionPane.showMessageDialog(null,
-							"Connection not possible\nWrong IP or port",
-							"Error", JOptionPane.OK_OPTION);
-					log.warning("Connection not possible, wrong ip or port");
-				}
+							"Konnte keine Verbindung zum Server aufbauen!\nÜberprüfen Sie ihre Eingaben und versuchen Sie es erneut",
+							"Verbindungsfehler", JOptionPane.OK_OPTION);
+					log.warning("Connection not possible, wrong username or password");
+				} else
+					success = true;
 
-			} else {
-				log.info("Program terminated by user");
-				dialog.dispose();
-				System.exit(0);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null,
+						"Konnte keine Verbindung zum Server aufbauen!\nÜberprüfen Sie ihre Eingaben und versuchen Sie es erneut",
+						"Verbindungsfehler", JOptionPane.OK_OPTION);
 			}
 		}
-		connected = true;
-
 	}
 
 	/**
@@ -141,8 +165,8 @@ public class Connection {
 	 * @return
 	 * @throws IOException
 	 */
-	public int connect(String ip, int port, String user, String passwd,
-			String trustStore, String trustStorePasswd) throws IOException {
+	public int connect(String ip, int port, String user, String passwd, String trustStore, String trustStorePasswd)
+			throws IOException {
 
 		settings.setSetting("ip", ip);
 		settings.setSetting("port", String.valueOf(port));
@@ -151,17 +175,14 @@ public class Connection {
 		System.setProperty("javax.net.ssl.trustStorePassword", trustStorePasswd);
 		try {
 			socket = (SSLSocket) SSLSocketFactory.getDefault().createSocket();
-			socket.connect(new InetSocketAddress(settings.getSetting("ip"),
-					Integer.parseInt(settings.getSetting("port"))), Integer
-					.parseInt(settings.getSetting("timeout")));
+			socket.connect(
+					new InetSocketAddress(settings.getSetting("ip"), Integer.parseInt(settings.getSetting("port"))),
+					Integer.parseInt(settings.getSetting("timeout")));
 
 			writer = new DataOutputStream(socket.getOutputStream());
-			reader = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			if (authenticate()) {
-				log.info("Succesfully connected to "
-						+ settings.getSetting("ip") + ":"
-						+ settings.getSetting("port"));
+				log.info("Succesfully connected to " + settings.getSetting("ip") + ":" + settings.getSetting("port"));
 				connected = true;
 
 				return (EVERYTHING_IS_AWESOME);
@@ -182,8 +203,8 @@ public class Connection {
 	private boolean authenticate() {
 
 		try {
-			writer.writeBytes(settings.getSetting("user") + "\n");
-			writer.writeBytes(settings.getSetting("password") + "\n");
+			writer.writeBytes(ConnectionDialog.getUsername() + "\n");
+			writer.writeBytes(ConnectionDialog.getPassword() + "\n");
 			String result = reader.readLine();
 			if (result.startsWith("Successful authentication")) {
 				log.info("Authentication successful");
@@ -237,21 +258,37 @@ public class Connection {
 
 	/**
 	 * The unsafe option to use the Connection. The is no settings file and you
-	 * can't use the GUI. You have to specify all parameters by yourself or use
-	 * the hardcoded values.
-	 * 
-	 * You might wonder why this is called the "unsafe method" even though there
-	 * is no other "safe" way of connecting. Well, there was a safe way, but it
-	 * has been removed, because a fellow developer of mine was simply to stupid
-	 * to use it. One of the main reasons he never manages to use my code
-	 * correctly is, that he never reads my Javadoc-comments. He will certainly
-	 * never read this xD
+	 * can't use the GUI. You have to specify all parameters by yourself.
 	 * 
 	 * @param log
 	 *            The log to log to
 	 */
 	public Connection(SimpleLog log) {
 		this.log = log;
+	}
+
+	/**
+	 * The safe method to use the Connection. you can use the GUI and dont't
+	 * have to worry about anything
+	 * 
+	 * @param log
+	 *            The Log to log to
+	 * @param settings
+	 *            The Settings to set the settings to
+	 */
+	public Connection(SimpleLog log, Settings settings) {
+		this.log = log;
+		this.settings = settings;
+		String[] neccessaryKeys = { "truststore", "truststorePassword" };
+		if (!settings.containsKeys(neccessaryKeys)) {
+			log.fatal("Neccessary keys are missing in settings file. Terminating...");
+			JOptionPane.showMessageDialog(null,
+					"Neccessary keys are missing in the settings file. Program is being terminated.\nPlease contact system administrator",
+					"Settings file corrupted", JOptionPane.OK_OPTION);
+			System.exit(1);
+
+		}
+
 	}
 
 	/**
@@ -270,12 +307,23 @@ public class Connection {
 		props.setProperty("ip", "127.0.0.1");
 		props.setProperty("truststore", "res/client/client.truststore");
 		props.setProperty("truststorePassword", "123456");
-		props.setProperty("timeout", "1000");
 
-		Connection f = new Connection(log);
+		Settings settings = new Settings(new File(path + "settings.properties"), props, false, log);
+		Connection f = new Connection(log, settings);
 		f.connect();
 		f.writeLine("reload all");
 		System.out.println(f.readLine());
 	}
 
+	public String getUsername() {
+		return ConnectionDialog.getUsername();
+	}
+
+	public String getIp() {
+		return ConnectionDialog.getIp();
+	}
+
+	public int getPort() {
+		return ConnectionDialog.getPort();
+	}
 }
