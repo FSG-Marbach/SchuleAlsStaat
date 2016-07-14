@@ -25,9 +25,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 
-import clientLibrary.Connection;
 import essentials.Essentials;
 import essentials.SimpleLog;
 

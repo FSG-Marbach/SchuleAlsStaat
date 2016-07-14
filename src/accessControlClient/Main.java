@@ -2,11 +2,6 @@ package accessControlClient;
 
 import java.io.File;
 
-import javax.swing.JOptionPane;
-
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
-
 import clientLibrary.Connection;
 import essentials.SimpleLog;
 
@@ -32,18 +27,6 @@ public class Main {
 		log.log("Initialize GUI...");
 		gui.initialize();
 		log.log("GUI initialized");
-
-		try {
-			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException ex) {
-			JOptionPane.showMessageDialog(null,
-					"Es ist ein Problem beim Erstellen des Barcodelisteners aufgetreten, bitte informieren Sie einen zuständigen Administrator.",
-					"Barcodelistenerfehler", JOptionPane.ERROR_MESSAGE);
-			System.err.println("There was a problem registering the barcodescannerlisterner.");
-			System.err.println(ex.getMessage());
-		}
-
-		GlobalScreen.getInstance().addNativeKeyListener(new Scannerlistener());
 		
 	}
 

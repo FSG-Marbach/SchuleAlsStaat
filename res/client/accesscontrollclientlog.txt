@@ -1,0 +1,4 @@
+14.07.2016_19:04:01 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_19:04:01 allow studentpictures: true
+14.07.2016_19:04:01 Initialize GUI...
+14.07.2016_19:04:02 GUI initialized
