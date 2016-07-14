@@ -280,7 +280,7 @@ public class Gui implements KeyListener, ActionListener {
 			pnl_imagePlace.setLayout(new BorderLayout());
 			pnl_imagePlace.setBackground(clr_background);
 
-			defaultpicture = new ImageIcon("res/client/emptyprofilpic.png");
+			defaultpicture = new ImageIcon(Main.path + "emptyprofilpic.png");
 			defaultpicture.setImage(defaultpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
 			lbl_image.setIcon(defaultpicture);
 
