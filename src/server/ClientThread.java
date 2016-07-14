@@ -8,7 +8,6 @@ import java.util.Arrays;
 
 import javax.net.ssl.SSLSocket;
 
-import essentials.Essentials;
 import essentials.Settings;
 import essentials.SimpleLog;
 
@@ -50,8 +49,7 @@ public class ClientThread extends Thread {
 							// Reading permissions group
 							if (permissions.getSetting(clientName) != null) {
 
-								permissionsGroup = permissions.getSetting(clientName);
-								String[] allowedCommands = permissions.getArray(permissionsGroup);
+								String[] allowedCommands = permissions.getArray(clientName);
 
 								// Receiving and managing commands
 								boolean b = true;
@@ -70,23 +68,21 @@ public class ClientThread extends Thread {
 
 											// Executing command
 											switch (command[0]) {
-											case "disconnect":
-												b = false;
-												break;
 											case "reload":
-												Commands.reload(id, command, log, passwords, permissions);
-												break;
-											case "shutdown":
-												Commands.shutdown(id, command);
+												writer.writeBytes(
+														Commands.reload(id, command, log, passwords, permissions)
+																+ "\n");
 												break;
 											default:
-												log.warning("Client " + id + " sent unimplemented command ('" + request
-														+ "') with permission!");
+												log.warning("Client " + id + " sent not implemented command ('"
+														+ request + "') with permission!");
+												writer.writeBytes("Invalid command\n");
 												break;
 											}
 										} else {
 											log.warning("Client " + id + " tried to execute '" + request
-													+ "' without permission!");
+													+ "' without permission (which may not be implemented)!");
+											writer.writeBytes("Invalid command\n");
 										}
 
 									} catch (IOException e) {

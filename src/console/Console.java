@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -52,6 +53,7 @@ public class Console {
 
 		JFrame frame = new JFrame("Citizen Data Management System Console");
 		frame.setLayout(layout);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.black);
@@ -63,9 +65,9 @@ public class Console {
 		String s = "";
 		for (int i = 0; i <= loginMessage.length(); i++)
 			s = s + "=";
-		loginMessage = s + "\n" + loginMessage + "'\n" + s + "\n" + username + "> ";
+		loginMessage = s + "\n" + loginMessage + "'\n" + s + "\n";
 
-		JTextArea textArea = new JTextArea(loginMessage, 30, 120);
+		JTextArea textArea = new JTextArea(loginMessage, 30, 100);
 		textArea.setBackground(Color.black);
 		textArea.setForeground(Color.white);
 		textArea.setCaretColor(Color.WHITE);
@@ -78,14 +80,24 @@ public class Console {
 		JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		Essentials.addComponent(panel, layout, scrollPane, 0, 0, 1, 1, 1, 1, new Insets(0, 0, 0, 0));
+		Essentials.addComponent(panel, layout, scrollPane, 0, 0, 2, 1, 1, 1, new Insets(0, 0, 0, 0));
 
+		JPanel background = new JPanel();
+		background.setBackground(Color.white);
+		background.setLayout(layout);
+		Essentials.addComponent(panel, layout, background, 0, 1, 1, 1, 0, 0, new Insets(0, 0, 0, 0));
+		
+		JLabel label = new JLabel(username + ">");
+		label.setFont(new Font("Consolas", 0, 14));
+		label.setForeground(Color.black);
+		Essentials.addComponent(background, layout, label, 0, 0, 1, 1, 1, 1, new Insets(0, 10, 0, 10));
+		
 		JTextField textField = new JTextField();
 		textField.setBackground(Color.white);
 		textField.setForeground(Color.black);
 		textField.setCaretColor(Color.black);
 		textField.setFont(new Font("Consolas", 0, 14));
-		textField.setBorder(BorderFactory.createMatteBorder(5, 10, 5, 10, Color.white));
+		textField.setBorder(BorderFactory.createMatteBorder(5, 0, 5, 10, Color.white));
 		textField.setPreferredSize(new Dimension(0, 30));
 		textField.addKeyListener(new KeyListener() {
 
@@ -94,7 +106,7 @@ public class Console {
 				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
 					String input = textField.getText();
 					textField.setText("");
-					textArea.append(input + "\n" + username + "> ");
+					textArea.append(username + "> " + input + "\n");
 					connection.writeLine(input);
 				}
 			}
@@ -107,7 +119,7 @@ public class Console {
 			public void keyPressed(KeyEvent e) {
 			}
 		});
-		Essentials.addComponent(panel, layout, textField, 0, 1, 1, 1, 1, 0, new Insets(0, 0, 0, 0));
+		Essentials.addComponent(panel, layout, textField, 1, 1, 1, 1, 1, 0, new Insets(0, 0, 0, 0));
 
 		frame.pack();
 		frame.setLocationRelativeTo(null);
