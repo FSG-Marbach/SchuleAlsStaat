@@ -25,8 +25,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 
+import clientLibrary.Connection;
 import essentials.Essentials;
+import essentials.SimpleLog;
 
 /**
  * 
@@ -44,11 +47,17 @@ public class Gui implements KeyListener, ActionListener {
 	private Color clr_background, clr_backgroundHeader;
 	private Font fnt_header, fnt_title, fnt_normal;
 	private GridBagLayout gridbaglayout;
-	private JButton btn_login;
+	private JButton btn_login, btn_locknumber;
 	private JTextArea jta_information;
 	private JScrollPane scp_information;
 	private static JTextField txf_userid;
 	private int width, height;
+	static SimpleLog log;
+	ImageIcon defaultpicture;
+
+	public Gui() {
+		log = new SimpleLog(Main.logfile, true, true);
+	}
 
 	public void restoreDefaults() {
 		lbl_name.setText("");
@@ -56,6 +65,11 @@ public class Gui implements KeyListener, ActionListener {
 		lbl_attendance.setText("");
 		jta_information.setText("");
 		txf_userid.setText("");
+		txf_userid.setEditable(true);
+		btn_login.setEnabled(false);
+		lbl_image.setIcon(defaultpicture);
+		btn_locknumber.setText("Schülerinformationen Abrufen");
+		log.log("defaults restored");
 	}
 
 	/**
@@ -77,17 +91,32 @@ public class Gui implements KeyListener, ActionListener {
 	 *
 	 */
 
-	public boolean fillGaps(String name, String classLevel, Integer attendance, Boolean state, String information) {
+	public boolean fillGaps(String name, String classLevel, Integer attendance, ImageIcon studentpicture,
+			String information) {
 
 		try {
 			lbl_name.setText(name);
 			lbl_class.setText(classLevel);
 			lbl_attendance.setText(attendance.toString() + " h");
 			jta_information.setText(information);
+			log.log("filled Places, name: " + name + ", classlevel: " + classLevel + ", attendacne: " + attendance
+					+ ", information: " + information);
+
+			if (studentpicture != null && Main.allowstudentpictures == true) {
+				studentpicture.setImage(studentpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
+				lbl_image.setIcon(studentpicture);
+				log.log("set studentpicture");
+			} else {
+				defaultpicture.setImage(defaultpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
+				lbl_image.setIcon(defaultpicture);
+				log.log("set defaultpicture");
+			}
 		} catch (Exception e) {
+			log.error("error while filling gaps");
+			log.logStackTrace(e);
 			return false;
 		}
-
+		log.log("filled gaps");
 		return true;
 	}
 
@@ -117,6 +146,8 @@ public class Gui implements KeyListener, ActionListener {
 			id = id.replace(">", "");
 			txf_userid.setText(id);
 		} catch (Exception e) {
+			log.error("error while setting studentid");
+			log.logStackTrace(e);
 			return false;
 		}
 		return true;
@@ -206,11 +237,18 @@ public class Gui implements KeyListener, ActionListener {
 			btn_login.setFont(fnt_normal);
 			btn_login.addActionListener(this);
 			btn_login.setContentAreaFilled(true);
+			btn_login.setEnabled(false);
+
+			btn_locknumber = new JButton("Schülerinformationen Abrufen");
+			btn_locknumber.setFont(fnt_normal);
+			btn_locknumber.addActionListener(this);
+			btn_locknumber.setContentAreaFilled(true);
 
 			txf_userid = new JTextField();
-			txf_userid.setFont(fnt_normal);
+			txf_userid.setFont(fnt_title);
 			txf_userid.addKeyListener(this);
 			txf_userid.requestFocus(true);
+			txf_userid.setMargin(new Insets(5, 10, 5, 5));
 
 			panel = new JPanel();
 			panel.setLayout(null);
@@ -225,7 +263,7 @@ public class Gui implements KeyListener, ActionListener {
 			pnl_informationLeftSide.setLayout(gridbaglayout);
 			pnl_informationLeftSide.setBackground(clr_background);
 
-			Essentials.addComponent(pnl_informationLeftSide, gridbaglayout, lbl_nameTitle, 0, 0, 2, 1, 1, 1,
+			Essentials.addComponent(pnl_informationLeftSide, gridbaglayout, lbl_nameTitle, 0, 0, 2, 1, 0, 0,
 					new Insets(5, 5, 5, 5), GridBagConstraints.WEST);
 			Essentials.addComponent(pnl_informationLeftSide, gridbaglayout, lbl_name, 0, 1, 2, 1, 1, 1,
 					new Insets(5, 5, 5, 5), GridBagConstraints.WEST);
@@ -238,24 +276,27 @@ public class Gui implements KeyListener, ActionListener {
 			Essentials.addComponent(pnl_informationLeftSide, gridbaglayout, lbl_attendance, 0, 5, 2, 1, 1, 1,
 					new Insets(5, 5, 5, 5), GridBagConstraints.WEST);
 
+			pnl_informationLeftSide.setBorder(BorderFactory.createLineBorder(clr_background, 15));
+
 			pnl_imagePlace = new JPanel();
 			pnl_imagePlace.setLayout(new BorderLayout());
 			pnl_imagePlace.setBackground(clr_background);
 
-			ImageIcon image = new ImageIcon("res/client/emptyprofilpic.png");
-			image.setImage(image.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
-			lbl_image.setIcon(image);
+			defaultpicture = new ImageIcon("res/client/emptyprofilpic.png");
+			defaultpicture.setImage(defaultpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
+			lbl_image.setIcon(defaultpicture);
 
 			pnl_imagePlace.add(lbl_imageTitle, BorderLayout.NORTH);
 			pnl_imagePlace.add(lbl_image, BorderLayout.CENTER);
 
-			Essentials.addComponent(pnl_informationLeftSide, gridbaglayout, pnl_imagePlace, 2, 0, 1, 5, 0, 1,
-					new Insets(5, 5, 5, 5));
+			Essentials.addComponent(pnl_informationLeftSide, gridbaglayout, pnl_imagePlace, 2, 0, 1, 6, 0, 1,
+					new Insets(0, 5, 5, 5));
 
 			pnl_informationRightSide = new JPanel();
 			pnl_informationRightSide.setLayout(new BorderLayout());
 			pnl_informationRightSide.setBackground(clr_background);
 
+			pnl_informationRightSide.setBorder(BorderFactory.createLineBorder(clr_background, 15));
 			pnl_informationRightSide.add(lbl_informationTitle, BorderLayout.NORTH);
 			pnl_informationRightSide.add(scp_information, BorderLayout.CENTER);
 
@@ -264,19 +305,26 @@ public class Gui implements KeyListener, ActionListener {
 			pnl_input.setBackground(clr_background);
 
 			Essentials.addComponent(pnl_input, gridbaglayout, txf_userid, 0, 0, 1, 1, 1, 1, new Insets(15, 15, 15, 15));
-			Essentials.addComponent(pnl_input, gridbaglayout, btn_login, 1, 0, 1, 1, 1, 1, new Insets(15, 15, 15, 15));
+			Essentials.addComponent(pnl_input, gridbaglayout, btn_locknumber, 1, 0, 1, 1, 1, 1,
+					new Insets(15, 15, 15, 15));
+			Essentials.addComponent(pnl_input, gridbaglayout, btn_login, 2, 0, 1, 1, 1, 1, new Insets(15, 15, 15, 15));
+
+			// pnl_input.setLayout(new BorderLayout());
+			// pnl_input.add(txf_userid, BorderLayout.WEST);
+			// pnl_input.add(btn_locknumber, BorderLayout.CENTER);
+			// pnl_input.add(btn_login, BorderLayout.EAST);
 
 			pnl_serverinformation = new JPanel();
 			pnl_serverinformation.setLayout(gridbaglayout);
 			pnl_serverinformation.setBackground(Color.green);
 
-			pnl_header.setBounds(0, 0, width, height / 7);
-			pnl_informationLeftSide.setBounds(0, height / 7, width / 3 * 2, height / 7 * 4);
-			pnl_informationRightSide.setBounds(width / 3 * 2, height / 7, width / 3, height / 7 * 4);
-			pnl_input.setBounds(0, height / 7 * 5, width, height / 7);
-			pnl_serverinformation.setBounds(0, height / 7 * 6, width, height / 7);
+			pnl_header.setBounds(0, 0, width, height / 7 * 2 - height / 11);
+			pnl_informationLeftSide.setBounds(0, height / 7 * 2 - height / 11, width / 3 * 2, height / 7 * 4);
+			pnl_informationRightSide.setBounds(width / 3 * 2, height / 7 * 2 - height / 11, width / 3, height / 7 * 4);
+			pnl_input.setBounds(0, height / 7 * 6 - height / 11, width, height / 7);
+			pnl_serverinformation.setBounds(0, height / 7 * 7 - height / 11, width, height / 11);
 
-			fnt_header = new Font("Arial Rounded MT Bold", Font.BOLD, (int) pnl_header.getSize().getHeight() / 3);
+			fnt_header = new Font("Arial Rounded MT Bold", Font.BOLD, 40);
 
 			lbl_header = new JLabel("Citizen Data Managment System - Zugangskontrollclient");
 			lbl_header.setFont(fnt_header);
@@ -286,12 +334,6 @@ public class Gui implements KeyListener, ActionListener {
 
 			pnl_header.add(lbl_header, BorderLayout.CENTER);
 
-			pnl_header.setBorder(BorderFactory.createLineBorder(clr_background));
-			pnl_informationLeftSide.setBorder(BorderFactory.createLineBorder(clr_background));
-			pnl_informationRightSide.setBorder(BorderFactory.createLineBorder(clr_background));
-			pnl_input.setBorder(BorderFactory.createLineBorder(clr_background));
-			pnl_serverinformation.setBorder(BorderFactory.createLineBorder(clr_background));
-
 			panel.add(pnl_header);
 			panel.add(pnl_informationLeftSide);
 			panel.add(pnl_informationRightSide);
@@ -299,26 +341,13 @@ public class Gui implements KeyListener, ActionListener {
 			panel.add(pnl_serverinformation);
 
 			frame.add(panel);
+			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);
 			txf_userid.requestFocus(true);
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
-	}
-
-	public Gui() {
-
-	}
-
-	public void keyPressed(KeyEvent EVT) {
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -333,18 +362,50 @@ public class Gui implements KeyListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btn_login) {
+			log.log("Login/out button clicked");
 			if (txf_userid.getText().equals("")) {
-				JOptionPane.showMessageDialog(null, "The Student ID field is empty.", "Error while logging in!",
+				JOptionPane.showMessageDialog(null, "The Student ID field is empty.", "Error while logging in/out!",
 						JOptionPane.ERROR_MESSAGE);
+				log.log("send message: studentidfield is empty");
 			} else {
-				System.out.println("Student ID: " + txf_userid.getText());
+				String studentid = txf_userid.getText();
+				log.log("button pressed, studendidfield: " + studentid);
+				// TODO Main.connection.writeLine("LOGGE SCHÜLER EIN/AUS
+				// TRIGGERCOMMAND");
 				restoreDefaults();
 			}
-
 			txf_userid.requestFocus();
-
 		}
+		if (e.getSource() == btn_locknumber && !btn_locknumber.getText().contains("Reset")) {
+			if (txf_userid.getText().equals("")) {
+				JOptionPane.showMessageDialog(null, "The Student ID field is empty.", "Error while logging in/out!",
+						JOptionPane.ERROR_MESSAGE);
+				log.log("send message: studentidfield is empty");
+			} else {
+				String studentid = txf_userid.getText();
+				log.log("set studendbutton pressed, studendidfield: " + studentid);
+				btn_login.setEnabled(true);
+				txf_userid.setEditable(false);
+				btn_locknumber.setText("Reset Schülerinfo");
+				// TODO Main.connection.writeLine("KRIEGE SCHÜLERDATEN VON");
+				/*
+				 * Main.connection.readLine(); fillGaps();
+				 */
+			}
+		} else if (e.getSource() == btn_locknumber && btn_locknumber.getText().contains("Reset")) {
+			restoreDefaults();
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
 }
