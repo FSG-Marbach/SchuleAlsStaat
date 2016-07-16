@@ -1,4 +1,3 @@
-package accessControlClient;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -393,6 +394,40 @@ public class Gui implements KeyListener, ActionListener {
 		} else if (e.getSource() == btn_locknumber && btn_locknumber.getText().contains("Reset")) {
 			restoreDefaults();
 		}
+	}
+
+	public String calculateAttendanceTime(String studentid, String[] loginarray, String[] logoutarray,
+			SimpleDateFormat dateFormat, SimpleLog log) {
+		//NOT WORKING!!!!!!!
+		long diffMillis = 0;
+		long diffDays = 0;
+		long diffHours = 0;
+		long diffMinutes = 0;
+		long diffSeconds = 0;
+		
+		String wholeTime = "";
+		for (int i = 0; i < logoutarray.length; i++) {
+
+			try {
+				Date from = dateFormat.parse(loginarray[i]);
+				Date to = dateFormat.parse(logoutarray[i]);
+				diffMillis = to.getTime() - from.getTime();
+				diffDays = diffMillis / (1000 * 60 * 60 * 24);
+				diffHours = diffMillis / (1000 * 60 * 60);
+				diffMinutes = diffMillis / (1000 * 60);
+				diffSeconds = diffMillis / (1000);
+
+				 log.log(studentid + " attendance: " + diffHours + "h " + diffMinutes + "min " + diffSeconds + "s");
+				 wholeTime  = wholeTime + diffHours + ":" + diffMinutes + ":" + diffSeconds + ";";
+			} catch (Exception ex) {
+				log.logStackTrace(ex);
+				return "Fehler bei der Berechnung";
+			}
+		}
+		
+		System.out.println(wholeTime);
+		return diffHours + "h " + diffMinutes + "min";
+
 	}
 
 	@Override
