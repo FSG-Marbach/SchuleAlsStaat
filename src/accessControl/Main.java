@@ -59,18 +59,12 @@ public class Main {
 		trustStore = (String) settings.getSetting("allowstudentpictures");
 		trustStorePasswd = (String) settings.getSetting("truststorePassword");
 
-		log.log("ip: " + ip);
-		log.log("port: " + port);
-		log.log("user: " + user);
-		log.log("passwd: " + passwd);
-		log.log("trustStore: " + trustStore);
-		log.log("trustStorePasswd: " + trustStorePasswd);
 
-		try {
-			connection.connect(ip, port, user, passwd, trustStore, trustStorePasswd);
-		} catch (IOException e) {
-			log.logStackTrace(e);
-		}
+//		try {
+//			connection.connect(ip, port, user, passwd, trustStore, trustStorePasswd);
+//		} catch (IOException e) {
+//			log.logStackTrace(e);
+//		}
 
 		Gui gui = new Gui();
 		log.log("Initialize GUI...");

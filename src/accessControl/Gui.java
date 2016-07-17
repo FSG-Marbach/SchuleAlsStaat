@@ -1,3 +1,5 @@
+package accessControl;
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,24 +53,22 @@ public class Gui implements KeyListener, ActionListener {
 	private JScrollPane scp_information;
 	private static JTextField txf_userid;
 	private int width, height;
-	static SimpleLog log;
 	ImageIcon defaultpicture;
 
 	public Gui() {
-		log = new SimpleLog(Main.logfile, true, true);
+
 	}
 
 	public void restoreDefaults() {
-		lbl_name.setText("");
-		lbl_class.setText("");
-		lbl_attendance.setText("");
-		jta_information.setText("");
+		lbl_name.setText("Johannes");
+		lbl_class.setText("9E");
+		lbl_attendance.setText("10h");
+		jta_information.setText("Keine Informationen verfügbar...");
 		txf_userid.setText("");
 		txf_userid.setEditable(true);
 		btn_login.setEnabled(false);
 		lbl_image.setIcon(defaultpicture);
 		btn_locknumber.setText("Schülerinformationen Abrufen");
-		log.log("defaults restored");
 	}
 
 	/**
@@ -98,24 +98,22 @@ public class Gui implements KeyListener, ActionListener {
 			lbl_class.setText(classLevel);
 			lbl_attendance.setText(attendance.toString() + " h");
 			jta_information.setText(information);
-			log.log("filled Places, name: " + name + ", classlevel: " + classLevel + ", attendacne: " + attendance
-					+ ", information: " + information);
+			
 
 			if (studentpicture != null && Main.allowstudentpictures == true) {
 				studentpicture.setImage(studentpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
 				lbl_image.setIcon(studentpicture);
-				log.log("set studentpicture");
+				
 			} else {
 				defaultpicture.setImage(defaultpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
 				lbl_image.setIcon(defaultpicture);
-				log.log("set defaultpicture");
+				
 			}
 		} catch (Exception e) {
-			log.error("error while filling gaps");
-			log.logStackTrace(e);
+			
 			return false;
 		}
-		log.log("filled gaps");
+		
 		return true;
 	}
 
@@ -145,8 +143,7 @@ public class Gui implements KeyListener, ActionListener {
 			id = id.replace(">", "");
 			txf_userid.setText(id);
 		} catch (Exception e) {
-			log.error("error while setting studentid");
-			log.logStackTrace(e);
+			
 			return false;
 		}
 		return true;
@@ -171,8 +168,8 @@ public class Gui implements KeyListener, ActionListener {
 			width = 1366;
 			height = 760;
 
-			fnt_title = new Font("Arial Rounded MT Bold", Font.BOLD, 22);
-			fnt_normal = new Font("Arial Rounded MT Bold", 0, 18);
+			fnt_title = new Font("Arial Rounded MT Bold", Font.BOLD, 24);
+			fnt_normal = new Font("Arial Rounded MT Bold", 0, 24);
 
 			clr_background = new Color(240, 240, 240);
 			clr_backgroundHeader = new Color(180, 180, 180);
@@ -205,7 +202,7 @@ public class Gui implements KeyListener, ActionListener {
 			lbl_attendance.setFont(fnt_normal);
 			lbl_attendance.setHorizontalAlignment(SwingConstants.LEFT);
 
-			lbl_attendanceTitle = new JLabel("Bissherige Anwesenheitszeit:");
+			lbl_attendanceTitle = new JLabel("Bisherige Anwesenheitszeit:");
 			lbl_attendanceTitle.setFont(fnt_title);
 			lbl_attendanceTitle.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -281,8 +278,9 @@ public class Gui implements KeyListener, ActionListener {
 			pnl_imagePlace.setLayout(new BorderLayout());
 			pnl_imagePlace.setBackground(clr_background);
 
-			defaultpicture = new ImageIcon(Main.path + "emptyprofilpic.png");
+			defaultpicture = new ImageIcon(Main.path + "emptyprofilpic2.png");
 			defaultpicture.setImage(defaultpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
+			defaultpicture.setImage(defaultpicture.getImage().getScaledInstance(200, 300, Image.SCALE_SMOOTH));
 			lbl_image.setIcon(defaultpicture);
 
 			pnl_imagePlace.add(lbl_imageTitle, BorderLayout.NORTH);
@@ -325,7 +323,7 @@ public class Gui implements KeyListener, ActionListener {
 
 			fnt_header = new Font("Arial Rounded MT Bold", Font.BOLD, 40);
 
-			lbl_header = new JLabel("Citizen Data Managment System - Zugangskontrollclient");
+			lbl_header = new JLabel("Citizen Data Managment System - Zugangskontrolle");
 			lbl_header.setFont(fnt_header);
 			lbl_header.setForeground(Color.black);
 			lbl_header.setHorizontalAlignment(SwingConstants.CENTER);
@@ -361,14 +359,14 @@ public class Gui implements KeyListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btn_login) {
-			log.log("Login/out button clicked");
+			
 			if (txf_userid.getText().equals("")) {
 				JOptionPane.showMessageDialog(null, "The Student ID field is empty.", "Error while logging in/out!",
 						JOptionPane.ERROR_MESSAGE);
-				log.log("send message: studentidfield is empty");
+				
 			} else {
 				String studentid = txf_userid.getText();
-				log.log("button pressed, studendidfield: " + studentid);
+				
 				// TODO Main.connection.writeLine("LOGGE SCHÜLER EIN/AUS
 				// TRIGGERCOMMAND");
 				restoreDefaults();
@@ -379,10 +377,10 @@ public class Gui implements KeyListener, ActionListener {
 			if (txf_userid.getText().equals("")) {
 				JOptionPane.showMessageDialog(null, "The Student ID field is empty.", "Error while logging in/out!",
 						JOptionPane.ERROR_MESSAGE);
-				log.log("send message: studentidfield is empty");
+				
 			} else {
 				String studentid = txf_userid.getText();
-				log.log("set studendbutton pressed, studendidfield: " + studentid);
+				
 				btn_login.setEnabled(true);
 				txf_userid.setEditable(false);
 				btn_locknumber.setText("Reset Schülerinfo");
@@ -417,10 +415,9 @@ public class Gui implements KeyListener, ActionListener {
 				diffMinutes = diffMillis / (1000 * 60);
 				diffSeconds = diffMillis / (1000);
 
-				 log.log(studentid + " attendance: " + diffHours + "h " + diffMinutes + "min " + diffSeconds + "s");
-				 wholeTime  = wholeTime + diffHours + ":" + diffMinutes + ":" + diffSeconds + ";";
+				
 			} catch (Exception ex) {
-				log.logStackTrace(ex);
+			
 				return "Fehler bei der Berechnung";
 			}
 		}

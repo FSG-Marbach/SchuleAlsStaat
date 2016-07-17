@@ -109,12 +109,9 @@ public class TestTimeStamp {
 				diffMinutes = diffMillis / (1000 * 60);
 				diffSeconds = diffMillis / (1000);
 
-				// log.log(studentid + " attendance: " + diffHours + "h " +
-				// diffMinutes + "min " + diffSeconds + "s");
 				wholeTime = wholeTime + diffHours + ":" + diffMinutes + ":" + diffSeconds + ";";
 			} catch (Exception ex) {
-				// log.logStackTrace(ex);
-				System.out.print(ex);
+				
 				return "Fehler bei der Berechnung";
 			}
 		}
