@@ -208,7 +208,7 @@ public class Database {
 		}
 	}
 
-	public boolean setBankAccounUsers(String sban, String[] users) {
+	public boolean setBankAccountUsers(String sban, String[] users) {
 		String users2 = "";
 
 		for (String string : users) {
