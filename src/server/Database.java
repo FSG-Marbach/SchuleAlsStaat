@@ -274,4 +274,135 @@ public class Database {
 		}
 	}
 
+	public String getCitizenName(String id) {
+		String query = "SELECT name FROM Citizens WHERE id = '" + id + "'";
+		try {
+
+			return connection.createStatement().executeQuery(query)
+					.getString(1);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+
+	public String getCitizenPic(String id) {
+		String query = "SELECT pic FROM Citizens WHERE id = '" + id + "'";
+		try {
+
+			return connection.createStatement().executeQuery(query)
+					.getString(1);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+
+	public String getCitizenClass(String id) {
+		String query = "SELECT class FROM Citizens WHERE id = '" + id + "'";
+		try {
+
+			return connection.createStatement().executeQuery(query)
+					.getString(1);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+
+	public String getCitizenExchangeVolume(String id) {
+		String query = "SELECT exchangeVolume FROM Citizens WHERE id = '" + id
+				+ "'";
+		try {
+
+			return connection.createStatement().executeQuery(query)
+					.getString(1);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+
+	public boolean setCitizenPic(String id, String pic) {
+		String query = "UPDATE Citizens SET pic ='" + pic + "' WHERE id = '"
+				+ id + "'";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
+
+	public boolean setCitizenName(String id, String pic) {
+		String query = "UPDATE Citizens SET pic ='" + pic + "' WHERE id = '"
+				+ id + "'";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
+
+	public boolean setCitizenClass(String id, String className) {
+		String query = "UPDATE Citizens SET className ='" + className
+				+ "' WHERE id = '" + id + "'";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
+
+	public boolean setCitizenExchangeVolume(String id, String exchangeVolume) {
+		String query = "UPDATE Citizens SET exchangeVolume ='" + exchangeVolume
+				+ "' WHERE id = '" + id + "'";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
+
+	public boolean createCitizen(String name, String id, String pic,
+			String className, String exchangeVolume) {
+		String query = "INSERT INTO BankAccounts(name, id, pic, class, exchangeVolume) VALUES ('"
+				+ name
+				+ "', '"
+				+ id
+				+ "', '"
+				+ pic
+				+ "', '"
+				+ className
+				+ "', '" + exchangeVolume + "');";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
+
 }
