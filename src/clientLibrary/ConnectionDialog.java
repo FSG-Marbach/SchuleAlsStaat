@@ -85,6 +85,7 @@ public class ConnectionDialog {
 		}
 
 		cbxIp = new JComboBox<String>(ips);
+		cbxIp.setEditable(true);
 		Essentials.addComponent(frame, layout, cbxIp, 1, 0, 1, 1, 1, 0, new Insets(5, 0, 5, 5));
 
 		JLabel lblPort = new JLabel("Port:");

@@ -31,7 +31,6 @@ public class DatabaseConnection {
 	 */
 	public DatabaseConnection(String connection) throws ClassNotFoundException,
 			SQLException {
-
 		Class.forName("com.mysql.jdbc.Drive");
 		this.connection = DriverManager.getConnection(connection);
 	}
@@ -45,9 +44,7 @@ public class DatabaseConnection {
 	 *             If something went wrong
 	 */
 	public ResultSet executeQuery(String query) throws SQLException {
-
 		return connection.createStatement().executeQuery(query);
 
 	}
-
 }

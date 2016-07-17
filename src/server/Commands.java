@@ -14,13 +14,6 @@ public abstract class Commands {
 	static String reload(int id, String[] command, SimpleLog log, Settings passwords, Settings permissions) {
 
 		if (!(command.length != 2)) {
-			
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
 			boolean b = false;
 			if (command[1] != null) {

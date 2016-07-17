@@ -13,7 +13,6 @@ import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -36,7 +35,6 @@ public class Console {
 	public Console() throws IOException {
 
 		Properties defaultValues = new Properties();
-		defaultValues.setProperty("ip", "127.0.0.1");
 		defaultValues.setProperty("port", String.valueOf(PORT));
 		defaultValues.setProperty("truststore", "client.truststore");
 		defaultValues.setProperty("truststorePassword", "123456");
@@ -82,15 +80,13 @@ public class Console {
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		Essentials.addComponent(panel, layout, scrollPane, 0, 0, 2, 1, 1, 1, new Insets(0, 0, 0, 0));
 
-		JPanel background = new JPanel();
-		background.setBackground(Color.white);
-		background.setLayout(layout);
-		Essentials.addComponent(panel, layout, background, 0, 1, 1, 1, 0, 0, new Insets(0, 0, 0, 0));
-		
-		JLabel label = new JLabel(username + ">");
+		JTextField label = new JTextField(username + ">");
+		label.setEditable(false);
 		label.setFont(new Font("Consolas", 0, 14));
+		label.setBackground(Color.white);
 		label.setForeground(Color.black);
-		Essentials.addComponent(background, layout, label, 0, 0, 1, 1, 1, 1, new Insets(0, 10, 0, 10));
+		label.setBorder(BorderFactory.createMatteBorder(5, 10, 5, 0, Color.white));
+		Essentials.addComponent(panel, layout, label, 0, 1, 1, 1, 0, 0, new Insets(0, 0, 0, 0));
 		
 		JTextField textField = new JTextField();
 		textField.setBackground(Color.white);
