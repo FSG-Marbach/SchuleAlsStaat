@@ -327,6 +327,60 @@ public class Database {
 		}
 	}
 
+	public String getCitizenCheckinTimes(String id) {
+		String query = "SELECT checkinTimes FROM Citizens WHERE id = '" + id
+				+ "'";
+		try {
+
+			return connection.createStatement().executeQuery(query)
+					.getString(1);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+
+	public String getCitizenCheckoutTimes(String id) {
+		String query = "SELECT checkoutTimes FROM Citizens WHERE id = '" + id
+				+ "'";
+		try {
+
+			return connection.createStatement().executeQuery(query)
+					.getString(1);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+	public boolean setCitizenCheckinTimes(String id, String checkinTimes) {
+		String query = "UPDATE Citizens SET checkinTimes ='" + checkinTimes + "' WHERE id = '"
+				+ id + "'";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
+	
+	public boolean setCitizenCheckoutTimes(String id, String checkoutTimes) {
+		String query = "UPDATE Citizens SET checkoutTimes ='" + checkoutTimes + "' WHERE id = '"
+				+ id + "'";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
 	public boolean setCitizenPic(String id, String pic) {
 		String query = "UPDATE Citizens SET pic ='" + pic + "' WHERE id = '"
 				+ id + "'";

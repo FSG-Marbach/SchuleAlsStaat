@@ -1,0 +1,41 @@
+17.07.2016_22:29:56 INFO: ================================================================
+17.07.2016_22:29:56 INFO: Started 'Citizen Data Management System' server | Version: 0.1.3
+17.07.2016_22:29:56 INFO: ================================================================
+17.07.2016_22:29:56 DEBUG: Reading settings.properties
+17.07.2016_22:29:56 INFO: Loaded settings.properties
+17.07.2016_22:29:56 DEBUG: Reading passwords.properties
+17.07.2016_22:29:56 INFO: Loaded passwords.properties
+17.07.2016_22:29:56 DEBUG: Reading permissions.properties
+17.07.2016_22:29:56 INFO: Loaded permissions.properties
+17.07.2016_22:29:57 INFO: Successfully created CDMS server on port 3746
+17.07.2016_22:29:57 INFO: Waiting for clients...
+17.07.2016_22:38:07 INFO: Client 0 connected
+17.07.2016_22:38:08 INFO: Successful authentication of client 0 (Name: root)
+17.07.2016_22:44:39 INFO: Client 0 sent command 'null'
+17.07.2016_22:45:20 INFO: Client 1 connected
+17.07.2016_22:45:20 INFO: Successful authentication of client 1 (Name: root)
+17.07.2016_22:45:37 INFO: Client 1 sent command 'null'
+================================================================
+Started 'Citizen Data Management System' server | Version: 0.1.3
+                       17.07.2016_23:47:50
+================================================================
+17.07.2016_23:47:50 DEBUG: Reading settings.properties
+17.07.2016_23:47:50 INFO: Loaded settings.properties
+17.07.2016_23:47:50 DEBUG: Reading passwords.properties
+17.07.2016_23:47:50 INFO: Loaded passwords.properties
+17.07.2016_23:47:50 DEBUG: Reading permissions.properties
+17.07.2016_23:47:50 INFO: Loaded permissions.properties
+17.07.2016_23:47:51 INFO: Successfully created CDMS server on port 3746
+17.07.2016_23:47:51 INFO: Waiting for clients...
+================================================================
+Started 'Citizen Data Management System' server | Version: 0.1.3
+                       17.07.2016_23:50:20
+================================================================
+17.07.2016_23:50:20 DEBUG: Reading settings.properties
+17.07.2016_23:50:20 WARNING: 'settings.properties' doesn't exist! Using default values
+17.07.2016_23:50:20 DEBUG: Reading passwords.properties
+17.07.2016_23:50:20 INFO: Loaded passwords.properties
+17.07.2016_23:50:20 DEBUG: Reading permissions.properties
+17.07.2016_23:50:20 INFO: Loaded permissions.properties
+17.07.2016_23:50:20 INFO: Successfully created CDMS server on port 3746
+17.07.2016_23:50:20 INFO: Waiting for clients...

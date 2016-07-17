@@ -30,11 +30,11 @@ public class ConnectionDialog {
 	SimpleLog log;
 	Settings settings;
 
-	static JComboBox<String> cbxIp;
-	static JFormattedTextField txfPort;
-	static JTextField txfUsername;
-	static JPasswordField txfPassword;
-	static JButton btnAbort, btnConnect;
+	JComboBox<String> cbxIp;
+	JFormattedTextField txfPort;
+	JTextField txfUsername;
+	JPasswordField txfPassword;
+	JButton btnAbort, btnConnect;
 
 	static String ip, username, password;
 	static int port;
@@ -103,7 +103,7 @@ public class ConnectionDialog {
 		JLabel lblUser = new JLabel("Benutzer:");
 		Essentials.addComponent(frame, layout, lblUser, 0, 1, 1, 1, 0, 0, new Insets(0, 5, 5, 5));
 
-		JTextField txfUsername = new JTextField();
+		final JTextField txfUsername = new JTextField();
 		txfUsername.setPreferredSize(new Dimension(260, 20));
 		Essentials.addComponent(frame, layout, txfUsername, 1, 1, 3, 1, 1, 0, new Insets(0, 0, 5, 5));
 

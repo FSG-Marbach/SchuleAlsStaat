@@ -11,7 +11,8 @@ import essentials.SimpleLog;
 public abstract class Commands {
 
 	// Reloading server properties
-	static String reload(int id, String[] command, SimpleLog log, Settings passwords, Settings permissions) {
+	static String reload(int id, String[] command, SimpleLog log,
+			Settings passwords, Settings permissions) {
 
 		if (!(command.length != 2)) {
 
@@ -36,16 +37,17 @@ public abstract class Commands {
 			}
 
 			if (b) {
-				log.warning("Client " + id + " sent invalid argument: '" + command[1] + "' in command: '"
+				log.warning("Client " + id + " sent invalid argument: '"
+						+ command[1] + "' in command: '"
 						+ Essentials.getAssembledStringArray(command) + "'!");
 				return "Invalid argument: " + command[1];
 			}
 		} else {
-			log.warning(
-					"Client " + id + " sent invalid command: '" + Essentials.getAssembledStringArray(command) + "'!");
+			log.warning("Client " + id + " sent invalid command: '"
+					+ Essentials.getAssembledStringArray(command) + "'!");
 			return "Invalid command";
 		}
-		
+
 		return "Reloaded properties";
 	}
 

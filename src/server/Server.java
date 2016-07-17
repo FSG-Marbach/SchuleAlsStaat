@@ -2,6 +2,7 @@ package server;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.net.ssl.SSLServerSocket;
@@ -21,6 +22,8 @@ public class Server {
 	static Settings settings, passwords, permissions;
 	SSLServerSocket serverSocket;
 
+	Database db;
+
 	final static String path = "res\\server\\";
 	final String version = "0.1.3";
 	String keystore, password, permissionsPath, passwordsPath;
@@ -33,15 +36,10 @@ public class Server {
 		// Create log file
 		log = new SimpleLog(new File(path + "log.txt"), true, true);
 
-		String message = "Started 'Citizen Data Management System' server | Version: " + version;
+		String message = "Started 'Citizen Data Management System' server | Version: "
+				+ version;
 
-		String s = "";
-		for (int i = 0; i < message.length(); i++)
-			s = s + "=";
-
-		log.info(s);
-		log.info(message);
-		log.info(s);
+		log.startupMessage(message);
 
 		// Initializing settings
 		Properties defaultValues = new Properties();
@@ -50,7 +48,11 @@ public class Server {
 		defaultValues.setProperty("password", "123456");
 		defaultValues.setProperty("permissionsPath", "permissions.properties");
 		defaultValues.setProperty("passwordsPath", "passwords.properties");
-		settings = new Settings(new File(path + "settings.properties"), defaultValues, false, log);
+		defaultValues
+				.setProperty("databaseConnection",
+						"jdbc:mysql://localhost/feedback?user=sqluser&password=sqluserpw");
+		settings = new Settings(new File(path + "settings.properties"),
+				defaultValues, false, log);
 		settings.setComment("Syntax: [Key]=[Value]", true);
 
 		// Setting variables
@@ -58,8 +60,8 @@ public class Server {
 			port = Integer.parseInt(settings.getSetting("port"));
 		} catch (NumberFormatException e) {
 			settings.setSetting("port", String.valueOf(port));
-			log.error("Error occurred while reading port from settings.properties! Default port (" + port
-					+ ") will be used...");
+			log.error("Error occurred while reading port from settings.properties! Default port ("
+					+ port + ") will be used...");
 		}
 
 		keystore = settings.getSetting("keystore");
@@ -74,13 +76,31 @@ public class Server {
 		}
 
 		// Initializing client passwords
-		passwords = new Settings(new File(path + passwordsPath), new Properties(), false, log);
+		passwords = new Settings(new File(path + passwordsPath),
+				new Properties(), false, log);
 		passwords.setComment("Syntax: [Client name]=[Password]", true);
 
 		// Initializing client permissions
-		permissions = new Settings(new File(path + permissionsPath), new Properties(), false, log);
-		permissions.setComment(
-				"Syntax: [Client name]=[Permissions group] or [Permissions group]=[Array of permissions]", true);
+		permissions = new Settings(new File(path + permissionsPath),
+				new Properties(), false, log);
+		permissions
+				.setComment(
+						"Syntax: [Client name]=[Permissions group] or [Permissions group]=[Array of permissions]",
+						true);
+
+		log.debug("Connectiong to database");
+		try {
+			db = new Database(settings.getSetting("databaseConnection"), log);
+		} catch (ClassNotFoundException e1) {
+			log.fatal("No database driver found! Shutting down");
+			log.logStackTrace(e1);
+			System.exit(1);
+		} catch (SQLException e1) {
+			log.fatal("Couldn't connect to database!");
+			log.logStackTrace(e1);
+			System.exit(1);
+		}
+		log.info("Successfully connected to database");
 
 		// Configuring SSLServer
 		System.setProperty("javax.net.ssl.keyStore", path + keystore);
@@ -88,7 +108,8 @@ public class Server {
 
 		// Creating SSLServer
 		try {
-			SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+			SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory
+					.getDefault();
 			serverSocket = (SSLServerSocket) factory.createServerSocket(port);
 		} catch (IOException e) {
 			log.fatal("Fatal error occurred while creating server! Shutting down...");
@@ -106,11 +127,13 @@ public class Server {
 			try {
 				client = (SSLSocket) serverSocket.accept();
 			} catch (IOException e) {
-				log.error("Error occurred while accepting a client (id: " + id + ")! Closing socket...");
+				log.error("Error occurred while accepting a client (id: " + id
+						+ ")! Closing socket...");
 				log.logStackTrace(e);
 			}
 			if (client != null)
-				new ClientThread(client, id, log, settings, passwords, permissions).start();
+				new ClientThread(client, id, log, settings, passwords,
+						permissions, db).start();
 			id++;
 		}
 	}
