@@ -327,6 +327,20 @@ public class Database {
 		}
 	}
 
+	public String getCitizenInformations(String id){
+		String query = "SELECT informations FROM Citizens WHERE id = '" + id
+				+ "'";
+		try {
+
+			return connection.createStatement().executeQuery(query)
+					.getString(1);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+	
 	public String getCitizenCheckinTimes(String id) {
 		String query = "SELECT checkinTimes FROM Citizens WHERE id = '" + id
 				+ "'";

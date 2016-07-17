@@ -377,7 +377,7 @@ public class Gui implements KeyListener, ActionListener {
 				if(state.equals("inside")){
 					Main.connection.writeLine("setCitizenLogoutPoint " + studentid);
 				}else if(state.equals("outside")){
-					Main.connection.writeLine("setCitizenLoginPoint " + studentid);
+					Main.connection.writeLine("setCitizenCheckinTimes " + studentid);
 				}
 
 				restoreDefaults();
@@ -408,10 +408,10 @@ public class Gui implements KeyListener, ActionListener {
 				Main.connection.writeLine("getCitizenName " + studentid);
 				String name = Main.connection.readLine();
 
-				Main.connection.writeLine("getCitizenLoginPoints " + studentid);
+				Main.connection.writeLine("getCitizenCheckinTimes " + studentid);
 				String[] loginarray = Main.connection.readLine().split(";");
 
-				Main.connection.writeLine("getCitizenLogoutPoints " + studentid);
+				Main.connection.writeLine("getCitizenCheckoutTimes " + studentid);
 				String[] logoutarray = Main.connection.readLine().split(";");
 
 				Main.connection.writeLine("getCitizenClass " + studentid);
@@ -425,7 +425,7 @@ public class Gui implements KeyListener, ActionListener {
 
 				String attendance = calculateAttendanceTime(studentid, loginarray, logoutarray, dateFormat, today);
 
-				Main.connection.writeLine("getInformations");
+				Main.connection.writeLine("getCitizenInformations " + studentid);
 				String information = Main.connection.readLine();
 
 				fillGaps(name, classLevel, attendance, null, information);
