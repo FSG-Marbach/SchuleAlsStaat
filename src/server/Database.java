@@ -5,6 +5,7 @@ package server;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import essentials.SimpleLog;
@@ -106,17 +107,17 @@ public class Database {
 	 * @param type
 	 * @return
 	 */
-	public boolean createBankAccount(String sban, String PIN, int value,
-			String comment, int type) {
-		String query = "INSERT INTO BankAccounts(sban, pin, value, comment, type) VALUES ('"
+	public boolean createBankAccount(String sban, int value, String comment,
+			int type) {
+		String query = "INSERT INTO BankAccounts(sban, value, comment, type) VALUES ('"
 				+ sban
-				+ "', '"
-				+ PIN
 				+ "', '"
 				+ value
 				+ "', '"
 				+ comment
-				+ "', '" + type + "');";
+				+ "', '"
+				+ type
+				+ "');";
 		try {
 
 			connection.createStatement().executeQuery(query);
@@ -238,4 +239,39 @@ public class Database {
 			return false;
 		}
 	}
+
+	public boolean writeToLog(String timestamp, String userType, String user,
+			String client, String message) {
+		String query = "INSERT INTO Log(timestamp, user, userType, client, message) VALUES ('"
+				+ timestamp
+				+ "', '"
+				+ userType
+				+ "', '"
+				+ user
+				+ "', '"
+				+ client + "', '" + message + "');";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
+
+	public ResultSet readLog(String userType, String user) {
+		String query = "SELECT timestamp, user, userType, client, message FROM Log WHERE userType = '"
+				+ userType + "' AND user = '" + user + "'";
+		try {
+
+			return connection.createStatement().executeQuery(query);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+
 }
