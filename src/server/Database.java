@@ -193,4 +193,38 @@ public class Database {
 			return false;
 		}
 	}
+
+	public String[] getBankAccountUsers(String sban) {
+		String query = "SELECT users FROM BankAccounts WHERE sban = '" + sban
+				+ "'";
+		try {
+
+			return connection.createStatement().executeQuery(query)
+					.getString(1).split(",");
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+
+	public boolean setBankAccounUsers(String sban, String[] users) {
+		String users2 = "";
+
+		for (String string : users) {
+			users2 = users2 + string + ",";
+		}
+		users2 = users2.substring(0, users2.length() - 1);
+		String query = "UPDATE BankAccounts SET users ='" + users2
+				+ "' WHERE sban = '" + sban + "'";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
+		}
+	}
 }
