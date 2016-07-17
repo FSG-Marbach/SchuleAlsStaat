@@ -39,26 +39,6 @@ public class Database {
 	}
 
 	/**
-	 * Get the PIN of a Bank Account
-	 * 
-	 * @param sban
-	 * @return Either the pin or null
-	 */
-	public String getBankAccountPIN(String sban) {
-		String query = "SELECT pin FROM BankAccounts WHERE sban = '" + sban
-				+ "'";
-		try {
-
-			return connection.createStatement().executeQuery(query)
-					.getString(1);
-		} catch (SQLException e) {
-			log.error("Couldn't process " + query);
-			log.logStackTrace(e);
-			return null;
-		}
-	}
-
-	/**
 	 * Get the value of a Bank Account
 	 * 
 	 * @param sban
@@ -116,6 +96,16 @@ public class Database {
 		}
 	}
 
+	/**
+	 * Create new BankAccount with given values
+	 * 
+	 * @param sban
+	 * @param PIN
+	 * @param value
+	 * @param comment
+	 * @param type
+	 * @return
+	 */
 	public boolean createBankAccount(String sban, String PIN, int value,
 			String comment, int type) {
 		String query = "INSERT INTO BankAccounts(sban, pin, value, comment, type) VALUES ('"
@@ -138,20 +128,13 @@ public class Database {
 		}
 	}
 
-	public boolean setBankAccountPIN(String sban, String PIN) {
-		String query = "UPDATE BankAccounts SET PIN ='" + PIN
-				+ "' WHERE sban = '" + sban + "'";
-		try {
-
-			connection.createStatement().executeQuery(query);
-			return true;
-		} catch (SQLException e) {
-			log.error("Couldn't process " + query);
-			log.logStackTrace(e);
-			return false;
-		}
-	}
-
+	/**
+	 * Set the bank account value
+	 * 
+	 * @param sban
+	 * @param value
+	 * @return
+	 */
 	public boolean setBankAccountValue(String sban, int value) {
 		String query = "UPDATE BankAccounts SET value ='" + value
 				+ "' WHERE sban = '" + sban + "'";
@@ -166,6 +149,13 @@ public class Database {
 		}
 	}
 
+	/**
+	 * Set the bank account comment
+	 * 
+	 * @param sban
+	 * @param value
+	 * @return
+	 */
 	public boolean setBankAccountComment(String sban, String comment) {
 		String query = "UPDATE BankAccounts SET comment ='" + comment
 				+ "' WHERE sban = '" + sban + "'";
@@ -180,6 +170,13 @@ public class Database {
 		}
 	}
 
+	/**
+	 * Set the bank account type
+	 * 
+	 * @param sban
+	 * @param value
+	 * @return
+	 */
 	public boolean setBankAccountType(String sban, String type) {
 		String query = "UPDATE BankAccounts SET type ='" + type
 				+ "' WHERE sban = '" + sban + "'";
@@ -194,6 +191,13 @@ public class Database {
 		}
 	}
 
+	/**
+	 * Set the bank account users
+	 * 
+	 * @param sban
+	 * @param value
+	 * @return
+	 */
 	public String[] getBankAccountUsers(String sban) {
 		String query = "SELECT users FROM BankAccounts WHERE sban = '" + sban
 				+ "'";
@@ -208,6 +212,13 @@ public class Database {
 		}
 	}
 
+	/**
+	 * Set the bank account users
+	 * 
+	 * @param sban
+	 * @param value
+	 * @return
+	 */
 	public boolean setBankAccountUsers(String sban, String[] users) {
 		String users2 = "";
 
