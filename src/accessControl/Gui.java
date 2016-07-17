@@ -1,6 +1,5 @@
 package accessControl;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -13,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -99,22 +99,21 @@ public class Gui implements KeyListener, ActionListener {
 			lbl_class.setText(classLevel);
 			lbl_attendance.setText(attendance);
 			jta_information.setText(information);
-			
 
 			if (studentpicture != null && Main.allowstudentpictures == true) {
 				studentpicture.setImage(studentpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
 				lbl_image.setIcon(studentpicture);
-				
+
 			} else {
 				defaultpicture.setImage(defaultpicture.getImage().getScaledInstance(250, 350, Image.SCALE_DEFAULT));
 				lbl_image.setIcon(defaultpicture);
-				
+
 			}
 		} catch (Exception e) {
-			
+
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -144,7 +143,7 @@ public class Gui implements KeyListener, ActionListener {
 			id = id.replace(">", "");
 			txf_userid.setText(id);
 		} catch (Exception e) {
-			
+
 			return false;
 		}
 		return true;
@@ -360,16 +359,27 @@ public class Gui implements KeyListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btn_login) {
-			
+
 			if (txf_userid.getText().equals("")) {
 				JOptionPane.showMessageDialog(null, "The Student ID field is empty.", "Error while logging in/out!",
 						JOptionPane.ERROR_MESSAGE);
-				
+
 			} else {
 				String studentid = txf_userid.getText();
+
+				//getCitizenState [id] = returns "inside" / "outside";
+				//setCitizenLogoutPoint [id] = setLogoutTimePoint, attached, seperated with ";"
+				//setCitizenLoginPoint [id] = setLoginTimePoint, attached, seperated with ";"
 				
-				// TODO Main.connection.writeLine("LOGGE SCHÜLER EIN/AUS
-				// TRIGGERCOMMAND");
+				Main.connection.writeLine("getCitizenState " + studentid);
+				String state = Main.connection.readLine();
+				
+				if(state.equals("inside")){
+					Main.connection.writeLine("setCitizenLogoutPoint " + studentid);
+				}else if(state.equals("outside")){
+					Main.connection.writeLine("setCitizenLoginPoint " + studentid);
+				}
+
 				restoreDefaults();
 			}
 			txf_userid.requestFocus();
@@ -378,23 +388,46 @@ public class Gui implements KeyListener, ActionListener {
 			if (txf_userid.getText().equals("")) {
 				JOptionPane.showMessageDialog(null, "The Student ID field is empty.", "Error while logging in/out!",
 						JOptionPane.ERROR_MESSAGE);
-				
+
 			} else {
 				String studentid = txf_userid.getText();
-				
+
 				btn_login.setEnabled(true);
 				txf_userid.setEditable(false);
 				btn_locknumber.setText("Reset Schülerinfo");
-				
-				
-				Date today = ;
-				String name = "";
-				String[] loginarray = .split(";");
-				String[] logout = .split(";");
-				String classLevel = "";
+
+				// getCitizenName [id] = [name des schülers]
+				// getCitizenLoginPoints [id] = [liste mit semikolon getrennt,
+				// wann einlogzeiten waren]
+				// getCitizenLogoutPoints [id] = [liste mit semikolon getrennt,
+				// wann auslogzeiten waren]
+				// getCitizenClass [id] = [klasse des schülers]
+				// getInformations = [liefet wichtige informationen zurück]
+				// getTodaysDate = System.currentTimeMillis()
+
+				Main.connection.writeLine("getCitizenName " + studentid);
+				String name = Main.connection.readLine();
+
+				Main.connection.writeLine("getCitizenLoginPoints " + studentid);
+				String[] loginarray = Main.connection.readLine().split(";");
+
+				Main.connection.writeLine("getCitizenLogoutPoints " + studentid);
+				String[] logoutarray = Main.connection.readLine().split(";");
+
+				Main.connection.writeLine("getCitizenClass " + studentid);
+				String classLevel = Main.connection.readLine();
+
+				Main.connection.writeLine("getTodaysDate");
+				long currentmillis = Long.parseLong(Main.connection.readLine());
+
+				Timestamp time = new Timestamp(currentmillis);
+				Date today = new Date(time.getTime());
+
 				String attendance = calculateAttendanceTime(studentid, loginarray, logoutarray, dateFormat, today);
-				String information = "";
-				
+
+				Main.connection.writeLine("getInformations");
+				String information = Main.connection.readLine();
+
 				fillGaps(name, classLevel, attendance, null, information);
 			}
 		} else if (e.getSource() == btn_locknumber && btn_locknumber.getText().contains("Reset")) {
@@ -423,7 +456,7 @@ public class Gui implements KeyListener, ActionListener {
 		}
 
 		diffMillis = diffMillis / 1000;
-		
+
 		final int MINUTES_IN_AN_HOUR = 60;
 		final int SECONDS_IN_A_MINUTE = 60;
 
