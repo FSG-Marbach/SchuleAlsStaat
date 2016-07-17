@@ -52,20 +52,35 @@ public class Main {
 		} else {
 			allowstudentpictures = false;
 		}
-		ip = (String) settings.getSetting("ip");
-		port = Integer.parseInt(settings.getSetting("port"));
-		user = (String) settings.getSetting("user");
-		passwd = (String) settings.getSetting("password");
-		trustStore = (String) settings.getSetting("allowstudentpictures");
-		trustStorePasswd = (String) settings.getSetting("truststorePassword");
+//		 ip = (String) settings.getSetting("ip");
+//		 port = Integer.parseInt(settings.getSetting("port"));
+//		 user = (String) settings.getSetting("user");
+//		 passwd = (String) settings.getSetting("password");
+//		 trustStore = (String) settings.getSetting("truststore");
+//		 trustStorePasswd = (String) settings.getSetting("trustStorePasswd");
+//
+//		user = "root";
+//		port = 3746;
+//		passwd = "123456";
+//		allowstudentpictures = false;
+//		trustStorePasswd = "123456";
+//		trustStore = "res/accesscontroll/client.truststore";
+//		ip = "127.0.0.1";
 
-
+//		connection = new Connection(log);
 //		try {
 //			connection.connect(ip, port, user, passwd, trustStore, trustStorePasswd);
 //		} catch (IOException e) {
-//			log.logStackTrace(e);
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
 //		}
+		
+//		Settings settings = new Settings(new File(path + "settings.properties"), defaultValues, false, new SimpleLog());
 
+		Connection connection = new Connection(new SimpleLog(), settings);
+		connection.connect();
+
+		
 		Gui gui = new Gui();
 		log.log("Initialize GUI...");
 		gui.initialize();

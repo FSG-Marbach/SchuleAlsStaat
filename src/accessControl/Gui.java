@@ -54,6 +54,7 @@ public class Gui implements KeyListener, ActionListener {
 	private static JTextField txf_userid;
 	private int width, height;
 	ImageIcon defaultpicture;
+	SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy_HH:mm:ss");
 
 	public Gui() {
 
@@ -90,13 +91,13 @@ public class Gui implements KeyListener, ActionListener {
 	 *
 	 */
 
-	public boolean fillGaps(String name, String classLevel, Integer attendance, ImageIcon studentpicture,
+	public boolean fillGaps(String name, String classLevel, String attendance, ImageIcon studentpicture,
 			String information) {
 
 		try {
 			lbl_name.setText(name);
 			lbl_class.setText(classLevel);
-			lbl_attendance.setText(attendance.toString() + " h");
+			lbl_attendance.setText(attendance);
 			jta_information.setText(information);
 			
 
@@ -384,46 +385,54 @@ public class Gui implements KeyListener, ActionListener {
 				btn_login.setEnabled(true);
 				txf_userid.setEditable(false);
 				btn_locknumber.setText("Reset Schülerinfo");
-				// TODO Main.connection.writeLine("KRIEGE SCHÜLERDATEN VON");
-				/*
-				 * Main.connection.readLine(); fillGaps();
-				 */
+				
+				
+				Date today = ;
+				String name = "";
+				String[] loginarray = .split(";");
+				String[] logout = .split(";");
+				String classLevel = "";
+				String attendance = calculateAttendanceTime(studentid, loginarray, logoutarray, dateFormat, today);
+				String information = "";
+				
+				fillGaps(name, classLevel, attendance, null, information);
 			}
 		} else if (e.getSource() == btn_locknumber && btn_locknumber.getText().contains("Reset")) {
 			restoreDefaults();
 		}
 	}
 
-	public String calculateAttendanceTime(String studentid, String[] loginarray, String[] logoutarray,
-			SimpleDateFormat dateFormat, SimpleLog log) {
-		//NOT WORKING!!!!!!!
-		long diffMillis = 0;
-		long diffDays = 0;
-		long diffHours = 0;
-		long diffMinutes = 0;
-		long diffSeconds = 0;
-		
-		String wholeTime = "";
-		for (int i = 0; i < logoutarray.length; i++) {
+	public static String calculateAttendanceTime(String studentid, String[] loginarray, String[] logoutarray,
+			SimpleDateFormat dateFormat, Date today) {
 
-			try {
+		long diffMillis = 0;
+
+		try {
+			for (int i = 0; i < logoutarray.length; i++) {
+
 				Date from = dateFormat.parse(loginarray[i]);
 				Date to = dateFormat.parse(logoutarray[i]);
-				diffMillis = to.getTime() - from.getTime();
-				diffDays = diffMillis / (1000 * 60 * 60 * 24);
-				diffHours = diffMillis / (1000 * 60 * 60);
-				diffMinutes = diffMillis / (1000 * 60);
-				diffSeconds = diffMillis / (1000);
 
-				
-			} catch (Exception ex) {
-			
-				return "Fehler bei der Berechnung";
+				if (today.getDate() == from.getDate()) {
+					diffMillis = diffMillis + to.getTime() - from.getTime();
+				}
 			}
+
+		} catch (Exception e) {
+			return "";
 		}
+
+		diffMillis = diffMillis / 1000;
 		
-		System.out.println(wholeTime);
-		return diffHours + "h " + diffMinutes + "min";
+		final int MINUTES_IN_AN_HOUR = 60;
+		final int SECONDS_IN_A_MINUTE = 60;
+
+		int seconds = (int) (diffMillis % SECONDS_IN_A_MINUTE);
+		int totalMinutes = (int) (diffMillis / SECONDS_IN_A_MINUTE);
+		int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
+		int hours = totalMinutes / MINUTES_IN_AN_HOUR;
+
+		return hours + "h " + minutes + "min " + seconds + "s";
 
 	}
 

@@ -70,8 +70,10 @@ public class TestTimeStamp {
 				//
 				// }
 				// }
+				time = new Timestamp(System.currentTimeMillis());
+				Date today = new Date(time.getTime());
 
-				calculateAttendanceTime("1", loginarray, logoutarray, dateFormat);
+				calculateAttendanceTime("1", loginarray, logoutarray, dateFormat, today);
 
 			}
 		});
@@ -89,48 +91,38 @@ public class TestTimeStamp {
 	}
 
 	public static String calculateAttendanceTime(String studentid, String[] loginarray, String[] logoutarray,
-			SimpleDateFormat dateFormat) {
+			SimpleDateFormat dateFormat, Date today) {
+
 		long diffMillis = 0;
-		long diffDays = 0;
-		long diffHours = 0;
-		long diffMinutes = 0;
-		long diffSeconds = 0;
 
-		String wholeTime = "";
-		for (int i = 0; i < logoutarray.length; i++) {
+		try {
+			for (int i = 0; i < logoutarray.length; i++) {
 
-			try {
 				Date from = dateFormat.parse(loginarray[i]);
 				Date to = dateFormat.parse(logoutarray[i]);
 
-				diffMillis = to.getTime() - from.getTime();
-				diffDays = diffMillis / (1000 * 60 * 60 * 24);
-				diffHours = diffMillis / (1000 * 60 * 60);
-				diffMinutes = diffMillis / (1000 * 60);
-				diffSeconds = diffMillis / (1000);
-
-				wholeTime = wholeTime + diffHours + ":" + diffMinutes + ":" + diffSeconds + ";";
-			} catch (Exception ex) {
-				
-				return "Fehler bei der Berechnung";
+				if (today.getDate() == from.getDate()) {
+					diffMillis = diffMillis + to.getTime() - from.getTime();
+				}
 			}
-		}
-		String[] attendanceTimes = wholeTime.split(";");
-		int hours = 0;
-		int minutes = 0;
-		int seconds = 0;
-		
-		for(int i=0; i<attendanceTimes.length;i++){
-			hours = Integer.parseInt(attendanceTimes[i].substring(0, attendanceTimes[i].indexOf(":")));
-			System.out.println("Gesamte Stunde: " + hours);
-			minutes = Integer.parseInt(attendanceTimes[i].substring(attendanceTimes[i].indexOf(":"), attendanceTimes[i].lastIndexOf(":")));
-			System.out.println("Gesamte Minuten: " + minutes);
-			hours = Integer.parseInt(attendanceTimes[i].substring(0, attendanceTimes[i].length()));
-			System.out.println("Gesamte Sekunden: " + seconds);
+
+		} catch (Exception e) {
+			return "";
 		}
 
-		System.out.println(wholeTime);
-		return diffHours + "h " + diffMinutes + "min";
+		diffMillis = diffMillis / 1000;
+		
+		final int MINUTES_IN_AN_HOUR = 60;
+		final int SECONDS_IN_A_MINUTE = 60;
+
+		int seconds = (int) (diffMillis % SECONDS_IN_A_MINUTE);
+		int totalMinutes = (int) (diffMillis / SECONDS_IN_A_MINUTE);
+		int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
+		int hours = totalMinutes / MINUTES_IN_AN_HOUR;
+
+//		System.out.println(hours + "h " + minutes + "min " + seconds + "s");
+
+		return hours + "h " + minutes + "min " + seconds + "s";
 
 	}
 
