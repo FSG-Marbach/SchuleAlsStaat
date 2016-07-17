@@ -385,7 +385,7 @@ public class Database {
 
 	public boolean createCitizen(String name, String id, String pic,
 			String className, String exchangeVolume) {
-		String query = "INSERT INTO BankAccounts(name, id, pic, class, exchangeVolume) VALUES ('"
+		String query = "INSERT INTO Citizens(name, id, pic, class, exchangeVolume) VALUES ('"
 				+ name
 				+ "', '"
 				+ id
