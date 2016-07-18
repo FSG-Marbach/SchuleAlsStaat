@@ -1,0 +1,347 @@
+14.07.2016_20:25:26 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:25:26 start reading config file
+14.07.2016_20:25:26 java.io.FileNotFoundException: res\accesscontroll\config.property (Das System kann die angegebene Datei nicht finden)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(Unknown Source)
+	at java.io.FileInputStream.<init>(Unknown Source)
+	at java.io.FileInputStream.<init>(Unknown Source)
+	at accessControlClient.Main.main(Main.java:42)
+
+14.07.2016_20:25:26 finished reading config file
+14.07.2016_20:25:56 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:25:56 start reading config file
+14.07.2016_20:25:56 finished reading config file
+14.07.2016_20:26:14 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:26:14 start reading config file
+14.07.2016_20:26:14 finished reading config file
+14.07.2016_20:28:18 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:28:18 start reading config file
+14.07.2016_20:28:18 finished reading config file
+14.07.2016_20:46:00 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:46:00 DEBUG: Reading setting.properties
+14.07.2016_20:46:00 WARNING: 'setting.properties' doesn't exist! Using default values
+14.07.2016_20:46:00 ip: null
+14.07.2016_20:46:00 port: 0
+14.07.2016_20:46:00 user: null
+14.07.2016_20:46:00 passwd: null
+14.07.2016_20:46:00 trustStore: null
+14.07.2016_20:46:00 trustStorePasswd: null
+14.07.2016_20:46:00 java.lang.NullPointerException
+	at accessControlClient.Main.main(Main.java:79)
+
+14.07.2016_20:46:00 Initialize GUI...
+14.07.2016_20:46:00 GUI initialized
+14.07.2016_20:46:07 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:46:07 DEBUG: Reading setting.properties
+14.07.2016_20:46:07 INFO: Loaded setting.properties
+14.07.2016_20:46:07 ip: null
+14.07.2016_20:46:07 port: 0
+14.07.2016_20:46:07 user: null
+14.07.2016_20:46:07 passwd: null
+14.07.2016_20:46:07 trustStore: null
+14.07.2016_20:46:07 trustStorePasswd: null
+14.07.2016_20:46:07 java.lang.NullPointerException
+	at accessControlClient.Main.main(Main.java:79)
+
+14.07.2016_20:46:07 Initialize GUI...
+14.07.2016_20:46:07 GUI initialized
+14.07.2016_20:46:44 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:46:44 DEBUG: Reading setting.properties
+14.07.2016_20:46:44 INFO: Loaded setting.properties
+14.07.2016_20:46:44 ip: null
+14.07.2016_20:46:44 port: 0
+14.07.2016_20:46:44 user: null
+14.07.2016_20:46:44 passwd: null
+14.07.2016_20:46:44 trustStore: null
+14.07.2016_20:46:44 trustStorePasswd: null
+14.07.2016_20:46:44 java.lang.NullPointerException
+	at accessControlClient.Main.main(Main.java:79)
+
+14.07.2016_20:46:44 Initialize GUI...
+14.07.2016_20:46:44 GUI initialized
+14.07.2016_20:47:41 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:47:41 DEBUG: Reading setting.properties
+14.07.2016_20:47:41 INFO: Loaded setting.properties
+14.07.2016_20:47:41 ip: null
+14.07.2016_20:47:41 port: 0
+14.07.2016_20:47:41 user: null
+14.07.2016_20:47:41 passwd: null
+14.07.2016_20:47:41 trustStore: null
+14.07.2016_20:47:41 trustStorePasswd: null
+14.07.2016_20:47:41 Initialize GUI...
+14.07.2016_20:47:41 GUI initialized
+14.07.2016_20:55:53 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:55:53 DEBUG: Reading setting.properties
+14.07.2016_20:55:53 INFO: Loaded setting.properties
+14.07.2016_20:55:53 ip: null
+14.07.2016_20:55:53 port: 0
+14.07.2016_20:55:53 user: root
+14.07.2016_20:55:53 passwd: 123456
+14.07.2016_20:55:53 trustStore: false
+14.07.2016_20:55:53 trustStorePasswd: null
+14.07.2016_20:55:53 Initialize GUI...
+14.07.2016_20:55:53 GUI initialized
+14.07.2016_20:56:29 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:56:29 DEBUG: Reading setting.properties
+14.07.2016_20:56:29 INFO: Loaded setting.properties
+14.07.2016_20:56:29 ip: null
+14.07.2016_20:56:29 port: 0
+14.07.2016_20:56:29 user: root
+14.07.2016_20:56:29 passwd: 123456
+14.07.2016_20:56:29 trustStore: false
+14.07.2016_20:56:29 trustStorePasswd: 123456
+14.07.2016_20:56:29 Initialize GUI...
+14.07.2016_20:56:29 GUI initialized
+14.07.2016_20:57:20 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:57:20 DEBUG: Reading setting.properties
+14.07.2016_20:57:20 INFO: Loaded setting.properties
+14.07.2016_20:57:20 ip: null
+14.07.2016_20:57:20 port: 0
+14.07.2016_20:57:20 user: root
+14.07.2016_20:57:20 passwd: 123456
+14.07.2016_20:57:20 trustStore: false
+14.07.2016_20:57:20 trustStorePasswd: 123456
+14.07.2016_20:57:20 java.lang.NullPointerException
+	at accessControlClient.Main.main(Main.java:86)
+
+14.07.2016_20:57:20 Initialize GUI...
+14.07.2016_20:57:21 GUI initialized
+14.07.2016_20:57:49 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:57:49 DEBUG: Reading setting.properties
+14.07.2016_20:57:49 INFO: Loaded setting.properties
+14.07.2016_20:57:49 ip: 127.0.01
+14.07.2016_20:57:49 port: 0
+14.07.2016_20:57:49 user: root
+14.07.2016_20:57:49 passwd: 123456
+14.07.2016_20:57:49 trustStore: false
+14.07.2016_20:57:49 trustStorePasswd: 123456
+14.07.2016_20:57:49 java.lang.NullPointerException
+	at accessControlClient.Main.main(Main.java:86)
+
+14.07.2016_20:57:49 Initialize GUI...
+14.07.2016_20:57:49 GUI initialized
+14.07.2016_20:58:17 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:58:17 DEBUG: Reading setting.properties
+14.07.2016_20:58:17 INFO: Loaded setting.properties
+14.07.2016_20:58:17 ip: 127.0.0.1
+14.07.2016_20:58:17 port: 0
+14.07.2016_20:58:17 user: root
+14.07.2016_20:58:17 passwd: 123456
+14.07.2016_20:58:17 trustStore: false
+14.07.2016_20:58:17 trustStorePasswd: 123456
+14.07.2016_20:58:17 java.lang.NullPointerException
+	at accessControlClient.Main.main(Main.java:70)
+
+14.07.2016_20:58:17 Initialize GUI...
+14.07.2016_20:58:17 GUI initialized
+14.07.2016_20:59:11 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:59:11 DEBUG: Reading setting.properties
+14.07.2016_20:59:11 INFO: Loaded setting.properties
+14.07.2016_20:59:11 ip: 127.0.0.1
+14.07.2016_20:59:11 port: 0
+14.07.2016_20:59:11 user: root
+14.07.2016_20:59:11 passwd: 123456
+14.07.2016_20:59:11 trustStore: false
+14.07.2016_20:59:11 trustStorePasswd: 123456
+14.07.2016_20:59:11 java.lang.NullPointerException
+	at accessControlClient.Main.main(Main.java:70)
+
+14.07.2016_20:59:11 Initialize GUI...
+14.07.2016_20:59:11 GUI initialized
+14.07.2016_20:59:24 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_20:59:24 DEBUG: Reading setting.properties
+14.07.2016_20:59:24 INFO: Loaded setting.properties
+14.07.2016_20:59:24 ip: 127.0.0.1
+14.07.2016_20:59:24 port: 3746
+14.07.2016_20:59:24 user: root
+14.07.2016_20:59:24 passwd: 123456
+14.07.2016_20:59:24 trustStore: false
+14.07.2016_20:59:24 trustStorePasswd: 123456
+14.07.2016_20:59:24 java.lang.NullPointerException
+	at accessControlClient.Main.main(Main.java:70)
+
+14.07.2016_20:59:24 Initialize GUI...
+14.07.2016_20:59:25 GUI initialized
+14.07.2016_21:02:37 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_21:02:37 DEBUG: Reading setting.properties
+14.07.2016_21:02:37 INFO: Loaded setting.properties
+14.07.2016_21:02:37 ip: 127.0.0.1
+14.07.2016_21:02:37 port: 3746
+14.07.2016_21:02:37 user: root
+14.07.2016_21:02:37 passwd: 123456
+14.07.2016_21:02:37 trustStore: false
+14.07.2016_21:02:37 trustStorePasswd: 123456
+14.07.2016_21:02:48 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_21:02:48 DEBUG: Reading setting.properties
+14.07.2016_21:02:48 INFO: Loaded setting.properties
+14.07.2016_21:02:48 ip: 127.0.0.1
+14.07.2016_21:02:48 port: 3746
+14.07.2016_21:02:48 user: root
+14.07.2016_21:02:48 passwd: 123456
+14.07.2016_21:02:48 trustStore: false
+14.07.2016_21:02:48 trustStorePasswd: 123456
+14.07.2016_21:14:07 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_21:14:07 DEBUG: Reading setting.properties
+14.07.2016_21:14:07 INFO: Loaded setting.properties
+14.07.2016_21:14:07 ip: 127.0.0.1
+14.07.2016_21:14:07 port: 3746
+14.07.2016_21:14:07 user: root
+14.07.2016_21:14:07 passwd: 123456
+14.07.2016_21:14:07 trustStore: false
+14.07.2016_21:14:07 trustStorePasswd: 123456
+14.07.2016_21:14:21 Startet  'Citizen Data Management System' accesscontrollclient
+14.07.2016_21:14:21 DEBUG: Reading setting.properties
+14.07.2016_21:14:21 INFO: Loaded setting.properties
+14.07.2016_21:14:21 ip: 127.0.0.1
+14.07.2016_21:14:21 port: 3746
+14.07.2016_21:14:21 user: root
+14.07.2016_21:14:21 passwd: 123456
+14.07.2016_21:14:21 trustStore: false
+14.07.2016_21:14:21 trustStorePasswd: 123456
+17.07.2016_20:32:46 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:32:46 DEBUG: Reading setting.properties
+17.07.2016_20:32:46 INFO: Loaded setting.properties
+17.07.2016_20:32:46 ip: 127.0.0.1
+17.07.2016_20:32:46 port: 3746
+17.07.2016_20:32:46 user: root
+17.07.2016_20:32:46 passwd: 123456
+17.07.2016_20:32:46 trustStore: false
+17.07.2016_20:32:46 trustStorePasswd: 123456
+17.07.2016_20:32:46 Initialize GUI...
+17.07.2016_20:32:47 GUI initialized
+17.07.2016_20:34:25 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:34:25 DEBUG: Reading setting.properties
+17.07.2016_20:34:25 INFO: Loaded setting.properties
+17.07.2016_20:34:25 Initialize GUI...
+17.07.2016_20:34:26 GUI initialized
+17.07.2016_20:34:53 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:34:53 DEBUG: Reading setting.properties
+17.07.2016_20:34:53 INFO: Loaded setting.properties
+17.07.2016_20:34:53 Initialize GUI...
+17.07.2016_20:34:53 GUI initialized
+17.07.2016_20:35:44 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:35:44 DEBUG: Reading setting.properties
+17.07.2016_20:35:44 INFO: Loaded setting.properties
+17.07.2016_20:35:44 Initialize GUI...
+17.07.2016_20:35:45 GUI initialized
+17.07.2016_20:42:22 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:42:22 DEBUG: Reading setting.properties
+17.07.2016_20:42:22 INFO: Loaded setting.properties
+17.07.2016_20:42:22 Initialize GUI...
+17.07.2016_20:42:23 GUI initialized
+17.07.2016_20:43:09 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:43:09 DEBUG: Reading setting.properties
+17.07.2016_20:43:09 INFO: Loaded setting.properties
+17.07.2016_20:43:09 Initialize GUI...
+17.07.2016_20:43:09 GUI initialized
+17.07.2016_20:50:50 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:50:50 DEBUG: Reading setting.properties
+17.07.2016_20:50:50 INFO: Loaded setting.properties
+17.07.2016_20:50:50 Initialize GUI...
+17.07.2016_20:50:51 GUI initialized
+17.07.2016_20:57:53 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:57:53 DEBUG: Reading setting.properties
+17.07.2016_20:57:53 INFO: Loaded setting.properties
+17.07.2016_20:57:53 Initialize GUI...
+17.07.2016_20:57:53 GUI initialized
+17.07.2016_20:58:03 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:58:03 DEBUG: Reading setting.properties
+17.07.2016_20:58:03 INFO: Loaded setting.properties
+17.07.2016_20:58:03 Initialize GUI...
+17.07.2016_20:58:03 GUI initialized
+17.07.2016_20:59:05 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:59:05 DEBUG: Reading setting.properties
+17.07.2016_20:59:05 INFO: Loaded setting.properties
+17.07.2016_20:59:05 Initialize GUI...
+17.07.2016_20:59:06 GUI initialized
+17.07.2016_20:59:16 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_20:59:16 DEBUG: Reading setting.properties
+17.07.2016_20:59:16 INFO: Loaded setting.properties
+17.07.2016_20:59:16 Initialize GUI...
+17.07.2016_20:59:17 GUI initialized
+17.07.2016_21:02:01 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_21:02:01 DEBUG: Reading setting.properties
+17.07.2016_21:02:01 INFO: Loaded setting.properties
+17.07.2016_21:02:01 Initialize GUI...
+17.07.2016_21:02:02 GUI initialized
+17.07.2016_21:07:57 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_21:07:57 DEBUG: Reading setting.properties
+17.07.2016_21:07:57 INFO: Loaded setting.properties
+17.07.2016_21:07:57 Initialize GUI...
+17.07.2016_21:07:58 GUI initialized
+17.07.2016_21:08:33 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_21:08:33 DEBUG: Reading setting.properties
+17.07.2016_21:08:33 INFO: Loaded setting.properties
+17.07.2016_21:08:33 Initialize GUI...
+17.07.2016_21:08:33 GUI initialized
+17.07.2016_21:08:51 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_21:08:51 DEBUG: Reading setting.properties
+17.07.2016_21:08:51 INFO: Loaded setting.properties
+17.07.2016_21:08:51 Initialize GUI...
+17.07.2016_21:08:51 GUI initialized
+17.07.2016_21:09:06 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_21:09:06 DEBUG: Reading setting.properties
+17.07.2016_21:09:06 INFO: Loaded setting.properties
+17.07.2016_21:09:06 Initialize GUI...
+17.07.2016_21:09:07 GUI initialized
+17.07.2016_21:09:15 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_21:09:15 DEBUG: Reading setting.properties
+17.07.2016_21:09:15 INFO: Loaded setting.properties
+17.07.2016_21:09:15 Initialize GUI...
+17.07.2016_21:09:16 GUI initialized
+17.07.2016_21:09:39 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_21:09:39 DEBUG: Reading setting.properties
+17.07.2016_21:09:39 INFO: Loaded setting.properties
+17.07.2016_21:09:39 Initialize GUI...
+17.07.2016_21:09:40 GUI initialized
+17.07.2016_22:42:37 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:42:37 DEBUG: Reading setting.properties
+17.07.2016_22:42:37 INFO: Loaded setting.properties
+17.07.2016_22:43:23 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:43:23 DEBUG: Reading setting.properties
+17.07.2016_22:43:23 INFO: Loaded setting.properties
+17.07.2016_22:45:16 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:45:16 DEBUG: Reading setting.properties
+17.07.2016_22:45:16 INFO: Loaded setting.properties
+17.07.2016_22:46:36 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:46:36 DEBUG: Reading setting.properties
+17.07.2016_22:46:36 INFO: Loaded setting.properties
+17.07.2016_22:47:08 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:47:08 DEBUG: Reading setting.properties
+17.07.2016_22:47:08 INFO: Loaded setting.properties
+17.07.2016_22:47:27 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:47:27 DEBUG: Reading setting.properties
+17.07.2016_22:47:27 INFO: Loaded setting.properties
+17.07.2016_22:48:36 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:48:36 DEBUG: Reading setting.properties
+17.07.2016_22:48:36 INFO: Loaded setting.properties
+17.07.2016_22:48:36 Initialize GUI...
+17.07.2016_22:48:37 GUI initialized
+17.07.2016_22:48:52 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:48:52 DEBUG: Reading setting.properties
+17.07.2016_22:48:52 INFO: Loaded setting.properties
+17.07.2016_22:51:31 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:51:31 DEBUG: Reading setting.properties
+17.07.2016_22:51:31 INFO: Loaded setting.properties
+17.07.2016_22:51:31 Initialize GUI...
+17.07.2016_22:51:32 GUI initialized
+17.07.2016_22:51:49 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:51:49 DEBUG: Reading setting.properties
+17.07.2016_22:51:49 INFO: Loaded setting.properties
+17.07.2016_22:52:22 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:52:22 DEBUG: Reading setting.properties
+17.07.2016_22:52:22 INFO: Loaded setting.properties
+17.07.2016_22:53:39 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:53:39 DEBUG: Reading setting.properties
+17.07.2016_22:53:39 INFO: Loaded setting.properties
+17.07.2016_22:54:15 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:54:15 DEBUG: Reading setting.properties
+17.07.2016_22:54:15 INFO: Loaded setting.properties
+17.07.2016_22:55:06 Startet  'Citizen Data Management System' accesscontrollclient
+17.07.2016_22:55:06 DEBUG: Reading setting.properties
+17.07.2016_22:55:06 INFO: Loaded setting.properties
+17.07.2016_22:55:18 Initialize GUI...
+17.07.2016_22:55:18 GUI initialized
+18.07.2016_00:22:47 Startet  'Citizen Data Management System' accesscontrollclient
+18.07.2016_00:22:47 DEBUG: Reading setting.properties
+18.07.2016_00:22:47 INFO: Loaded setting.properties

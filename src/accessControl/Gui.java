@@ -377,7 +377,7 @@ public class Gui implements KeyListener, ActionListener {
 				if(state.equals("inside")){
 					Main.connection.writeLine("setCitizenLogoutPoint " + studentid);
 				}else if(state.equals("outside")){
-					Main.connection.writeLine("setCitizenLoginPoint " + studentid);
+					Main.connection.writeLine("setCitizenCheckinTimes " + studentid);
 				}
 
 				restoreDefaults();
@@ -408,10 +408,10 @@ public class Gui implements KeyListener, ActionListener {
 				Main.connection.writeLine("getCitizenName " + studentid);
 				String name = Main.connection.readLine();
 
-				Main.connection.writeLine("getCitizenLoginPoints " + studentid);
+				Main.connection.writeLine("getCitizenCheckinTimes " + studentid);
 				String[] loginarray = Main.connection.readLine().split(";");
 
-				Main.connection.writeLine("getCitizenLogoutPoints " + studentid);
+				Main.connection.writeLine("getCitizenCheckoutTimes " + studentid);
 				String[] logoutarray = Main.connection.readLine().split(";");
 
 				Main.connection.writeLine("getCitizenClass " + studentid);
@@ -420,12 +420,12 @@ public class Gui implements KeyListener, ActionListener {
 				Main.connection.writeLine("getTodaysDate");
 				long currentmillis = Long.parseLong(Main.connection.readLine());
 
-				Timestamp time = new Timestamp(currentmillis);
-				Date today = new Date(time.getTime());
+				Timestamp todaytimestamp = new Timestamp(currentmillis);
+				Date today = new Date(todaytimestamp.getTime());
 
 				String attendance = calculateAttendanceTime(studentid, loginarray, logoutarray, dateFormat, today);
 
-				Main.connection.writeLine("getInformations");
+				Main.connection.writeLine("getCitizenInformations " + studentid);
 				String information = Main.connection.readLine();
 
 				fillGaps(name, classLevel, attendance, null, information);
@@ -443,8 +443,10 @@ public class Gui implements KeyListener, ActionListener {
 		try {
 			for (int i = 0; i < logoutarray.length; i++) {
 
-				Date from = dateFormat.parse(loginarray[i]);
-				Date to = dateFormat.parse(logoutarray[i]);
+				Timestamp logintimestamp = new Timestamp(Long.parseLong(loginarray[i]));
+				Timestamp logouttimestamp = new Timestamp(Long.parseLong(logoutarray[i]));
+				Date from = new Date(logintimestamp.getTime());
+				Date to = new Date(logouttimestamp.getTime());
 
 				if (today.getDate() == from.getDate()) {
 					diffMillis = diffMillis + to.getTime() - from.getTime();
@@ -456,7 +458,7 @@ public class Gui implements KeyListener, ActionListener {
 		}
 
 		diffMillis = diffMillis / 1000;
-
+		
 		final int MINUTES_IN_AN_HOUR = 60;
 		final int SECONDS_IN_A_MINUTE = 60;
 
@@ -464,6 +466,8 @@ public class Gui implements KeyListener, ActionListener {
 		int totalMinutes = (int) (diffMillis / SECONDS_IN_A_MINUTE);
 		int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
 		int hours = totalMinutes / MINUTES_IN_AN_HOUR;
+
+//		System.out.println(hours + "h " + minutes + "min " + seconds + "s");
 
 		return hours + "h " + minutes + "min " + seconds + "s";
 

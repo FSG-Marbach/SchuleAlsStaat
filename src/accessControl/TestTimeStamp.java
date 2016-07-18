@@ -29,10 +29,12 @@ public class TestTimeStamp {
 				time = new Timestamp(System.currentTimeMillis());
 				System.out.println(dateFormat.format(time));
 				if (trigger.getText().contains("in")) {
-					loginzeit = loginzeit + dateFormat.format(time) + ";";
+//					loginzeit = loginzeit + dateFormat.format(time) + ";";
+					loginzeit = loginzeit + System.currentTimeMillis() + ";";
 					trigger.setText("Logout");
 				} else {
-					logoutzeit = logoutzeit + dateFormat.format(time) + ";";
+//					logoutzeit = logoutzeit + dateFormat.format(time) + ";";
+					logoutzeit = logoutzeit + System.currentTimeMillis() + ";";
 					trigger.setText("Login");
 				}
 			}
@@ -49,27 +51,6 @@ public class TestTimeStamp {
 				String[] loginarray = loginzeit.split(";");
 				String[] logoutarray = logoutzeit.split(";");
 
-				// for (int i = 0; i < logoutarray.length; i++) {
-				// System.out.print("Anwesend von " + loginarray[i] + " bis " +
-				// logoutarray[i]);
-				//
-				// try {
-				// Date from = dateFormat.parse(loginarray[i]);
-				// Date to = dateFormat.parse(logoutarray[i]);
-				//
-				// long diffMillis = to.getTime() - from.getTime();
-				// long diffDays = diffMillis / (1000 * 60 * 60 * 24);
-				// long diffHours = diffMillis / (1000 * 60 * 60);
-				// long diffMinutes = diffMillis / (1000 * 60);
-				// long diffSeconds = diffMillis / (1000);
-				//
-				// System.out.print(" anwesende Zeit: Tage: " + diffDays + "
-				// Stunden:" + diffHours + " Minuten: " + diffMinutes + ":" +"
-				// Sekunden: "+ diffSeconds + "\n");
-				// } catch (Exception ex) {
-				//
-				// }
-				// }
 				time = new Timestamp(System.currentTimeMillis());
 				Date today = new Date(time.getTime());
 
@@ -98,8 +79,10 @@ public class TestTimeStamp {
 		try {
 			for (int i = 0; i < logoutarray.length; i++) {
 
-				Date from = dateFormat.parse(loginarray[i]);
-				Date to = dateFormat.parse(logoutarray[i]);
+				Timestamp login = new Timestamp(Long.parseLong(loginarray[i]));
+				Timestamp logout = new Timestamp(Long.parseLong(logoutarray[i]));
+				Date from = new Date(login.getTime());
+				Date to = new Date(logout.getTime());
 
 				if (today.getDate() == from.getDate()) {
 					diffMillis = diffMillis + to.getTime() - from.getTime();
@@ -120,7 +103,7 @@ public class TestTimeStamp {
 		int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
 		int hours = totalMinutes / MINUTES_IN_AN_HOUR;
 
-//		System.out.println(hours + "h " + minutes + "min " + seconds + "s");
+		System.out.println(hours + "h " + minutes + "min " + seconds + "s");
 
 		return hours + "h " + minutes + "min " + seconds + "s";
 
