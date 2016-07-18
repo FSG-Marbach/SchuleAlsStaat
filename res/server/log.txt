@@ -39,3 +39,227 @@ Started 'Citizen Data Management System' server | Version: 0.1.3
 17.07.2016_23:50:20 INFO: Loaded permissions.properties
 17.07.2016_23:50:20 INFO: Successfully created CDMS server on port 3746
 17.07.2016_23:50:20 INFO: Waiting for clients...
+================================================================
+Started 'Citizen Data Management System' server | Version: 0.1.3
+                       18.07.2016_14:37:48
+================================================================
+18.07.2016_14:37:48 DEBUG: Reading settings.properties
+18.07.2016_14:37:48 INFO: Loaded settings.properties
+18.07.2016_14:37:48 DEBUG: Reading passwords.properties
+18.07.2016_14:37:48 INFO: Loaded passwords.properties
+18.07.2016_14:37:48 DEBUG: Reading permissions.properties
+18.07.2016_14:37:48 INFO: Loaded permissions.properties
+18.07.2016_14:37:48 DEBUG: Connectiong to database
+18.07.2016_14:37:48 FATAL ERROR: No database driver found! Shutting down
+18.07.2016_14:37:48 java.lang.ClassNotFoundException: com.mysql.jdbc.Drive
+	at java.net.URLClassLoader$1.run(Unknown Source)
+	at java.net.URLClassLoader$1.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Unknown Source)
+	at server.Database.<init>(Database.java:37)
+	at server.Server.<init>(Server.java:93)
+	at server.Server.main(Server.java:142)
+
+================================================================
+Started 'Citizen Data Management System' server | Version: 0.1.3
+                       18.07.2016_14:38:23
+================================================================
+18.07.2016_14:38:23 DEBUG: Reading settings.properties
+18.07.2016_14:38:23 INFO: Loaded settings.properties
+18.07.2016_14:38:23 DEBUG: Reading passwords.properties
+18.07.2016_14:38:23 INFO: Loaded passwords.properties
+18.07.2016_14:38:23 DEBUG: Reading permissions.properties
+18.07.2016_14:38:23 INFO: Loaded permissions.properties
+18.07.2016_14:38:23 DEBUG: Connectiong to database
+18.07.2016_14:38:24 INFO: Successfully created CDMS server on port 3746
+18.07.2016_14:38:24 INFO: Waiting for clients...
+18.07.2016_14:38:54 INFO: Client 0 connected
+18.07.2016_14:38:54 INFO: Successful authentication of client 0 (Name: root)
+18.07.2016_14:39:11 INFO: Client 0 sent command 'reload'
+18.07.2016_14:39:11 WARNING: Client 0 sent invalid command: 'reload'!
+18.07.2016_14:39:14 INFO: Client 0 sent command 'reload all'
+18.07.2016_14:39:14 DEBUG: Reloading passwords.properties
+18.07.2016_14:39:14 INFO: Reloaded passwords.properties
+18.07.2016_14:39:14 DEBUG: Reloading permissions.properties
+18.07.2016_14:39:14 INFO: Reloaded permissions.properties
+18.07.2016_14:39:17 INFO: Client 0 sent command 'test'
+18.07.2016_14:39:17 WARNING: Client 0 tried to execute 'test' without permission (which may not be implemented)!
+18.07.2016_14:39:18 INFO: Client 0 sent command 'test'
+18.07.2016_14:39:18 WARNING: Client 0 tried to execute 'test' without permission (which may not be implemented)!
+18.07.2016_14:39:39 INFO: Client 0 sent command 'getCitizenName 1234'
+18.07.2016_14:39:39 WARNING: Client 0 tried to execute 'getCitizenName 1234' without permission (which may not be implemented)!
+18.07.2016_14:41:34 INFO: Client 0 sent command 'reload all'
+18.07.2016_14:41:34 DEBUG: Reloading passwords.properties
+18.07.2016_14:41:34 INFO: Reloaded passwords.properties
+18.07.2016_14:41:34 DEBUG: Reloading permissions.properties
+18.07.2016_14:41:34 INFO: Reloaded permissions.properties
+18.07.2016_14:41:46 INFO: Client 0 sent command 'getCitizenName 1234'
+18.07.2016_14:41:46 WARNING: Client 0 tried to execute 'getCitizenName 1234' without permission (which may not be implemented)!
+18.07.2016_14:42:42 INFO: Client 0 sent command 'reboot'
+18.07.2016_14:42:42 WARNING: Client 0 sent not implemented command ('reboot') with permission!
+18.07.2016_14:42:46 INFO: Client 0 sent command 'reload'
+18.07.2016_14:42:46 WARNING: Client 0 sent invalid command: 'reload'!
+================================================================
+Started 'Citizen Data Management System' server | Version: 0.1.3
+                       18.07.2016_14:43:17
+================================================================
+18.07.2016_14:43:17 DEBUG: Reading settings.properties
+18.07.2016_14:43:17 INFO: Loaded settings.properties
+18.07.2016_14:43:17 DEBUG: Reading passwords.properties
+18.07.2016_14:43:17 INFO: Loaded passwords.properties
+18.07.2016_14:43:17 DEBUG: Reading permissions.properties
+18.07.2016_14:43:17 INFO: Loaded permissions.properties
+18.07.2016_14:43:17 DEBUG: Connectiong to database
+18.07.2016_14:43:17 INFO: Successfully created CDMS server on port 3746
+18.07.2016_14:43:17 INFO: Waiting for clients...
+18.07.2016_14:43:31 INFO: Client 0 connected
+18.07.2016_14:43:31 INFO: Successful authentication of client 0 (Name: root)
+18.07.2016_14:43:38 INFO: Client 0 sent command 'getCitizenName 123'
+================================================================
+Started 'Citizen Data Management System' server | Version: 0.1.3
+                       18.07.2016_14:46:57
+================================================================
+18.07.2016_14:46:57 DEBUG: Reading settings.properties
+18.07.2016_14:46:57 INFO: Loaded settings.properties
+18.07.2016_14:46:57 DEBUG: Reading passwords.properties
+18.07.2016_14:46:57 INFO: Loaded passwords.properties
+18.07.2016_14:46:57 DEBUG: Reading permissions.properties
+18.07.2016_14:46:57 INFO: Loaded permissions.properties
+18.07.2016_14:46:57 DEBUG: Connectiong to database
+18.07.2016_14:46:57 INFO: Successfully created CDMS server on port 3746
+18.07.2016_14:46:57 INFO: Waiting for clients...
+18.07.2016_14:47:12 INFO: Client 0 connected
+18.07.2016_14:47:12 INFO: Successful authentication of client 0 (Name: root)
+18.07.2016_14:47:22 INFO: Client 0 sent command 'getCitizenName 1234'
+18.07.2016_14:47:40 INFO: Client 0 sent command 'reload all'
+18.07.2016_14:47:40 DEBUG: Reloading passwords.properties
+18.07.2016_14:47:40 INFO: Reloaded passwords.properties
+18.07.2016_14:47:40 DEBUG: Reloading permissions.properties
+18.07.2016_14:47:40 INFO: Reloaded permissions.properties
+18.07.2016_14:48:37 INFO: Client 1 connected
+18.07.2016_14:48:37 INFO: Successful authentication of client 1 (Name: root)
+18.07.2016_14:48:39 ERROR: Error occurred while receiving data from client 1
+18.07.2016_14:48:39 java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at sun.security.ssl.InputRecord.readFully(Unknown Source)
+	at sun.security.ssl.InputRecord.read(Unknown Source)
+	at sun.security.ssl.SSLSocketImpl.readRecord(Unknown Source)
+	at sun.security.ssl.SSLSocketImpl.readDataRecord(Unknown Source)
+	at sun.security.ssl.AppInputStream.read(Unknown Source)
+	at sun.nio.cs.StreamDecoder.readBytes(Unknown Source)
+	at sun.nio.cs.StreamDecoder.implRead(Unknown Source)
+	at sun.nio.cs.StreamDecoder.read(Unknown Source)
+	at java.io.InputStreamReader.read(Unknown Source)
+	at java.io.BufferedReader.fill(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at server.ClientThread.run(ClientThread.java:66)
+
+18.07.2016_14:48:39 DEBUG: Closing socket of client 1
+18.07.2016_14:48:39 DEBUG: Closed socket of client 1
+18.07.2016_14:48:39 INFO: Client 1 disconnected
+18.07.2016_14:48:47 ERROR: Error occurred while receiving data from client 0
+18.07.2016_14:48:47 java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at sun.security.ssl.InputRecord.readFully(Unknown Source)
+	at sun.security.ssl.InputRecord.read(Unknown Source)
+	at sun.security.ssl.SSLSocketImpl.readRecord(Unknown Source)
+	at sun.security.ssl.SSLSocketImpl.readDataRecord(Unknown Source)
+	at sun.security.ssl.AppInputStream.read(Unknown Source)
+	at sun.nio.cs.StreamDecoder.readBytes(Unknown Source)
+	at sun.nio.cs.StreamDecoder.implRead(Unknown Source)
+	at sun.nio.cs.StreamDecoder.read(Unknown Source)
+	at java.io.InputStreamReader.read(Unknown Source)
+	at java.io.BufferedReader.fill(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at server.ClientThread.run(ClientThread.java:66)
+
+18.07.2016_14:48:47 DEBUG: Closing socket of client 0
+18.07.2016_14:48:47 DEBUG: Closed socket of client 0
+18.07.2016_14:48:47 INFO: Client 0 disconnected
+================================================================
+Started 'Citizen Data Management System' server | Version: 0.1.3
+                       18.07.2016_14:51:22
+================================================================
+18.07.2016_14:51:22 DEBUG: Reading settings.properties
+18.07.2016_14:51:22 INFO: Loaded settings.properties
+18.07.2016_14:51:22 DEBUG: Reading passwords.properties
+18.07.2016_14:51:22 INFO: Loaded passwords.properties
+18.07.2016_14:51:22 DEBUG: Reading permissions.properties
+18.07.2016_14:51:22 INFO: Loaded permissions.properties
+18.07.2016_14:51:22 DEBUG: Connectiong to database
+18.07.2016_14:51:23 INFO: Successfully created CDMS server on port 3746
+18.07.2016_14:51:23 INFO: Waiting for clients...
+18.07.2016_14:51:37 INFO: Client 0 connected
+18.07.2016_14:51:37 INFO: Successful authentication of client 0 (Name: root)
+18.07.2016_14:52:18 INFO: Client 0 sent command 'getCitizenName 1234'
+18.07.2016_14:52:23 INFO: Client 0 sent command 'reload all'
+18.07.2016_14:52:23 DEBUG: Reloading passwords.properties
+18.07.2016_14:52:23 INFO: Reloaded passwords.properties
+18.07.2016_14:52:23 DEBUG: Reloading permissions.properties
+18.07.2016_14:52:23 INFO: Reloaded permissions.properties
+18.07.2016_14:52:32 ERROR: Error occurred while receiving data from client 0
+18.07.2016_14:52:32 java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at sun.security.ssl.InputRecord.readFully(Unknown Source)
+	at sun.security.ssl.InputRecord.read(Unknown Source)
+	at sun.security.ssl.SSLSocketImpl.readRecord(Unknown Source)
+	at sun.security.ssl.SSLSocketImpl.readDataRecord(Unknown Source)
+	at sun.security.ssl.AppInputStream.read(Unknown Source)
+	at sun.nio.cs.StreamDecoder.readBytes(Unknown Source)
+	at sun.nio.cs.StreamDecoder.implRead(Unknown Source)
+	at sun.nio.cs.StreamDecoder.read(Unknown Source)
+	at java.io.InputStreamReader.read(Unknown Source)
+	at java.io.BufferedReader.fill(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at server.ClientThread.run(ClientThread.java:66)
+
+18.07.2016_14:52:32 DEBUG: Closing socket of client 0
+18.07.2016_14:52:32 DEBUG: Closed socket of client 0
+18.07.2016_14:52:32 INFO: Client 0 disconnected
+================================================================
+Started 'Citizen Data Management System' server | Version: 0.1.3
+                       18.07.2016_15:08:04
+================================================================
+18.07.2016_15:08:04 DEBUG: Reading settings.properties
+18.07.2016_15:08:04 INFO: Loaded settings.properties
+18.07.2016_15:08:04 DEBUG: Reading passwords.properties
+18.07.2016_15:08:04 INFO: Loaded passwords.properties
+18.07.2016_15:08:04 DEBUG: Reading permissions.properties
+18.07.2016_15:08:04 INFO: Loaded permissions.properties
+18.07.2016_15:08:04 DEBUG: Connectiong to database
+18.07.2016_15:08:05 INFO: Successfully created CDMS server on port 3746
+18.07.2016_15:08:05 INFO: Waiting for clients...
+18.07.2016_15:11:07 INFO: Client 0 connected
+18.07.2016_15:11:07 INFO: Successful authentication of client 0 (Name: root)
+18.07.2016_15:13:03 ERROR: Error occurred while receiving data from client 0
+18.07.2016_15:13:03 java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at sun.security.ssl.InputRecord.readFully(Unknown Source)
+	at sun.security.ssl.InputRecord.read(Unknown Source)
+	at sun.security.ssl.SSLSocketImpl.readRecord(Unknown Source)
+	at sun.security.ssl.SSLSocketImpl.readDataRecord(Unknown Source)
+	at sun.security.ssl.AppInputStream.read(Unknown Source)
+	at sun.nio.cs.StreamDecoder.readBytes(Unknown Source)
+	at sun.nio.cs.StreamDecoder.implRead(Unknown Source)
+	at sun.nio.cs.StreamDecoder.read(Unknown Source)
+	at java.io.InputStreamReader.read(Unknown Source)
+	at java.io.BufferedReader.fill(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at server.ClientThread.run(ClientThread.java:66)
+
+18.07.2016_15:13:03 DEBUG: Closing socket of client 0
+18.07.2016_15:13:03 DEBUG: Closed socket of client 0
+18.07.2016_15:13:03 INFO: Client 0 disconnected

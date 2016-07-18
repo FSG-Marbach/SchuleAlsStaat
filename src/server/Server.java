@@ -89,18 +89,20 @@ public class Server {
 						true);
 
 		log.debug("Connectiong to database");
-		try {
-			db = new Database(settings.getSetting("databaseConnection"), log);
-		} catch (ClassNotFoundException e1) {
-			log.fatal("No database driver found! Shutting down");
-			log.logStackTrace(e1);
-			System.exit(1);
-		} catch (SQLException e1) {
-			log.fatal("Couldn't connect to database!");
-			log.logStackTrace(e1);
-			System.exit(1);
-		}
-		log.info("Successfully connected to database");
+		
+		//TODO ADD DATABASE
+//		try {
+//			db = new Database(settings.getSetting("databaseConnection"), log);
+//		} catch (ClassNotFoundException e1) {
+//			log.fatal("No database driver found! Shutting down");
+//			log.logStackTrace(e1);
+//			System.exit(1);
+//		} catch (SQLException e1) {
+//			log.fatal("Couldn't connect to database!");
+//			log.logStackTrace(e1);
+//			System.exit(1);
+//		}
+//		log.info("Successfully connected to database");
 
 		// Configuring SSLServer
 		System.setProperty("javax.net.ssl.keyStore", path + keystore);

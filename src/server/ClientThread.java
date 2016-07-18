@@ -73,46 +73,56 @@ public class ClientThread extends Thread {
 										// Checking for permission
 										if (Arrays.asList(allowedCommands)
 												.contains(command[0])) {
+											try {
+												// Executing command
+												switch (command[0]) {
+												case "reload":
+													writer.writeBytes(Commands
+															.reload(id,
+																	command,
+																	log,
+																	passwords,
+																	permissions)
+															+ "\n");
+													break;
 
-											// Executing command
-											switch (command[0]) {
-											case "reload":
-												writer.writeBytes(Commands
-														.reload(id, command,
-																log, passwords,
-																permissions)
-														+ "\n");
-												break;
+												case "getCitizenName":
+													writer.writeBytes(db
+															.getCitizenName(command[1]));
+													break;
+												case "getCitizenPic":
+													writer.writeBytes(db
+															.getCitizenPic(command[1]));
+													break;
+												case "getCitizenClass":
+													writer.writeBytes(db
+															.getCitizenClass(command[1]));
+													break;
+												case "getCitizenCheckinTimes":
+													writer.writeBytes(db
+															.getCitizenCheckinTimes(command[1]));
+													break;
+												case "getCitizenCheckoutTimes":
+													writer.writeBytes(db
+															.getCitizenCheckoutTimes(command[1]));
+													break;
+												default:
+													log.warning("Client "
+															+ id
+															+ " sent not implemented command ('"
+															+ request
+															+ "') with permission!");
+													writer.writeBytes("Invalid command\n");
+													break;
 
-											case "getCitizenName":
-												writer.writeBytes(db
-														.getCitizenName(command[1]));
-												break;
-											case "getCitizenPic":
-												writer.writeBytes(db
-														.getCitizenPic(command[1]));
-												break;
-											case "getCitizenClass":
-												writer.writeBytes(db
-														.getCitizenClass(command[1]));
-												break;
-											case "getCitizenCheckinTimes":
-												writer.writeBytes(db
-														.getCitizenCheckinTimes(command[1]));
-												break;
-											case "getCitizenCheckoutTimes":
-												writer.writeBytes(db
-														.getCitizenCheckoutTimes(command[1]));
-												break;
-											default:
-												log.warning("Client "
-														+ id
-														+ " sent not implemented command ('"
-														+ request
-														+ "') with permission!");
-												writer.writeBytes("Invalid command\n");
-												break;
-
+												}
+											} catch (Exception e) {
+												if (db == null)
+													writer.writeBytes("Can't execute command because database is missing\n");
+												else
+													writer.writeBytes("An error occured: "
+															+ e.getMessage()
+															+ "\n");
 											}
 										} else {
 											log.warning("Client "
