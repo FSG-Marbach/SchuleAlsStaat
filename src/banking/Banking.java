@@ -24,7 +24,7 @@ public class Banking {
 		connection = new Connection(new SimpleLog(), settings);
 		connection.connect();
 		
-//		String usertype = connection.getUsername().getType();
+//		String usertype = connection.getType();
 		GUI gui = new GUI();
 //		if(usertype == "director"){
 //			gui.enableOnlyAsDirector();

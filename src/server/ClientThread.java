@@ -142,28 +142,39 @@ public class ClientThread extends Thread {
 												send(database.getBankAccountComment(command[1]), command);
 												break;
 											case "getBankAccountUsers":
-												String users = database.getBankAccountUsers(command[1]);
-												
-												send(users, command);
+												send(database.getBankAccountUsers(command[1]), command);
 												break;
 											case "addUser":
 												database.addUser(command[1], command[2]);
-												
+												break;
 											case "removeUser":
 												database.removeUser(command[1], command[2]);
-												
+												break;
+											case"addAccount":
+												database.addAccount(command[1], command[2]);
+												break;
+											case"removeAccount":
+												database.removeAccount(command[1], command[2]);
+												break;
 											case "getTax":
+												send(database.getTax(), command);
+												break;
 											case "setTax":
-												
+												send(database.setTax(), command);
+												break;
 											case "createCitizen":
-												database.createCitizen( command[1], command[2], command[3], command[4], command[5]);
-												
+												send(database.createCitizen(command[1], command[2], command[3], command[4], command[5]) + "", command);
+												break;
 											case "doesCitizenIdExist":
 												send(database.doesCizizenIdExist(command[1]), command);
 												break;
 											case "doesSBANExist":
 												send(database.doesSBANExist(command[1]), command);
 												break;
+											// case "readLog":
+											// send(database.readLog("0",
+											// command[1]), command);
+											// break;
 											default:
 												log.warning("Client " + id + " sent not implemented command ('"
 														+ request + "') with permission!");

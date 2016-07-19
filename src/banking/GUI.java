@@ -33,7 +33,7 @@ import javax.swing.border.TitledBorder;
 import essentials.Essentials;
 
 public class GUI implements KeyListener {
-
+	String tax = "20";
 	JTextField txfType;
 	JTextArea txaAccountLog;
 	JTextField txfCitizenID;
@@ -398,13 +398,16 @@ public class GUI implements KeyListener {
 
 						Banking.connection.writeLine("getBankAccountUsers " + txfAccountNumber.getText());
 						lstAuthorizedCitizen.setListData(Banking.connection.readLine().split(";"));
-						
+
 						Banking.connection.writeLine("getBankAccountType " + txfAccountNumber.getText());
 						txfType.setText(Banking.connection.readLine());
 
 						Banking.connection.writeLine("readLog " + txfAccountNumber.getText());
 						txaAccountLog.setText(Banking.connection.readLine());
 
+						Banking.connection.writeLine("getTax");
+						tax = Banking.connection.readLine();
+						
 						enableAfterSBAN();
 					} else {
 						JOptionPane.showMessageDialog(null, "Ungültige SBAN!\nÜberprüfen sie ihre Eingabe",
@@ -437,12 +440,13 @@ public class GUI implements KeyListener {
 		txfType.setPreferredSize(new Dimension(120, 20));
 		txfType.setFont(new Font("Helvetica", 0, 12));
 		Essentials.addComponent(pnlBankAccountOverview, layout, txfType, 1, 2, 2, 1, 0, 0, new Insets(0, 0, 10, 10));
-		
-//		cbxType = new JComboBox<String>();
-		
-//		cbxType.setPreferredSize(new Dimension(120, 20));
-//		cbxType.setFont(new Font("Helvetica", 0, 12));
-//		Essentials.addComponent(pnlBankAccountOverview, layout, cbxType, 1, 2, 2, 1, 0, 0, new Insets(0, 0, 10, 10));
+
+		// cbxType = new JComboBox<String>();
+
+		// cbxType.setPreferredSize(new Dimension(120, 20));
+		// cbxType.setFont(new Font("Helvetica", 0, 12));
+		// Essentials.addComponent(pnlBankAccountOverview, layout, cbxType, 1,
+		// 2, 2, 1, 0, 0, new Insets(0, 0, 10, 10));
 
 		JLabel lblAuthorizedCitizen = new JLabel("Zugriffsberechtigte Bürger:");
 		lblAuthorizedCitizen.setFont(new Font("Helvetica", 0, 14));
@@ -757,7 +761,7 @@ public class GUI implements KeyListener {
 		pnlTaxation.setLayout(layout);
 		Essentials.addComponent(pnlPayingOutEuro, layout, pnlTaxation, 0, 1, 3, 1, 1, 0, new Insets(0, 10, 10, 10));
 
-		JLabel lblTaxation = new JLabel("Nach Besteuerung (20%):");
+		JLabel lblTaxation = new JLabel("Nach Besteuerung (" + tax + "%):");
 		lblTaxation.setFont(new Font("Helvetica", 0, 14));
 		Essentials.addComponent(pnlTaxation, layout, lblTaxation, 0, 0, 1, 1, 0, 0, new Insets(0, 0, 0, 10));
 
