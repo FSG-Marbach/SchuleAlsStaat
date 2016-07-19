@@ -132,7 +132,8 @@ public class ClientThread extends Thread {
 												}
 												break;
 											case "reciveBasicSecurity":
-												// TODO Überweise Grundsicherung
+												writer.writeBytes(
+														String.valueOf(database.payBasicSecurity(command[1])));
 												break;
 											case "⁠⁠⁠getBankAccountValue":
 												send(database.getBankAccountValue(command[1]).toString(), command);
@@ -147,6 +148,16 @@ public class ClientThread extends Thread {
 													returnstring = returnstring + users[i] + ";";
 												}
 												send(returnstring, command);
+												break;
+
+											case "payBasicSecurity":
+												send(String.valueOf(database.payBasicSecurity(command[1])), command);
+												break;
+											case "doesCitizenIdExist":
+												send(database.doesCizizenIdExist(command[1]), command);
+												break;
+											case "doesSBANExist":
+												send(database.doesSBANExist(command[1]), command);
 												break;
 											default:
 												log.warning("Client " + id + " sent not implemented command ('"

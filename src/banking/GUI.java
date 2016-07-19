@@ -127,39 +127,51 @@ public class GUI implements KeyListener {
 							"Ungültige Eingabe bei der Bürger-ID!\nÜberprüfen sie ihre Eingabe", "Fehler aufgetreten",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					Banking.connection.writeLine("getCitizenName " + txfCitizenID.getText());
-					txfName.setText(Banking.connection.readLine());
+					try {
+						Banking.connection.writeLine("doesCitizenIdExist " + txfCitizenID.getText());
+						String doesIdExist = Banking.connection.readLine();
 
-					Banking.connection.writeLine("getCitizenClass " + txfCitizenID.getText());
-					txfClass.setText(Banking.connection.readLine());
+						if (doesIdExist.equals("true")) {
+							Banking.connection.writeLine("getCitizenName " + txfCitizenID.getText());
+							txfName.setText(Banking.connection.readLine());
 
-					Banking.connection.writeLine("getCitizenExchangeVolume " + txfCitizenID.getText());
-					txfAlreadyChanged.setText(Banking.connection.readLine());
+							Banking.connection.writeLine("getCitizenClass " + txfCitizenID.getText());
+							txfClass.setText(Banking.connection.readLine());
 
-					Banking.connection.writeLine("getBankAccountComment " + txfCitizenID.getText());
-					txaComment.setText(Banking.connection.readLine());
+							Banking.connection.writeLine("getCitizenExchangeVolume " + txfCitizenID.getText());
+							txfAlreadyChanged.setText(Banking.connection.readLine());
 
-					Banking.connection.writeLine("getCitizenInformation " + txfCitizenID.getText());
-					txaComment.setText(Banking.connection.readLine());
+							Banking.connection.writeLine("getBankAccountComment " + txfCitizenID.getText());
+							txaComment.setText(Banking.connection.readLine());
 
-					Banking.connection.writeLine("getCitizenHasReceivedBasicSecurity " + txfCitizenID.getText());
-					String hasPayedBS = Banking.connection.readLine();
+							Banking.connection.writeLine("getCitizenInformation " + txfCitizenID.getText());
+							txaComment.setText(Banking.connection.readLine());
 
-					if (hasPayedBS.equals("true")) {
-						cbxAlreadyPaid.setSelected(true);
-					} else {
-						cbxAlreadyPaid.setSelected(false);
+							Banking.connection
+									.writeLine("getCitizenHasReceivedBasicSecurity " + txfCitizenID.getText());
+							String hasPayedBS = Banking.connection.readLine();
+
+							if (hasPayedBS.equals("true")) {
+								cbxAlreadyPaid.setSelected(true);
+							} else {
+								cbxAlreadyPaid.setSelected(false);
+							}
+
+							// TODO GET ALL BANKACCOUNTS
+							// Banking.connection.writeLine(" " +
+							// txfCitizenID.getText());
+							// String[] bankaccounts =
+							// Banking.connection.readLine().split(";");
+							// for (int i = 0; i < bankaccounts.length; i++) {
+							// lstBankAccounts.setListData(bankaccounts);
+							// }
+						} else {
+							JOptionPane.showMessageDialog(null, "Ungültige Bürger-ID!\nÜberprüfen sie ihre Eingabe",
+									"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (Exception e2) {
+						// TODO: handle exception
 					}
-
-					// TODO GET ALL BANKACCOUNTS
-					// Banking.connection.writeLine(" " +
-					// txfCitizenID.getText());
-					// String[] bankaccounts =
-					// Banking.connection.readLine().split(";");
-					// for (int i = 0; i < bankaccounts.length; i++) {
-					// lstBankAccounts.setListData(bankaccounts);
-					// }
-
 					enableAfterID();
 				}
 
@@ -340,14 +352,23 @@ public class GUI implements KeyListener {
 							"Ungültige Eingabe bei der Kontonummer!\nÜberprüfen sie ihre Eingabe", "Fehler aufgetreten",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					Banking.connection.writeLine("⁠⁠⁠getBankAccountValue " + cbxType.getSelectedItem().toString()
-							+ txfAccountNumber.getText());
-					txfAmount.setText(Banking.connection.readLine());
-					
-					Banking.connection.writeLine("getBankAccountUsers " + cbxType.getSelectedItem().toString()
-							+ txfAccountNumber.getText());
-					lstAuthorizedCitizen.setListData(Banking.connection.readLine().split(";"));
-					enableAfterSBAN();
+
+					Banking.connection.writeLine("doesSBANExist " + txfAccountNumber.getText());
+					String doesIdExist = Banking.connection.readLine();
+
+					if (doesIdExist.equals("true")) {
+						Banking.connection.writeLine("⁠⁠⁠getBankAccountValue " + txfAccountNumber.getText());
+						txfAmount.setText(Banking.connection.readLine());
+
+						Banking.connection.writeLine("getBankAccountUsers " + txfAccountNumber.getText());
+						lstAuthorizedCitizen.setListData(Banking.connection.readLine().split(";"));
+
+						enableAfterSBAN();
+					} else {
+						JOptionPane.showMessageDialog(null, "Ungültige SBAN!\nÜberprüfen sie ihre Eingabe",
+								"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+					}
+
 				}
 			}
 		});
@@ -660,8 +681,7 @@ public class GUI implements KeyListener {
 		txaComment.setEnabled(true);
 		txfAlreadyChanged.setEnabled(false);
 		btnPayOff.setEnabled(true);
-		btnRemoveBankAccounts.setEnabled(true);
-		btnAddBankAccounts.setEnabled(true);
+		
 		txfAccountNumber.setEnabled(true);
 		btnAccountNumber.setEnabled(true);
 	}
@@ -698,6 +718,8 @@ public class GUI implements KeyListener {
 		btnRemoveAuthorizedCitizen.setEnabled(true);
 		btnAddAuthorizedCitizen.setEnabled(true);
 		cbxType.setEnabled(true);
+		btnRemoveBankAccounts.setEnabled(true);
+		btnAddBankAccounts.setEnabled(true);
 	}
 
 	public void disableAfterSBAN() {
@@ -721,9 +743,10 @@ public class GUI implements KeyListener {
 
 	}
 
-	public void reloadFields(){
-		
+	public void reloadFields() {
+
 	}
+
 	public static void main(String[] args) {
 		new GUI();
 	}
