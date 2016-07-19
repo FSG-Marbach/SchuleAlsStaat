@@ -315,6 +315,45 @@ public class Gui implements KeyListener, ActionListener {
 			pnl_serverinformation.setLayout(gridbaglayout);
 			pnl_serverinformation.setBackground(Color.green);
 
+			JButton btn_logout = new JButton("Abmelden");
+			btn_logout.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Main.connection.disconnect();
+
+				}
+			});
+
+			JLabel lbl_ip = new JLabel("127.0.0.1");
+			// lbl_ip.setText(Main.connection.getIp());
+
+			JLabel lbl_port = new JLabel("3546");
+			// lbl_port.setText(Main.connection.getPort() + "");
+
+			JLabel lbl_username = new JLabel("user");
+			// lbl_username.setText(Main.connection.getUsername());
+
+			JLabel lbl_settings = new JLabel("aufhauiwgh");
+			// lbl_settings.setText(Main.connection.getSettings() + "");
+
+			Essentials.addComponent(pnl_serverinformation, gridbaglayout, lbl_ip, 0, 0, 1, 1, 1, 1,
+					new Insets(5, 5, 5, 5));
+			Essentials.addComponent(pnl_serverinformation, gridbaglayout, lbl_port, 1, 0, 1, 1, 1, 1,
+					new Insets(5, 5, 5, 5));
+			Essentials.addComponent(pnl_serverinformation, gridbaglayout, lbl_username, 2, 0, 1, 1, 1, 1,
+					new Insets(5, 5, 5, 5));
+			Essentials.addComponent(pnl_serverinformation, gridbaglayout, lbl_settings, 3, 0, 1, 1, 1, 1,
+					new Insets(5, 5, 5, 5));
+			Essentials.addComponent(pnl_serverinformation, gridbaglayout, btn_logout, 4, 0, 1, 1, 1, 1,
+					new Insets(5, 5, 5, 5));
+
+			// pnl_serverinformation.add(lbl_ip);
+			// pnl_serverinformation.add(lbl_port);
+			// pnl_serverinformation.add(lbl_username);
+			// pnl_serverinformation.add(lbl_settings);
+			// pnl_serverinformation.add(btn_logout);
+
 			pnl_header.setBounds(0, 0, width, height / 7 * 2 - height / 11);
 			pnl_informationLeftSide.setBounds(0, height / 7 * 2 - height / 11, width / 3 * 2, height / 7 * 4);
 			pnl_informationRightSide.setBounds(width / 3 * 2, height / 7 * 2 - height / 11, width / 3, height / 7 * 4);
@@ -367,16 +406,18 @@ public class Gui implements KeyListener, ActionListener {
 			} else {
 				String studentid = txf_userid.getText();
 
-				//getCitizenState [id] = returns "inside" / "outside";
-				//setCitizenLogoutPoint [id] = setLogoutTimePoint, attached, seperated with ";"
-				//setCitizenLoginPoint [id] = setLoginTimePoint, attached, seperated with ";"
-				
+				// getCitizenState [id] = returns "inside" / "outside";
+				// setCitizenLogoutPoint [id] = setLogoutTimePoint, attached,
+				// seperated with ";"
+				// setCitizenLoginPoint [id] = setLoginTimePoint, attached,
+				// seperated with ";"
+
 				Main.connection.writeLine("getCitizenState " + studentid);
 				String state = Main.connection.readLine();
-				
-				if(state.equals("inside")){
+
+				if (state.equals("inside")) {
 					Main.connection.writeLine("setCitizenLogoutPoint " + studentid);
-				}else if(state.equals("outside")){
+				} else if (state.equals("outside")) {
 					Main.connection.writeLine("setCitizenCheckinTimes " + studentid);
 				}
 
@@ -425,7 +466,7 @@ public class Gui implements KeyListener, ActionListener {
 
 				String attendance = calculateAttendanceTime(studentid, loginarray, logoutarray, dateFormat, today);
 
-				Main.connection.writeLine("getCitizenInformations " + studentid);
+				Main.connection.writeLine("getCitizenInformation " + studentid);
 				String information = Main.connection.readLine();
 
 				fillGaps(name, classLevel, attendance, null, information);
@@ -458,7 +499,7 @@ public class Gui implements KeyListener, ActionListener {
 		}
 
 		diffMillis = diffMillis / 1000;
-		
+
 		final int MINUTES_IN_AN_HOUR = 60;
 		final int SECONDS_IN_A_MINUTE = 60;
 
@@ -467,7 +508,7 @@ public class Gui implements KeyListener, ActionListener {
 		int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
 		int hours = totalMinutes / MINUTES_IN_AN_HOUR;
 
-//		System.out.println(hours + "h " + minutes + "min " + seconds + "s");
+		// System.out.println(hours + "h " + minutes + "min " + seconds + "s");
 
 		return hours + "h " + minutes + "min " + seconds + "s";
 
