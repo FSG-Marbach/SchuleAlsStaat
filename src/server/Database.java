@@ -327,7 +327,7 @@ public class Database {
 		}
 	}
 
-	public String getCitizenInformations(String id){
+	public String getCitizenInformation(String id){
 		String query = "SELECT informations FROM Citizens WHERE id = '" + id
 				+ "'";
 		try {

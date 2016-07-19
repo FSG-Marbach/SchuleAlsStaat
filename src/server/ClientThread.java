@@ -96,7 +96,8 @@ public class ClientThread extends Thread {
 												send(database.getCitizenCheckoutTimes(command[1]), command);
 												break;
 											case "getCitizenInformation":
-//												send(database.getCitizenInformation(command[1]), command);
+												// send(database.getCitizenInformation(command[1]),
+												// command);
 												break;
 											case "getTodaysDate":
 												writer.writeBytes("" + System.currentTimeMillis());
@@ -120,20 +121,33 @@ public class ClientThread extends Thread {
 																command[1] + System.currentTimeMillis() + ";"));
 												break;
 											case "getCitizenExchangeVolume":
-												writer.writeBytes(database.getCitizenExchangeVolume(command[1]));
+												send(database.getCitizenExchangeVolume(command[1]), command);
 												break;
-//											case "getCitizenHasReceivedBasicSecurity":
-////												if (database.getCitizenHasReceivedBasicSecurity(command[1])
-//														.equals("true")) {
-//													writer.writeBytes("true");
-//												} else {
-//													writer.writeBytes("false");
-//												}
-//												break;
+											case "getCitizenHasReceivedBasicSecurity":
+												if (database.getCitizenHasReceivedBasicSecurity(command[1])
+														.equals("true")) {
+													writer.writeBytes("true");
+												} else {
+													writer.writeBytes("false");
+												}
+												break;
 											case "reciveBasicSecurity":
-												// TODO �berweise Grundsicherung
+												// TODO Überweise Grundsicherung
 												break;
-
+											case "⁠⁠⁠getBankAccountValue":
+												send(database.getBankAccountValue(command[1]).toString(), command);
+												break;
+											case "getBankAccountComment":
+												send(database.getBankAccountComment(command[1]), command);
+												break;
+											case "getBankAccountUsers":
+												String[] users = database.getBankAccountUsers(command[1]);
+												String returnstring = "";
+												for (int i = 0; i < users.length; i++) {
+													returnstring = returnstring + users[i] + ";";
+												}
+												send(returnstring, command);
+												break;
 											default:
 												log.warning("Client " + id + " sent not implemented command ('"
 														+ request + "') with permission!");
