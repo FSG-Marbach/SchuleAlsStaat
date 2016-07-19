@@ -96,10 +96,10 @@ public class ClientThread extends Thread {
 												send(database.getCitizenCheckoutTimes(command[1]), command);
 												break;
 											case "getCitizenInformation":
-												// send(database.getCitizenInformation(command[1]),
-												// command);
+												 send(database.getCitizenInformation(command[1]),
+												 command);
 												break;
-											case "getTodaysDate":
+											case "getTime":
 												writer.writeBytes("" + System.currentTimeMillis());
 												break;
 											case "getCitizenState":
@@ -131,7 +131,7 @@ public class ClientThread extends Thread {
 													writer.writeBytes("false");
 												}
 												break;
-											case "reciveBasicSecurity":
+											case "payBasicSecurity":
 												writer.writeBytes(
 														String.valueOf(database.payBasicSecurity(command[1])));
 												break;
@@ -149,10 +149,18 @@ public class ClientThread extends Thread {
 												}
 												send(returnstring, command);
 												break;
-
-											case "payBasicSecurity":
-												send(String.valueOf(database.payBasicSecurity(command[1])), command);
-												break;
+											case "addUser":
+												//Account, User
+											case "removeUser":
+											//Account, User
+											case "addAccount":
+												//User, Account
+											case "removeAccount":
+												//User, Account
+												
+											case "getTax":
+											case "setTax":
+												
 											case "doesCitizenIdExist":
 												send(database.doesCizizenIdExist(command[1]), command);
 												break;

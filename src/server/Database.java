@@ -437,7 +437,6 @@ public class Database {
 	}
 
 	public boolean payBasicSecurity(String id) {
-
 		String basicSecurity = Server.settings.getSetting("basicSecurityBankAccount");
 		if (basicSecurity == null) {
 			log.error("No basic Security Bank Account found");
@@ -459,6 +458,30 @@ public class Database {
 			log.logStackTrace(e);
 			return false;
 		}
+	}
+
+	public boolean depositMartinis(String id, String amount) {
+
+		return setBankAccountValue(id, getBankAccountValue(id) + (Integer.parseInt(amount)));
+
+	}
+
+	public boolean depositEuros(String id, String amount) {
+		return depositMartinis(id, String.valueOf(Integer.parseInt(amount) * 10));
+	}
+
+	public boolean payMartinis(String id, String amount) {
+		if (getBankAccountValue(id) >= Integer.parseInt(amount))
+			return setBankAccountValue(id, getBankAccountValue(id) - Integer.parseInt(amount));
+		else
+			return false;
+	}
+
+	public String payEuros(String id, String amount) {
+		payMartinis(id, amount);
+		int m = Integer.parseInt(amount);
+		m = (m * (1 - Integer.parseInt(Server.settings.getSetting("tax")) / 100)) / 10;
+		return String.valueOf(m);
 	}
 
 }
