@@ -183,15 +183,41 @@ public class Database {
 	 * @param value
 	 * @return
 	 */
-	public String[] getBankAccountUsers(String sban) {
+	public String getBankAccountUsers(String sban) {
 		String query = "SELECT users FROM BankAccounts WHERE sban = '" + sban + "'";
 		try {
 
-			return connection.createStatement().executeQuery(query).getString(1).split(",");
+			return connection.createStatement().executeQuery(query).getString(1);
 		} catch (SQLException e) {
 			log.error("Couldn't process " + query);
 			log.logStackTrace(e);
 			return null;
+		}
+	}
+
+	public String getUsersBankAccounts(String id) {
+		String query = "SELECT bankAccounts FROM Citizens WHERE id = '" + id + "'";
+		try {
+
+			return connection.createStatement().executeQuery(query).getString(1);
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return null;
+		}
+	}
+
+	public boolean setUserBankAccounts(String sbans, String id) {
+		String users2 = "";
+		String query = "UPDATE Citizens SET bankAccounts ='" + sbans + "' WHERE id = '" + id + "'";
+		try {
+
+			connection.createStatement().executeQuery(query);
+			return true;
+		} catch (SQLException e) {
+			log.error("Couldn't process " + query);
+			log.logStackTrace(e);
+			return false;
 		}
 	}
 
@@ -202,12 +228,8 @@ public class Database {
 	 * @param value
 	 * @return
 	 */
-	public boolean setBankAccountUsers(String sban, String[] users) {
+	public boolean setBankAccountUsers(String sban, String users) {
 		String users2 = "";
-
-		for (String string : users) {
-			users2 = users2 + string + ",";
-		}
 		users2 = users2.substring(0, users2.length() - 1);
 		String query = "UPDATE BankAccounts SET users ='" + users2 + "' WHERE sban = '" + sban + "'";
 		try {
@@ -232,12 +254,13 @@ public class Database {
 			log.error("Couldn't process " + query);
 			log.logStackTrace(e);
 			return false;
+
 		}
 	}
 
-	public ResultSet readLog(String userType, String user) {
+	public ResultSet readLog(String userType, String userid) {
 		String query = "SELECT timestamp, user, userType, client, message FROM Log WHERE userType = '" + userType
-				+ "' AND user = '" + user + "'";
+				+ "' AND user = '" + userid + "'";
 		try {
 
 			return connection.createStatement().executeQuery(query);
@@ -458,6 +481,16 @@ public class Database {
 			log.logStackTrace(e);
 			return false;
 		}
+	}
+
+	public boolean addUser(String bankAccount, String user) {
+		setBankAccountUsers(bankAccount, getBankAccountUsers(bankAccount) + "," + user);
+		return setUserBankAccounts(user, getUsersBankAccounts(user) + "," + bankAccount);
+	}
+
+	public boolean removeUser(String bankAccount, String user) {
+		setBankAccountUsers(bankAccount, getBankAccountUsers(bankAccount).replace("," + user, ""));
+		return setUserBankAccounts(user, getUsersBankAccounts(user).replace("," + bankAccount, ""));
 	}
 
 	public boolean depositMartinis(String id, String amount) {

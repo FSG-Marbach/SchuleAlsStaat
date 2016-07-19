@@ -142,24 +142,21 @@ public class ClientThread extends Thread {
 												send(database.getBankAccountComment(command[1]), command);
 												break;
 											case "getBankAccountUsers":
-												String[] users = database.getBankAccountUsers(command[1]);
-												String returnstring = "";
-												for (int i = 0; i < users.length; i++) {
-													returnstring = returnstring + users[i] + ";";
-												}
-												send(returnstring, command);
+												String users = database.getBankAccountUsers(command[1]);
+												
+												send(users, command);
 												break;
 											case "addUser":
-												//Account, User
+												database.addUser(command[1], command[2]);
+												
 											case "removeUser":
-											//Account, User
-											case "addAccount":
-												//User, Account
-											case "removeAccount":
-												//User, Account
+												database.removeUser(command[1], command[2]);
 												
 											case "getTax":
 											case "setTax":
+												
+											case "createCitizen":
+												database.createCitizen( command[1], command[2], command[3], command[4], command[5]);
 												
 											case "doesCitizenIdExist":
 												send(database.doesCizizenIdExist(command[1]), command);
