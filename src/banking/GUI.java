@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,10 +31,13 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 
 import essentials.Essentials;
-import javafx.scene.control.ListCell;
 
 public class GUI implements KeyListener {
 
+	JTextField txfType;
+	JTextArea txaAccountLog;
+	JTextField txfCitizenID;
+	JTextField txfTaxation;
 	JTextField txfName;
 	JTextField txfClass;
 	JTextField txfAlreadyChanged;
@@ -109,7 +114,7 @@ public class GUI implements KeyListener {
 		lblID.setFont(new Font("Helvetica", 0, 14));
 		Essentials.addComponent(pnlCitizenInformation, layout, lblID, 0, 0, 1, 1, 0, 0, new Insets(0, 0, 10, 10));
 
-		final JTextField txfCitizenID = new JTextField();
+		txfCitizenID = new JTextField();
 		txfCitizenID.addKeyListener(this);
 		txfCitizenID.setPreferredSize(new Dimension(80, 20));
 		txfCitizenID.setFont(new Font("Helvetica", 0, 12));
@@ -127,52 +132,45 @@ public class GUI implements KeyListener {
 							"Ungültige Eingabe bei der Bürger-ID!\nÜberprüfen sie ihre Eingabe", "Fehler aufgetreten",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					try {
-						Banking.connection.writeLine("doesCitizenIdExist " + txfCitizenID.getText());
-						String doesIdExist = Banking.connection.readLine();
 
-						if (doesIdExist.equals("true")) {
-							Banking.connection.writeLine("getCitizenName " + txfCitizenID.getText());
-							txfName.setText(Banking.connection.readLine());
+					Banking.connection.writeLine("doesCitizenIdExist " + txfCitizenID.getText());
+					String doesIdExist = Banking.connection.readLine();
 
-							Banking.connection.writeLine("getCitizenClass " + txfCitizenID.getText());
-							txfClass.setText(Banking.connection.readLine());
+					if (doesIdExist.equals("true")) {
+						Banking.connection.writeLine("getCitizenName " + txfCitizenID.getText());
+						txfName.setText(Banking.connection.readLine());
 
-							Banking.connection.writeLine("getCitizenExchangeVolume " + txfCitizenID.getText());
-							txfAlreadyChanged.setText(Banking.connection.readLine());
+						Banking.connection.writeLine("getCitizenClass " + txfCitizenID.getText());
+						txfClass.setText(Banking.connection.readLine());
 
-							Banking.connection.writeLine("getBankAccountComment " + txfCitizenID.getText());
-							txaComment.setText(Banking.connection.readLine());
+						Banking.connection.writeLine("getCitizenExchangeVolume " + txfCitizenID.getText());
+						txfAlreadyChanged.setText(Banking.connection.readLine());
 
-							Banking.connection.writeLine("getCitizenInformation " + txfCitizenID.getText());
-							txaComment.setText(Banking.connection.readLine());
+						Banking.connection.writeLine("getBankAccountComment " + txfCitizenID.getText());
+						txaComment.setText(Banking.connection.readLine());
 
-							Banking.connection
-									.writeLine("getCitizenHasReceivedBasicSecurity " + txfCitizenID.getText());
-							String hasPayedBS = Banking.connection.readLine();
+						Banking.connection.writeLine("getCitizenInformation " + txfCitizenID.getText());
+						txaComment.setText(Banking.connection.readLine());
 
-							if (hasPayedBS.equals("true")) {
-								cbxAlreadyPaid.setSelected(true);
-							} else {
-								cbxAlreadyPaid.setSelected(false);
-							}
+						Banking.connection.writeLine("getCitizenHasReceivedBasicSecurity " + txfCitizenID.getText());
+						String hasPayedBS = Banking.connection.readLine();
 
-							// TODO GET ALL BANKACCOUNTS
-							// Banking.connection.writeLine(" " +
-							// txfCitizenID.getText());
-							// String[] bankaccounts =
-							// Banking.connection.readLine().split(";");
-							// for (int i = 0; i < bankaccounts.length; i++) {
-							// lstBankAccounts.setListData(bankaccounts);
-							// }
+						if (hasPayedBS.equals("true")) {
+							cbxAlreadyPaid.setSelected(true);
 						} else {
-							JOptionPane.showMessageDialog(null, "Ungültige Bürger-ID!\nÜberprüfen sie ihre Eingabe",
-									"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+							cbxAlreadyPaid.setSelected(false);
 						}
-					} catch (Exception e2) {
-						// TODO: handle exception
+
+						Banking.connection.writeLine("getAllAccountsOfCitizen " + txfCitizenID.getText());
+						String[] bankaccounts = Banking.connection.readLine().split(";");
+						lstBankAccounts.setListData(bankaccounts);
+
+						enableAfterID();
+					} else {
+						JOptionPane.showMessageDialog(null, "Ungültige Bürger-ID!\nÜberprüfen sie ihre Eingabe",
+								"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
 					}
-					enableAfterID();
+
 				}
 
 			}
@@ -262,6 +260,15 @@ public class GUI implements KeyListener {
 							"Bereits bezahlt", JOptionPane.OK_OPTION);
 				} else if (cbxAlreadyPaid.isSelected() == false && !txfCitizenID.equals("")) {
 					Banking.connection.writeLine("reciveBasicSecurity " + txfCitizenID.getText());
+					String hasrecieved = Banking.connection.readLine();
+					if (hasrecieved.equals("true")) {
+						cbxAlreadyPaid.setSelected(true);
+						reloadFields();
+					} else {
+						JOptionPane.showMessageDialog(null, "Fehler beim Abheben der Grundsicherung.",
+								"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+					}
+
 				} else {
 					JOptionPane.showMessageDialog(null,
 							"Ungültige Eingabe bei der Bürger-ID!\nÜberprüfen sie ihre Eingabe.", "Fehler aufgetreten",
@@ -286,6 +293,14 @@ public class GUI implements KeyListener {
 		lstBankAccounts = new JList<String>();
 		lstBankAccounts.setFont(new Font("Helvetica", 0, 12));
 		lstBankAccounts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		lstBankAccounts.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					txfAccountNumber.setText(lstBankAccounts.getSelectedValue());
+					btnAccountNumber.doClick();
+				}
+			}
+		});
 
 		JScrollPane scpBankAccounts = new JScrollPane(lstBankAccounts, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -302,7 +317,24 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				if (txfCitizenID.getText() != "") {
+					String accountnumber = JOptionPane.showInputDialog(null, "Bitte geben sie die Kontonummer an:",
+							"Konto hinzufügen", JOptionPane.OK_OPTION);
+					Banking.connection.writeLine("doesSBANExist " + accountnumber);
+
+					if (accountnumber != null && Banking.connection.readLine() == "true") {
+						Banking.connection.writeLine("addAccount " + txfCitizenID.getText() + " " + accountnumber);
+						reloadFields();
+					} else {
+						JOptionPane.showMessageDialog(null,
+								"Ungültige Eingabe bei der Kontonummer!\nÜberprüfen sie ihre Eingabe.",
+								"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Ungültige Eingabe bei der Bürger-ID!\nÜberprüfen sie ihre Eingabe.", "Fehler aufgetreten",
+							JOptionPane.ERROR_MESSAGE);
+				}
 
 			}
 		});
@@ -314,7 +346,11 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				if (txfCitizenID.getText() != "") {
+					String toremove = lstBankAccounts.getSelectedValue();
+					Banking.connection.writeLine("removeAccount " + txfCitizenID.getText() + " " + toremove);
+					reloadFields();
+				}
 
 			}
 		});
@@ -362,6 +398,12 @@ public class GUI implements KeyListener {
 
 						Banking.connection.writeLine("getBankAccountUsers " + txfAccountNumber.getText());
 						lstAuthorizedCitizen.setListData(Banking.connection.readLine().split(";"));
+						
+						Banking.connection.writeLine("getBankAccountType " + txfAccountNumber.getText());
+						txfType.setText(Banking.connection.readLine());
+
+						Banking.connection.writeLine("readLog " + txfAccountNumber.getText());
+						txaAccountLog.setText(Banking.connection.readLine());
 
 						enableAfterSBAN();
 					} else {
@@ -391,10 +433,16 @@ public class GUI implements KeyListener {
 		lblType.setFont(new Font("Helvetica", 0, 14));
 		Essentials.addComponent(pnlBankAccountOverview, layout, lblType, 0, 2, 1, 1, 0, 0, new Insets(0, 10, 10, 10));
 
-		cbxType = new JComboBox<String>();
-		cbxType.setPreferredSize(new Dimension(120, 20));
-		cbxType.setFont(new Font("Helvetica", 0, 12));
-		Essentials.addComponent(pnlBankAccountOverview, layout, cbxType, 1, 2, 2, 1, 0, 0, new Insets(0, 0, 10, 10));
+		txfType = new JTextField();
+		txfType.setPreferredSize(new Dimension(120, 20));
+		txfType.setFont(new Font("Helvetica", 0, 12));
+		Essentials.addComponent(pnlBankAccountOverview, layout, txfType, 1, 2, 2, 1, 0, 0, new Insets(0, 0, 10, 10));
+		
+//		cbxType = new JComboBox<String>();
+		
+//		cbxType.setPreferredSize(new Dimension(120, 20));
+//		cbxType.setFont(new Font("Helvetica", 0, 12));
+//		Essentials.addComponent(pnlBankAccountOverview, layout, cbxType, 1, 2, 2, 1, 0, 0, new Insets(0, 0, 10, 10));
 
 		JLabel lblAuthorizedCitizen = new JLabel("Zugriffsberechtigte Bürger:");
 		lblAuthorizedCitizen.setFont(new Font("Helvetica", 0, 14));
@@ -415,17 +463,24 @@ public class GUI implements KeyListener {
 		Essentials.addComponent(pnlBankAccountOverview, layout, pnlManageAuthorizedCitizen, 0, 5, 3, 1, 1, 0,
 				new Insets(0, 10, 10, 10));
 
-		btnDeleteAccount = new JButton("Konto löschen");
-		btnDeleteAccount.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		Essentials.addComponent(pnlManageAuthorizedCitizen, layout, btnDeleteAccount, 0, 0, 1, 1, 0, 0,
-				new Insets(0, 0, 0, 10));
+		// btnDeleteAccount = new JButton("Konto löschen");
+		// btnDeleteAccount.addActionListener(new ActionListener() {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// Banking.connection.writeLine("getBankAccountValue " +
+		// txfAccountNumber.getText());
+		// String accountvalue = Banking.connection.readLine();
+		// int value = Integer.parseInt(accountvalue);
+		// if(value == 0){
+		// Banking.connection.writeLine("")
+		// }
+		//
+		// }
+		// });
+		// Essentials.addComponent(pnlManageAuthorizedCitizen, layout,
+		// btnDeleteAccount, 0, 0, 1, 1, 0, 0,
+		// new Insets(0, 0, 0, 10));
 
 		Essentials.addComponent(pnlManageAuthorizedCitizen, layout, new JPanel(), 1, 0, 1, 1, 1, 0,
 				new Insets(0, 0, 0, 0));
@@ -435,9 +490,27 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				if (txfAccountNumber.getText() != "") {
+					String citizennumber = JOptionPane.showInputDialog(null, "Bitte geben sie die Bürger-ID an:",
+							"Bürger hinzufügen", JOptionPane.OK_OPTION);
+					Banking.connection.writeLine("doesCitizenID " + citizennumber);
+
+					if (citizennumber != null && Banking.connection.readLine() == "true") {
+						Banking.connection.writeLine("addUser " + txfAccountNumber.getText() + " " + citizennumber);
+						reloadFields();
+					} else {
+						JOptionPane.showMessageDialog(null,
+								"Ungültige Eingabe bei der Bürgernummer!\nÜberprüfen sie ihre Eingabe.",
+								"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Ungültige Eingabe bei der Bürger-ID!\nÜberprüfen sie ihre Eingabe.", "Fehler aufgetreten",
+							JOptionPane.ERROR_MESSAGE);
+				}
 
 			}
+
 		});
 		Essentials.addComponent(pnlManageAuthorizedCitizen, layout, btnAddAuthorizedCitizen, 2, 0, 1, 1, 0, 0,
 				new Insets(0, 0, 0, 10));
@@ -447,7 +520,11 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				if (txfAccountNumber.getText() != "") {
+					String citizennumber = lstAuthorizedCitizen.getSelectedValue();
+					Banking.connection.writeLine("removeUser " + txfAccountNumber.getText() + " " + citizennumber);
+					reloadFields();
+				}
 
 			}
 		});
@@ -494,8 +571,28 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				Banking.connection.writeLine("doesSBANExist " + txfTransferAccountNumber.getText());
 
+				if (Banking.connection.readLine() == "true") {
+					if (txfTransferAccountNumber.getText() != "" && txfAmount.getText() != "") {
+						Banking.connection.writeLine("transfer " + txfTransferAccountNumber + " " + txfAmount);
+						if (Banking.connection.readLine() == "true") {
+							reloadFields();
+						} else {
+							JOptionPane.showMessageDialog(null,
+									"Fehler bei der Überweisung aufgetreten" + "!\nÜberprüfen sie ihre Eingabe",
+									"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Fehlerhafte Eingabe!\nÜberprüfen sie ihre Eingabe",
+								"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+					}
+
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Überweisungskonto nicht gefunden!\nÜberprüfen sie ihre Eingabe", "Fehler aufgetreten",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		Essentials.addComponent(pnlConfirmTransfer, layout, btnTransfer, 1, 0, 1, 1, 0, 0, new Insets(0, 0, 0, 0));
@@ -534,7 +631,22 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				if (txfDepositEuroAmount.getText() == "") {
+
+				} else {
+					Banking.connection.writeLine("doesSBANExist " + txfAccountNumber.getText());
+					if (Banking.connection.readLine() == "true") {
+						Banking.connection.writeLine("DepositEuroAmount " + txfAccountNumber.getText() + " "
+								+ txfDepositEuroAmount.getText());
+						String hasworked = Banking.connection.readLine();
+						if (hasworked == "true") {
+							reloadFields();
+						} else {
+							JOptionPane.showMessageDialog(null, "Fehler beim Einzahlen!\nÜberprüfen sie ihre Eingabe",
+									"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
 
 			}
 		});
@@ -562,7 +674,22 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				if (txfDepositMartiniAmount.getText() == "") {
+
+				} else {
+					Banking.connection.writeLine("doesSBANExist " + txfAccountNumber.getText());
+					if (Banking.connection.readLine() == "true") {
+						Banking.connection.writeLine("DepositMartiniAmount " + txfAccountNumber.getText() + " "
+								+ txfDepositEuroAmount.getText());
+						String hasworked = Banking.connection.readLine();
+						if (hasworked == "true") {
+							reloadFields();
+						} else {
+							JOptionPane.showMessageDialog(null, "Fehler beim Einzahlen!\nÜberprüfen sie ihre Eingabe",
+									"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
 
 			}
 		});
@@ -586,7 +713,7 @@ public class GUI implements KeyListener {
 		pnlPayingOutEuro.setLayout(layout);
 		tbpPayingOut.add("Euro", pnlPayingOutEuro);
 
-		JLabel lblPayingOutEuroAmount = new JLabel("Betrag:");
+		JLabel lblPayingOutEuroAmount = new JLabel("Betrag (Martini):");
 		lblPayingOutEuroAmount.setFont(new Font("Helvetica", 0, 14));
 		Essentials.addComponent(pnlPayingOutEuro, layout, lblPayingOutEuroAmount, 0, 0, 1, 1, 0, 0,
 				new Insets(10, 10, 10, 10));
@@ -603,7 +730,23 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				if (txfPayingOutEuroAmount.getText() == "") {
+
+				} else {
+					Banking.connection.writeLine("doesSBANExist " + txfAccountNumber.getText());
+					if (Banking.connection.readLine() == "true") {
+						Banking.connection.writeLine("PayingOutEuroAmount " + txfAccountNumber.getText() + " "
+								+ txfPayingOutEuroAmount.getText());
+						txfTaxation.setText(Banking.connection.readLine());
+
+						if (txfTaxation.getText() != "") {
+							reloadFields();
+						} else {
+							JOptionPane.showMessageDialog(null, "Fehler beim Auszahlen!\nÜberprüfen sie ihre Eingabe",
+									"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
 
 			}
 		});
@@ -618,12 +761,12 @@ public class GUI implements KeyListener {
 		lblTaxation.setFont(new Font("Helvetica", 0, 14));
 		Essentials.addComponent(pnlTaxation, layout, lblTaxation, 0, 0, 1, 1, 0, 0, new Insets(0, 0, 0, 10));
 
-		JTextField txfTaxation = new JTextField();
+		txfTaxation = new JTextField();
 		txfTaxation.setPreferredSize(new Dimension(0, 20));
 		txfTaxation.setEditable(false);
 		Essentials.addComponent(pnlTaxation, layout, txfTaxation, 1, 0, 1, 1, 1, 0, new Insets(0, 0, 0, 10));
 
-		JLabel lblMartini = new JLabel("Martini");
+		JLabel lblMartini = new JLabel("Euro");
 		lblMartini.setFont(new Font("Helvetica", 0, 14));
 		Essentials.addComponent(pnlTaxation, layout, lblMartini, 2, 0, 1, 1, 0, 0, new Insets(0, 0, 0, 0));
 
@@ -648,7 +791,23 @@ public class GUI implements KeyListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (txfPayingOutMartiniAmount.getText() == "") {
 
+				} else {
+					Banking.connection.writeLine("doesSBANExist " + txfAccountNumber.getText());
+					if (Banking.connection.readLine() == "true") {
+						Banking.connection.writeLine("PayingOutMartiniAmount " + txfAccountNumber.getText() + " "
+								+ txfPayingOutMartiniAmount.getText());
+
+						String hasworked = Banking.connection.readLine();
+						if (hasworked == "true") {
+							reloadFields();
+						} else {
+							JOptionPane.showMessageDialog(null, "Fehler beim Auszahlen!\nÜberprüfen sie ihre Eingabe",
+									"Fehler aufgetreten", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
 			}
 		});
 		Essentials.addComponent(pnlPayingOutMartini, layout, btnPayingOutMartiniAmount, 2, 0, 1, 1, 0, 0,
@@ -663,7 +822,7 @@ public class GUI implements KeyListener {
 		pnlAccountLog.setBorder(brdAccountLog);
 		Essentials.addComponent(pnlEast, layout, pnlAccountLog, 0, 1, 1, 1, 1, 1, new Insets(0, 10, 10, 10));
 
-		JTextArea txaAccountLog = new JTextArea();
+		txaAccountLog = new JTextArea();
 		txaAccountLog.setFont(new Font("Helvetica", 0, 12));
 		txaAccountLog.setLineWrap(true);
 		txaAccountLog.setEditable(false);
@@ -681,7 +840,7 @@ public class GUI implements KeyListener {
 		txaComment.setEnabled(true);
 		txfAlreadyChanged.setEnabled(false);
 		btnPayOff.setEnabled(true);
-		
+
 		txfAccountNumber.setEnabled(true);
 		btnAccountNumber.setEnabled(true);
 	}
@@ -724,7 +883,6 @@ public class GUI implements KeyListener {
 
 	public void disableAfterSBAN() {
 		btnAddBankAccounts.setEnabled(false);
-		btnDeleteAccount.setEnabled(false);
 		btnRemoveAuthorizedCitizen.setEnabled(false);
 		btnAddAuthorizedCitizen.setEnabled(false);
 
@@ -739,11 +897,46 @@ public class GUI implements KeyListener {
 		btnTransfer.setEnabled(false);
 		txfAmount.setEnabled(false);
 		txfTransferAccountNumber.setEnabled(false);
-		cbxType.setEnabled(false);
+		txfType.setEnabled(false);
 
 	}
 
 	public void reloadFields() {
+		if (txfCitizenID.getText() != "") {
+			Banking.connection.writeLine("getCitizenName " + txfCitizenID.getText());
+			txfName.setText(Banking.connection.readLine());
+
+			Banking.connection.writeLine("getCitizenClass " + txfCitizenID.getText());
+			txfClass.setText(Banking.connection.readLine());
+
+			Banking.connection.writeLine("getCitizenExchangeVolume " + txfCitizenID.getText());
+			txfAlreadyChanged.setText(Banking.connection.readLine());
+
+			Banking.connection.writeLine("getBankAccountComment " + txfCitizenID.getText());
+			txaComment.setText(Banking.connection.readLine());
+
+			Banking.connection.writeLine("getCitizenHasReceivedBasicSecurity " + txfCitizenID.getText());
+			String hasPayedBS = Banking.connection.readLine();
+
+			if (hasPayedBS.equals("true")) {
+				cbxAlreadyPaid.setSelected(true);
+			} else {
+				cbxAlreadyPaid.setSelected(false);
+			}
+
+			Banking.connection.writeLine("getAllAccountsOfCitizen " + txfCitizenID.getText());
+			String[] bankaccounts = Banking.connection.readLine().split(";");
+			lstBankAccounts.setListData(bankaccounts);
+
+		}
+		if (txfAccountNumber.getText() != "") {
+			Banking.connection.writeLine("⁠⁠⁠getBankAccountValue " + txfAccountNumber.getText());
+			txfAmount.setText(Banking.connection.readLine());
+
+			Banking.connection.writeLine("getBankAccountUsers " + txfAccountNumber.getText());
+			lstAuthorizedCitizen.setListData(Banking.connection.readLine().split(";"));
+
+		}
 
 	}
 

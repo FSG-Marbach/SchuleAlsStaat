@@ -22,9 +22,13 @@ public class Banking {
 		Settings settings = new Settings(new File(PATH + "settings.properties"), defaultValues, false, new SimpleLog());
 
 		connection = new Connection(new SimpleLog(), settings);
-		// connection.connect();
-
-		new GUI();
+		connection.connect();
+		
+//		String usertype = connection.getUsername().getType();
+		GUI gui = new GUI();
+//		if(usertype == "director"){
+//			gui.enableOnlyAsDirector();
+//		}
 	}
 
 	public static void main(String[] args) {
