@@ -38,9 +38,11 @@ public class Console {
 		defaultValues.setProperty("port", String.valueOf(PORT));
 		defaultValues.setProperty("truststore", "client.truststore");
 		defaultValues.setProperty("truststorePassword", "123456");
-		Settings settings = new Settings(new File(PATH + "settings.properties"), defaultValues, false, new SimpleLog());
+		Settings settings = new Settings(
+				new File(PATH + "settings.properties"), defaultValues, false,
+				new SimpleLog());
 
-		Connection connection = new Connection(new SimpleLog(), settings);
+		final Connection connection = new Connection(new SimpleLog(), settings);
 		connection.connect();
 
 		username = connection.getUsername();
@@ -56,16 +58,17 @@ public class Console {
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.black);
 		panel.setLayout(layout);
-		Essentials.addComponent(frame, layout, panel, 0, 0, 1, 1, 1, 1, new Insets(0, 0, 0, 0));
+		Essentials.addComponent(frame, layout, panel, 0, 0, 1, 1, 1, 1,
+				new Insets(0, 0, 0, 0));
 
-		String loginMessage = "Successful authentication of user '" + username + "' on CDMS server running on '" + ip
-				+ "/" + port;
+		String loginMessage = "Successful authentication of user '" + username
+				+ "' on CDMS server running on '" + ip + "/" + port;
 		String s = "";
 		for (int i = 0; i <= loginMessage.length(); i++)
 			s = s + "=";
 		loginMessage = s + "\n" + loginMessage + "'\n" + s + "\n";
 
-		JTextArea textArea = new JTextArea(loginMessage, 30, 100);
+		final JTextArea textArea = new JTextArea(loginMessage, 30, 100);
 		textArea.setBackground(Color.black);
 		textArea.setForeground(Color.white);
 		textArea.setCaretColor(Color.WHITE);
@@ -75,25 +78,30 @@ public class Console {
 		textArea.setWrapStyleWord(true);
 		textArea.setEditable(false);
 
-		JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		JScrollPane scrollPane = new JScrollPane(textArea,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		Essentials.addComponent(panel, layout, scrollPane, 0, 0, 2, 1, 1, 1, new Insets(0, 0, 0, 0));
+		Essentials.addComponent(panel, layout, scrollPane, 0, 0, 2, 1, 1, 1,
+				new Insets(0, 0, 0, 0));
 
 		JTextField label = new JTextField(username + ">");
 		label.setEditable(false);
 		label.setFont(new Font("Consolas", 0, 14));
 		label.setBackground(Color.white);
 		label.setForeground(Color.black);
-		label.setBorder(BorderFactory.createMatteBorder(5, 10, 5, 0, Color.white));
-		Essentials.addComponent(panel, layout, label, 0, 1, 1, 1, 0, 0, new Insets(0, 0, 0, 0));
-		
-		JTextField textField = new JTextField();
+		label.setBorder(BorderFactory.createMatteBorder(5, 10, 5, 0,
+				Color.white));
+		Essentials.addComponent(panel, layout, label, 0, 1, 1, 1, 0, 0,
+				new Insets(0, 0, 0, 0));
+
+		final JTextField textField = new JTextField();
 		textField.setBackground(Color.white);
 		textField.setForeground(Color.black);
 		textField.setCaretColor(Color.black);
 		textField.setFont(new Font("Consolas", 0, 14));
-		textField.setBorder(BorderFactory.createMatteBorder(5, 0, 5, 10, Color.white));
+		textField.setBorder(BorderFactory.createMatteBorder(5, 0, 5, 10,
+				Color.white));
 		textField.setPreferredSize(new Dimension(0, 30));
 		textField.addKeyListener(new KeyListener() {
 
@@ -115,7 +123,8 @@ public class Console {
 			public void keyPressed(KeyEvent e) {
 			}
 		});
-		Essentials.addComponent(panel, layout, textField, 1, 1, 1, 1, 1, 0, new Insets(0, 0, 0, 0));
+		Essentials.addComponent(panel, layout, textField, 1, 1, 1, 1, 1, 0,
+				new Insets(0, 0, 0, 0));
 
 		frame.pack();
 		frame.setLocationRelativeTo(null);
@@ -132,7 +141,8 @@ public class Console {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
-			System.out.println("Error while setting LookAndFeel! Default Java LookAndFeel will be used...");
+			System.out
+					.println("Error while setting LookAndFeel! Default Java LookAndFeel will be used...");
 		}
 
 		new Console();
