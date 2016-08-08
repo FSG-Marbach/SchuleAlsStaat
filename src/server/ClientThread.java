@@ -19,7 +19,7 @@ public class ClientThread extends Thread {
 	DataOutputStream writer;
 	Settings settings, passwords, permissions;
 
-	Database db;
+	Database database;
 
 	String clientName, password, permissionsGroup;
 	int id;
@@ -30,8 +30,7 @@ public class ClientThread extends Thread {
 
 		// Initialize session
 		try {
-			reader = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new DataOutputStream(socket.getOutputStream());
 
 			// Receive client name and password
@@ -44,8 +43,7 @@ public class ClientThread extends Thread {
 					// Syndicate password
 					if (passwords.getSetting(clientName).equals(password)) {
 
-						log.info("Successful authentication of client " + id
-								+ " (Name: " + clientName + ")");
+						log.info("Successful authentication of client " + id + " (Name: " + clientName + ")");
 
 						try {
 							writer.writeBytes("Successful authentication\n");
@@ -53,8 +51,7 @@ public class ClientThread extends Thread {
 							// Reading permissions group
 							if (permissions.getSetting(clientName) != null) {
 
-								String[] allowedCommands = permissions
-										.getArray(clientName);
+								String[] allowedCommands = permissions.getArray(clientName);
 
 								// Receiving and managing commands
 								boolean b = true;
@@ -64,86 +61,142 @@ public class ClientThread extends Thread {
 									String request = null;
 									try {
 										request = reader.readLine();
-										log.info("Client " + id
-												+ " sent command '" + request
-												+ "'");
+										log.info("Client " + id + " sent command '" + request + "'");
 
 										String[] command = request.split(" ");
 
 										// Checking for permission
-										if (Arrays.asList(allowedCommands)
-												.contains(command[0])) {
-											try {
-												// Executing command
-												switch (command[0]) {
-												case "reload":
-													writer.writeBytes(Commands
-															.reload(id,
-																	command,
-																	log,
-																	passwords,
-																	permissions)
-															+ "\n");
-													break;
+										if (Arrays.asList(allowedCommands).contains(command[0])) {
 
-												case "getCitizenName":
-													writer.writeBytes(db
-															.getCitizenName(command[1]));
-													break;
-												case "getCitizenPic":
-													writer.writeBytes(db
-															.getCitizenPic(command[1]));
-													break;
-												case "getCitizenClass":
-													writer.writeBytes(db
-															.getCitizenClass(command[1]));
-													break;
-												case "getCitizenCheckinTimes":
-													writer.writeBytes(db
-															.getCitizenCheckinTimes(command[1]));
-													break;
-												case "getCitizenCheckoutTimes":
-													writer.writeBytes(db
-															.getCitizenCheckoutTimes(command[1]));
-													break;
-												default:
-													log.warning("Client "
-															+ id
-															+ " sent not implemented command ('"
-															+ request
-															+ "') with permission!");
-													writer.writeBytes("Invalid command\n");
-													break;
+											// Executing command
+											switch (command[0]) {
+											case "reload":
+												writer.writeBytes(
+														Commands.reload(id, command, log, passwords, permissions)
+																+ "\n");
+												break;
+											// case "getCitizenName":
+											// send(Commands.getCitizenName(id,
+											// command, log, database));
+											// break;
 
+											case "getCitizenName":
+												send(database.getCitizenName(command[1]), command);
+												break;
+											case "getCitizenPic":
+												send(database.getCitizenPic(command[1]), command);
+												break;
+											case "getCitizenClass":
+												send(database.getCitizenClass(command[1]), command);
+												break;
+											case "getCitizenCheckinTimes":
+												send(database.getCitizenCheckinTimes(command[1]), command);
+												break;
+											case "getCitizenCheckoutTimes":
+												send(database.getCitizenCheckoutTimes(command[1]), command);
+												break;
+											case "getCitizenInformation":
+												 send(database.getCitizenInformation(command[1]),
+												 command);
+												break;
+											case "getTime":
+												writer.writeBytes("" + System.currentTimeMillis());
+												break;
+											case "getCitizenState":
+												if (database.getCitizenCheckinTimes(command[1]).length() > database
+														.getCitizenCheckoutTimes(command[1]).length()) {
+													writer.writeBytes("inside");
+												} else {
+													writer.writeBytes("outside");
 												}
-											} catch (Exception e) {
-												if (db == null)
-													writer.writeBytes("Can't execute command because database is missing\n");
-												else
-													writer.writeBytes("An error occured: "
-															+ e.getMessage()
-															+ "\n");
+												break;
+											case "setCitizenCheckinTimes":
+												database.setCitizenCheckinTimes(command[1],
+														database.getCitizenCheckinTimes(
+																command[1] + System.currentTimeMillis() + ";"));
+												break;
+											case "setCitizenCheckoutTimes":
+												database.setCitizenCheckoutTimes(command[1],
+														database.getCitizenCheckoutTimes(
+																command[1] + System.currentTimeMillis() + ";"));
+												break;
+											case "getCitizenExchangeVolume":
+												send(database.getCitizenExchangeVolume(command[1]), command);
+												break;
+											case "getCitizenHasReceivedBasicSecurity":
+												if (database.getCitizenHasReceivedBasicSecurity(command[1])
+														.equals("true")) {
+													writer.writeBytes("true");
+												} else {
+													writer.writeBytes("false");
+												}
+												break;
+											case "payBasicSecurity":
+												writer.writeBytes(
+														String.valueOf(database.payBasicSecurity(command[1])));
+												break;
+											case "⁠⁠⁠getBankAccountValue":
+												send(database.getBankAccountValue(command[1]).toString(), command);
+												break;
+											case "getBankAccountComment":
+												send(database.getBankAccountComment(command[1]), command);
+												break;
+											case "getBankAccountUsers":
+												send(database.getBankAccountUsers(command[1]), command);
+												break;
+											case "addUser":
+												database.addUser(command[1], command[2]);
+												break;
+											case "removeUser":
+												database.removeUser(command[1], command[2]);
+												break;
+											case"addAccount":
+												database.addAccount(command[1], command[2]);
+												break;
+											case"removeAccount":
+												database.removeAccount(command[1], command[2]);
+												break;
+											case "getTax":
+												send(database.getTax(), command);
+												break;
+											case "setTax":
+												send(database.setTax(), command);
+												break;
+											case "createCitizen":
+												send(database.createCitizen(command[1], command[2], command[3], command[4], command[5]) + "", command);
+												break;
+											case "doesCitizenIdExist":
+												send(database.doesCizizenIdExist(command[1]), command);
+												break;
+											case "doesSBANExist":
+												send(database.doesSBANExist(command[1]), command);
+												break;
+											// case "readLog":
+											// send(database.readLog("0",
+											// command[1]), command);
+											// break;
+											default:
+												log.warning("Client " + id + " sent not implemented command ('"
+														+ request + "') with permission!");
+												writer.writeBytes("Invalid command\n");
+												break;
+
 											}
 										} else {
-											log.warning("Client "
-													+ id
-													+ " tried to execute '"
-													+ request
+											log.warning("Client " + id + " tried to execute '" + request
 													+ "' without permission (which may not be implemented)!");
 											writer.writeBytes("Invalid command\n");
 										}
 
 									} catch (IOException e) {
-										log.error("Error occurred while receiving data from client "
-												+ id);
+										log.error("Error occurred while receiving data from client " + id);
 										log.logStackTrace(e);
 										b = false;
 									}
 								}
 
 							} else {
-								log.error("Error occurred while reading permissions group of client "
-										+ id + "!");
+								log.error("Error occurred while reading permissions group of client " + id + "!");
 							}
 						} catch (IOException e) {
 							log.warning("Couldn't sent authentication message ('Successful authentication') to client "
@@ -152,28 +205,25 @@ public class ClientThread extends Thread {
 						}
 					} else {
 
-						log.warning("Authentication of client " + id
-								+ " failed! (Wrong password)");
+						log.warning("Authentication of client " + id + " failed! (Wrong password)");
 
 						try {
 							writer.writeBytes("Authentication failed\n");
 						} catch (IOException e) {
-							log.warning("Couldn't sent authentication message ('Wrong password') to client "
-									+ id + "!");
+							log.warning(
+									"Couldn't sent authentication message ('Wrong password') to client " + id + "!");
 							log.logStackTrace(e);
 						}
 					}
 				} else {
 
-					log.warning("Authentication of client " + id
-							+ " failed! (No entry of '" + clientName + "' in '"
+					log.warning("Authentication of client " + id + " failed! (No entry of '" + clientName + "' in '"
 							+ settings.getSetting("passwordsPath") + ")");
 
 					try {
 						writer.writeBytes("Authentication failed\n");
 					} catch (IOException e) {
-						log.warning("Couldn't sent authentication message ('Invalid name') to client "
-								+ id + "!");
+						log.warning("Couldn't sent authentication message ('Invalid name') to client " + id + "!");
 						log.logStackTrace(e);
 					}
 				}
@@ -184,8 +234,7 @@ public class ClientThread extends Thread {
 			}
 
 		} catch (IOException e) {
-			log.error("Error occurred while initializing session in client "
-					+ id + "!");
+			log.error("Error occurred while initializing session in client " + id + "!");
 			log.logStackTrace(e);
 		}
 
@@ -202,9 +251,22 @@ public class ClientThread extends Thread {
 		log.info("Client " + id + " disconnected");
 	}
 
-	public ClientThread(SSLSocket socket, int id, SimpleLog log,
-			Settings settings, Settings passwords, Settings permissions,
-			Database db) {
+	private void send(String s, String[] c) {
+
+		if (s == null)
+			log.warning("SQL Exception. Command was " + c[0] + " " + c[1]);
+		if (s.equals(""))
+			log.warning("Empty cell detected. Command was " + c[0] + " " + c[1]);
+		try {
+			writer.writeBytes(s);
+		} catch (IOException e) {
+			log.error("IOException while sending reply to client");
+			log.logStackTrace(e);
+		}
+	}
+
+	public ClientThread(SSLSocket socket, int id, SimpleLog log, Settings settings, Settings passwords,
+			Settings permissions, Database database) {
 
 		this.socket = socket;
 		this.id = id;
@@ -212,6 +274,6 @@ public class ClientThread extends Thread {
 		this.passwords = passwords;
 		this.permissions = permissions;
 		this.settings = settings;
-		this.db = db;
+		this.database = database;
 	}
 }
